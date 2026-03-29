@@ -1,12 +1,16 @@
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Check, Crown, X, Clock, Sparkles } from "lucide-react";
+import { Check, Crown, X, Clock, Sparkles, Loader2, Settings } from "lucide-react";
 import AppLayout from "@/components/AppLayout";
 import { cn } from "@/lib/utils";
 import { useSubscription, PRO_PRICING } from "@/hooks/useSubscription";
 import { useLocalizedCurrency } from "@/hooks/useLocalizedPrice";
 import FoundingMemberBadge from "@/components/FoundingMemberBadge";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { useSearchParams } from "react-router-dom";
 
 const FOUNDING_MEMBER_LIMIT = 500;
 
@@ -44,6 +48,53 @@ const proPlanFeatures = [
 export default function Subscription() {
   const { plan, isPro, isTrial, trialDaysRemaining, isTrialExpired, isFoundingMember } = useSubscription();
   const { format } = useLocalizedCurrency();
+  const [searchParams] = useSearchParams();
+  const [checkoutLoading, setCheckoutLoading] = useState<"monthly" | "yearly" | null>(null);
+  const [portalLoading, setPortalLoading] = useState(false);
+
+  // Show success toast on redirect from checkout
+  const success = searchParams.get("success");
+  if (success === "true") {
+    toast.success("Welcome to Pro! Your subscription is being activated.", { id: "checkout-success" });
+  }
+
+  const handleCheckout = async (billing_cycle: "monthly" | "yearly") => {
+    setCheckoutLoading(billing_cycle);
+    try {
+      const { data, error } = await supabase.functions.invoke("lemon-checkout", {
+        body: { billing_cycle },
+      });
+      if (error) throw error;
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error("No checkout URL returned");
+      }
+    } catch (err: any) {
+      console.error("Checkout error:", err);
+      toast.error("Failed to start checkout. Please try again.");
+    } finally {
+      setCheckoutLoading(null);
+    }
+  };
+
+  const handlePortal = async () => {
+    setPortalLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("lemon-portal");
+      if (error) throw error;
+      if (data?.url) {
+        window.open(data.url, "_blank");
+      } else {
+        throw new Error("No portal URL returned");
+      }
+    } catch (err: any) {
+      console.error("Portal error:", err);
+      toast.error("Failed to open customer portal. Please try again.");
+    } finally {
+      setPortalLoading(false);
+    }
+  };
 
   const monthlyPrice = format(PRO_PRICING.monthly);
   const yearlyPrice = format(PRO_PRICING.yearly);
@@ -167,13 +218,21 @@ export default function Subscription() {
                   </li>
                 ))}
               </ul>
-              <Button className="w-full" disabled={isPro && !isTrial}>
-                {isPro && !isTrial ? "Current Plan" : isTrial ? "Subscribe Now — Keep Pro" : "Coming Soon"}
-              </Button>
-              {isTrial && (
-                <p className="text-center text-[10px] text-muted-foreground mt-2">
-                  Payment integration coming soon
-                </p>
+              {isPro && !isTrial ? (
+                <div className="space-y-2">
+                  <Button className="w-full" variant="outline" onClick={handlePortal} disabled={portalLoading}>
+                    {portalLoading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Loading...</> : <><Settings className="w-4 h-4 mr-2" />Manage Subscription</>}
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <Button className="w-full" onClick={() => handleCheckout("monthly")} disabled={!!checkoutLoading}>
+                    {checkoutLoading === "monthly" ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Processing...</> : `Subscribe Monthly — ${monthlyPrice}/mo`}
+                  </Button>
+                  <Button className="w-full" variant="outline" onClick={() => handleCheckout("yearly")} disabled={!!checkoutLoading}>
+                    {checkoutLoading === "yearly" ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Processing...</> : `Subscribe Yearly — ${yearlyPrice}/yr (Save 44%)`}
+                  </Button>
+                </div>
               )}
             </CardContent>
           </Card>
