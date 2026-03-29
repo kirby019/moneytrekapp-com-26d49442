@@ -184,8 +184,8 @@ export default function Landing() {
                     />
                   </div>
                   <div className="flex justify-between mt-2 text-[10px] text-muted-foreground">
-                    <span>$8,200 paid</span>
-                    <span>$24,500 total</span>
+                    <span>{fmt(8200)} paid</span>
+                    <span>{fmt(24500)} total</span>
                   </div>
                 </div>
                 {/* Mini chart mockup */}
@@ -255,11 +255,7 @@ export default function Landing() {
               </div>
               {/* Debt list mockup */}
               <div className="space-y-2">
-                {[
-                  { name: "Chase Visa", bal: "$4,200", pct: 35 },
-                  { name: "Student Loan", bal: "$12,500", pct: 18 },
-                  { name: "Car Loan", bal: "$6,300", pct: 45 },
-                ].map(d => (
+                {mockDebts.map(d => (
                   <div key={d.name} className="flex items-center gap-4 bg-secondary/30 rounded-lg p-3">
                     <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
                       <CreditCard className="w-4 h-4 text-primary" />
