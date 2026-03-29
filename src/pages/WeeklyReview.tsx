@@ -130,7 +130,7 @@ export default function WeeklyReview() {
         <Card>
           <CardContent className="p-6">
             <h2 className="font-heading font-semibold mb-2">Motivation</h2>
-            <p className="text-muted-foreground text-sm italic">"The secret of getting ahead is getting started." — Mark Twain</p>
+            <p className="text-muted-foreground text-sm italic">"Every payment you make is a step closer to freedom. Keep going — you're doing amazing!"</p>
           </CardContent>
         </Card>
       </div>
