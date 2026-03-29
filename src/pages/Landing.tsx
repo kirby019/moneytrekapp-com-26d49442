@@ -553,9 +553,15 @@ export default function Landing() {
             <p className="text-primary-foreground/60 mb-8 max-w-md mx-auto text-sm sm:text-base">
               Track your debt, monitor your progress, and build better financial habits with MoneyTrek. Small steps lead to big financial progress.
             </p>
-            <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
-              <Link to="/signup">Create Free Account <ArrowRight className="ml-2 w-4 h-4" /></Link>
-            </Button>
+            {user ? (
+              <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
+                <Link to="/dashboard">Go to Dashboard <ArrowRight className="ml-2 w-4 h-4" /></Link>
+              </Button>
+            ) : (
+              <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
+                <Link to="/signup">Create Free Account <ArrowRight className="ml-2 w-4 h-4" /></Link>
+              </Button>
+            )}
           </motion.div>
         </div>
         <div className="absolute top-10 left-10 w-48 h-48 rounded-full bg-accent/10 blur-3xl" />
@@ -578,8 +584,17 @@ export default function Landing() {
             <div>
               <h4 className="font-heading font-semibold text-sm mb-3">Product</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link to="/signup" className="hover:text-foreground transition-colors">Get Started</Link></li>
-                <li><Link to="/login" className="hover:text-foreground transition-colors">Log In</Link></li>
+                {user ? (
+                  <>
+                    <li><Link to="/dashboard" className="hover:text-foreground transition-colors">Dashboard</Link></li>
+                    <li><button onClick={() => signOut()} className="hover:text-foreground transition-colors">Sign Out</button></li>
+                  </>
+                ) : (
+                  <>
+                    <li><Link to="/signup" className="hover:text-foreground transition-colors">Get Started</Link></li>
+                    <li><Link to="/login" className="hover:text-foreground transition-colors">Log In</Link></li>
+                  </>
+                )}
                 <li><span className="cursor-default">Pricing</span></li>
               </ul>
             </div>
