@@ -5,6 +5,7 @@ import { useWeeklyReports } from "@/hooks/useWeeklyReports";
 import { usePayments } from "@/hooks/usePayments";
 import { useDebts } from "@/hooks/useDebts";
 import { useProfile } from "@/hooks/useProfile";
+import { useExchangeRates, convertCurrency } from "@/hooks/useExchangeRates";
 import { formatCurrency } from "@/lib/currency";
 
 export default function WeeklyReview() {
@@ -12,6 +13,7 @@ export default function WeeklyReview() {
   const { data: payments } = usePayments();
   const { data: debts } = useDebts();
   const { data: profile } = useProfile();
+  const { data: rates } = useExchangeRates();
   const defaultCurrency = (profile as any)?.default_currency ?? "USD";
 
   const now = new Date();
@@ -26,8 +28,18 @@ export default function WeeklyReview() {
     return pd >= weekStart && pd <= now;
   }) ?? [];
 
-  const weekTotal = thisWeekPayments.reduce((s, p) => s + (p.amount ?? 0), 0);
-  const totalBalance = debts?.reduce((s, d) => s + (d.current_balance ?? 0), 0) ?? 0;
+  // Convert weekly payment totals to default currency
+  const weekTotal = thisWeekPayments.reduce((s, p) => {
+    // Payments inherit debt currency — look up the debt
+    const debt = debts?.find(d => d.id === p.debt_id);
+    const cur = (debt as any)?.currency ?? defaultCurrency;
+    return s + convertCurrency(p.amount ?? 0, cur, defaultCurrency, rates);
+  }, 0);
+
+  const totalBalance = debts?.reduce((s, d) => {
+    const cur = (d as any).currency ?? defaultCurrency;
+    return s + convertCurrency(d.current_balance ?? 0, cur, defaultCurrency, rates);
+  }, 0) ?? 0;
 
   const report = reports?.[0];
 
@@ -61,17 +73,21 @@ export default function WeeklyReview() {
             <h2 className="font-heading font-semibold mb-4">This Week's Payments</h2>
             {thisWeekPayments.length > 0 ? (
               <div className="space-y-3">
-                {thisWeekPayments.map(p => (
-                  <div key={p.id} className="flex items-start gap-3">
-                    <CheckCircle2 className="w-4 h-4 text-success mt-0.5" />
-                    <div>
-                      <p className="text-sm font-medium">{(p as any).debts?.debt_name ?? "Payment"}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {formatCurrency(p.amount ?? 0, defaultCurrency)} — {p.is_extra_payment ? "extra payment" : "minimum"}
-                      </p>
+                {thisWeekPayments.map(p => {
+                  const debt = debts?.find(d => d.id === p.debt_id);
+                  const cur = (debt as any)?.currency ?? defaultCurrency;
+                  return (
+                    <div key={p.id} className="flex items-start gap-3">
+                      <CheckCircle2 className="w-4 h-4 text-success mt-0.5" />
+                      <div>
+                        <p className="text-sm font-medium">{(p as any).debts?.debt_name ?? "Payment"}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {formatCurrency(p.amount ?? 0, cur)} — {p.is_extra_payment ? "extra payment" : "minimum"}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             ) : (
               <p className="text-sm text-muted-foreground">No payments this week yet. Keep going!</p>

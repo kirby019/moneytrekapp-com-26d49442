@@ -7,22 +7,38 @@ import { Link } from "react-router-dom";
 import AppLayout from "@/components/AppLayout";
 import { useDebts } from "@/hooks/useDebts";
 import { useProfile } from "@/hooks/useProfile";
+import { useExchangeRates, convertCurrency } from "@/hooks/useExchangeRates";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatCurrency } from "@/lib/currency";
 
 export default function Dashboard() {
   const { data: debts, isLoading } = useDebts();
   const { data: profile } = useProfile();
+  const { data: rates } = useExchangeRates();
 
   const defaultCurrency = (profile as any)?.default_currency ?? "USD";
   const activeDebts = debts?.filter((d) => d.status !== "paid") ?? [];
-  const totalOriginal = debts?.reduce((s, d) => s + (d.original_amount ?? 0), 0) ?? 0;
-  const totalBalance = debts?.reduce((s, d) => s + (d.current_balance ?? 0), 0) ?? 0;
+
+  // Convert all amounts to default currency for totals
+  const totalOriginal = debts?.reduce((s, d) => {
+    const cur = (d as any).currency ?? defaultCurrency;
+    return s + convertCurrency(d.original_amount ?? 0, cur, defaultCurrency, rates);
+  }, 0) ?? 0;
+
+  const totalBalance = debts?.reduce((s, d) => {
+    const cur = (d as any).currency ?? defaultCurrency;
+    return s + convertCurrency(d.current_balance ?? 0, cur, defaultCurrency, rates);
+  }, 0) ?? 0;
+
   const totalPaid = totalOriginal - totalBalance;
   const overallProgress = totalOriginal > 0 ? Math.round((totalPaid / totalOriginal) * 100) : 0;
-  const totalMinPayment = debts?.reduce((s, d) => s + (d.minimum_payment ?? 0), 0) ?? 0;
-  const paidOffCount = debts?.filter((d) => d.status === "paid").length ?? 0;
 
+  const totalMinPayment = debts?.reduce((s, d) => {
+    const cur = (d as any).currency ?? defaultCurrency;
+    return s + convertCurrency(d.minimum_payment ?? 0, cur, defaultCurrency, rates);
+  }, 0) ?? 0;
+
+  const paidOffCount = debts?.filter((d) => d.status === "paid").length ?? 0;
   const firstName = profile?.full_name?.split(" ")[0] ?? "there";
 
   const stats = [
