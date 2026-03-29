@@ -105,6 +105,7 @@ export default function AddDebt() {
             </form>
           </CardContent>
         </Card>
+        )}
       </div>
     </AppLayout>
   );
