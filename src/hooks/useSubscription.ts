@@ -56,8 +56,21 @@ export function useSubscription() {
     enabled: !!user,
   });
 
-  const plan: PlanType = subscription?.plan === "pro" ? "pro" : "free";
+  const isTrial = !!(subscription as any)?.is_trial;
+  const trialEndsAt = (subscription as any)?.trial_ends_at
+    ? new Date((subscription as any).trial_ends_at)
+    : null;
+  const isTrialExpired = isTrial && trialEndsAt ? trialEndsAt < new Date() : false;
+  const isFoundingMember = !!(subscription as any)?.is_founding_member;
+
+  // If trial is expired and it's still a trial (not converted), treat as free
+  const plan: PlanType =
+    subscription?.plan === "pro" && !isTrialExpired ? "pro" : "free";
   const limits = PLAN_LIMITS[plan];
+
+  const trialDaysRemaining = trialEndsAt
+    ? Math.max(0, Math.ceil((trialEndsAt.getTime() - Date.now()) / (1000 * 60 * 60 * 24)))
+    : 0;
 
   return {
     plan,
@@ -66,6 +79,11 @@ export function useSubscription() {
     isLoading,
     isPro: plan === "pro",
     isFree: plan === "free",
+    isTrial,
+    isTrialExpired,
+    trialDaysRemaining,
+    trialEndsAt,
+    isFoundingMember,
   };
 }
 
