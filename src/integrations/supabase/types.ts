@@ -91,6 +91,39 @@ export type Database = {
         }
         Relationships: []
       }
+      financial_goals: {
+        Row: {
+          created_at: string
+          currency: string
+          current_amount: number
+          goal_name: string
+          id: string
+          target_amount: number
+          target_date: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          current_amount?: number
+          goal_name: string
+          id?: string
+          target_amount?: number
+          target_date?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          current_amount?: number
+          goal_name?: string
+          id?: string
+          target_amount?: number
+          target_date?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       milestones: {
         Row: {
           achieved_date: string | null
@@ -122,6 +155,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      net_worth_snapshots: {
+        Row: {
+          created_at: string
+          id: string
+          net_worth: number
+          snapshot_date: string
+          total_debt: number
+          total_savings: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          net_worth?: number
+          snapshot_date?: string
+          total_debt?: number
+          total_savings?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          net_worth?: number
+          snapshot_date?: string
+          total_debt?: number
+          total_savings?: number
+          user_id?: string
+        }
+        Relationships: []
       }
       notifications: {
         Row: {
@@ -229,6 +292,71 @@ export type Database = {
           id?: string
         }
         Relationships: []
+      }
+      savings_accounts: {
+        Row: {
+          account_name: string
+          balance: number
+          created_at: string
+          currency: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          account_name: string
+          balance?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          account_name?: string
+          balance?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      savings_transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          notes: string | null
+          savings_account_id: string
+          transaction_date: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          id?: string
+          notes?: string | null
+          savings_account_id: string
+          transaction_date?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          notes?: string | null
+          savings_account_id?: string
+          transaction_date?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "savings_transactions_savings_account_id_fkey"
+            columns: ["savings_account_id"]
+            isOneToOne: false
+            referencedRelation: "savings_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       streaks: {
         Row: {
