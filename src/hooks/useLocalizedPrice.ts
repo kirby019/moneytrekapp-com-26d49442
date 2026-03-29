@@ -19,15 +19,56 @@ const localeToCurrency: Record<string, string> = {
   LV: "EUR", EE: "EUR", MT: "EUR", CY: "EUR", LU: "EUR",
 };
 
+// Map IANA timezone to currency as a fallback when locale doesn't reveal region
+const timezoneToCurrency: Record<string, string> = {
+  "Asia/Ho_Chi_Minh": "VND", "Asia/Saigon": "VND",
+  "Asia/Manila": "PHP", "Asia/Singapore": "SGD", "Asia/Bangkok": "THB",
+  "Asia/Jakarta": "IDR", "Asia/Kuala_Lumpur": "MYR", "Asia/Hong_Kong": "HKD",
+  "Asia/Taipei": "TWD", "Asia/Tokyo": "JPY", "Asia/Seoul": "KRW",
+  "Asia/Kolkata": "INR", "Asia/Calcutta": "INR", "Asia/Shanghai": "CNY",
+  "Asia/Dhaka": "BDT", "Asia/Karachi": "PKR", "Asia/Colombo": "LKR",
+  "Asia/Yangon": "MMK", "Asia/Kathmandu": "NPR", "Asia/Dubai": "AED",
+  "Asia/Riyadh": "SAR", "Asia/Qatar": "QAR", "Asia/Kuwait": "KWD",
+  "Asia/Bahrain": "BHD", "Asia/Muscat": "OMR", "Asia/Jerusalem": "ILS",
+  "Asia/Istanbul": "TRY",
+  "Europe/London": "GBP", "Europe/Zurich": "CHF", "Europe/Stockholm": "SEK",
+  "Europe/Oslo": "NOK", "Europe/Copenhagen": "DKK", "Europe/Warsaw": "PLN",
+  "Europe/Prague": "CZK", "Europe/Budapest": "HUF", "Europe/Bucharest": "RON",
+  "Europe/Sofia": "BGN", "Europe/Zagreb": "HRK", "Europe/Moscow": "RUB",
+  "Europe/Kiev": "UAH", "Europe/Kyiv": "UAH",
+  "Europe/Berlin": "EUR", "Europe/Paris": "EUR", "Europe/Rome": "EUR",
+  "Europe/Madrid": "EUR", "Europe/Amsterdam": "EUR", "Europe/Brussels": "EUR",
+  "Europe/Vienna": "EUR", "Europe/Lisbon": "EUR", "Europe/Dublin": "EUR",
+  "Europe/Helsinki": "EUR", "Europe/Athens": "EUR",
+  "Australia/Sydney": "AUD", "Australia/Melbourne": "AUD", "Australia/Perth": "AUD",
+  "Pacific/Auckland": "NZD",
+  "America/New_York": "USD", "America/Chicago": "USD", "America/Denver": "USD",
+  "America/Los_Angeles": "USD", "America/Toronto": "CAD", "America/Vancouver": "CAD",
+  "America/Sao_Paulo": "BRL", "America/Mexico_City": "MXN", "America/Argentina/Buenos_Aires": "ARS",
+  "America/Santiago": "CLP", "America/Bogota": "COP", "America/Lima": "PEN",
+  "Africa/Cairo": "EGP", "Africa/Johannesburg": "ZAR", "Africa/Lagos": "NGN",
+  "Africa/Nairobi": "KES", "Africa/Accra": "GHS",
+};
+
 function detectCurrency(): string {
+  // 1. Try locale region first
   try {
     const locales = navigator.languages ?? [navigator.language];
     for (const locale of locales) {
       const parts = locale.split("-");
-      const region = parts.length > 1 ? parts[parts.length - 1].toUpperCase() : parts[0].toUpperCase();
-      if (localeToCurrency[region]) return localeToCurrency[region];
+      if (parts.length > 1) {
+        const region = parts[parts.length - 1].toUpperCase();
+        if (localeToCurrency[region]) return localeToCurrency[region];
+      }
     }
   } catch {}
+
+  // 2. Fallback to timezone detection (works even with en-US locale in Vietnam)
+  try {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    if (tz && timezoneToCurrency[tz]) return timezoneToCurrency[tz];
+  } catch {}
+
   return "USD";
 }
 
