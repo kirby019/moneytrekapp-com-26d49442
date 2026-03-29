@@ -8,11 +8,13 @@ import AppLayout from "@/components/AppLayout";
 import { useDebts } from "@/hooks/useDebts";
 import { useProfile } from "@/hooks/useProfile";
 import { Skeleton } from "@/components/ui/skeleton";
+import { formatCurrency } from "@/lib/currency";
 
 export default function Dashboard() {
   const { data: debts, isLoading } = useDebts();
   const { data: profile } = useProfile();
 
+  const defaultCurrency = (profile as any)?.default_currency ?? "USD";
   const activeDebts = debts?.filter((d) => d.status !== "paid") ?? [];
   const totalOriginal = debts?.reduce((s, d) => s + (d.original_amount ?? 0), 0) ?? 0;
   const totalBalance = debts?.reduce((s, d) => s + (d.current_balance ?? 0), 0) ?? 0;
@@ -24,10 +26,10 @@ export default function Dashboard() {
   const firstName = profile?.full_name?.split(" ")[0] ?? "there";
 
   const stats = [
-    { label: "Total Debt", value: `$${totalBalance.toLocaleString()}`, icon: CreditCard, change: `${activeDebts.length} active` },
-    { label: "Monthly Payment", value: `$${totalMinPayment.toLocaleString()}`, icon: DollarSign, change: "Minimums total" },
+    { label: "Total Debt", value: formatCurrency(totalBalance, defaultCurrency), icon: CreditCard, change: `${activeDebts.length} active` },
+    { label: "Monthly Payment", value: formatCurrency(totalMinPayment, defaultCurrency), icon: DollarSign, change: "Minimums total" },
     { label: "Debts Remaining", value: `${activeDebts.length}`, icon: TrendingDown, change: paidOffCount > 0 ? `${paidOffCount} paid off!` : "Keep going!" },
-    { label: "Progress", value: `${overallProgress}%`, icon: Target, change: `$${totalPaid.toLocaleString()} eliminated` },
+    { label: "Progress", value: `${overallProgress}%`, icon: Target, change: `${formatCurrency(totalPaid, defaultCurrency)} eliminated` },
   ];
 
   return (
@@ -53,7 +55,7 @@ export default function Dashboard() {
               <p className="text-primary-foreground/70 text-sm font-medium">Overall Progress</p>
               <p className="text-4xl font-heading font-extrabold mt-1">{overallProgress}% Paid Off</p>
               <p className="text-primary-foreground/60 text-sm mt-1">
-                ${totalPaid.toLocaleString()} of ${totalOriginal.toLocaleString()} eliminated
+                {formatCurrency(totalPaid, defaultCurrency)} of {formatCurrency(totalOriginal, defaultCurrency)} eliminated
               </p>
             </div>
             <div className="w-full md:w-64">
@@ -103,6 +105,7 @@ export default function Dashboard() {
                 const orig = debt.original_amount ?? 0;
                 const bal = debt.current_balance ?? 0;
                 const progress = orig > 0 ? Math.round(((orig - bal) / orig) * 100) : 0;
+                const cur = (debt as any).currency ?? defaultCurrency;
                 return (
                   <motion.div key={debt.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.08 }}>
                     <Card className="hover:shadow-md transition-shadow">
@@ -116,7 +119,7 @@ export default function Dashboard() {
                             <Progress value={progress} className="h-2" />
                           </div>
                           <div className="flex justify-between mt-1.5 text-xs text-muted-foreground">
-                            <span>${bal.toLocaleString()} remaining</span>
+                            <span>{formatCurrency(bal, cur)} remaining</span>
                             <span>{progress}%</span>
                           </div>
                         </div>

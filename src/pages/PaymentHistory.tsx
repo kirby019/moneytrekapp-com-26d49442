@@ -5,10 +5,14 @@ import { Link } from "react-router-dom";
 import { Plus } from "lucide-react";
 import AppLayout from "@/components/AppLayout";
 import { usePayments } from "@/hooks/usePayments";
+import { useProfile } from "@/hooks/useProfile";
 import { Skeleton } from "@/components/ui/skeleton";
+import { formatCurrency } from "@/lib/currency";
 
 export default function PaymentHistory() {
   const { data: payments, isLoading } = usePayments();
+  const { data: profile } = useProfile();
+  const defaultCurrency = (profile as any)?.default_currency ?? "USD";
 
   return (
     <AppLayout>
@@ -41,7 +45,7 @@ export default function PaymentHistory() {
                     <Badge variant={p.is_extra_payment ? "default" : "secondary"}>
                       {p.is_extra_payment ? "Extra" : "Minimum"}
                     </Badge>
-                    <span className="font-heading font-bold">${(p.amount ?? 0).toLocaleString()}</span>
+                    <span className="font-heading font-bold">{formatCurrency(p.amount ?? 0, defaultCurrency)}</span>
                   </div>
                 </CardContent>
               </Card>

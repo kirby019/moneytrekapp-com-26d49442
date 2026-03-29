@@ -1,14 +1,18 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { TrendingDown, DollarSign, CheckCircle2, Target } from "lucide-react";
+import { TrendingDown, DollarSign, CheckCircle2 } from "lucide-react";
 import AppLayout from "@/components/AppLayout";
 import { useWeeklyReports } from "@/hooks/useWeeklyReports";
 import { usePayments } from "@/hooks/usePayments";
 import { useDebts } from "@/hooks/useDebts";
+import { useProfile } from "@/hooks/useProfile";
+import { formatCurrency } from "@/lib/currency";
 
 export default function WeeklyReview() {
   const { data: reports } = useWeeklyReports();
   const { data: payments } = usePayments();
   const { data: debts } = useDebts();
+  const { data: profile } = useProfile();
+  const defaultCurrency = (profile as any)?.default_currency ?? "USD";
 
   const now = new Date();
   const weekStart = new Date(now);
@@ -16,7 +20,6 @@ export default function WeeklyReview() {
   const weekStartStr = weekStart.toLocaleDateString("en-US", { month: "long", day: "numeric" });
   const weekEndStr = now.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
 
-  // Calculate this week's payments
   const thisWeekPayments = payments?.filter(p => {
     if (!p.payment_date) return false;
     const pd = new Date(p.payment_date);
@@ -40,14 +43,14 @@ export default function WeeklyReview() {
           <Card>
             <CardContent className="p-5 text-center">
               <DollarSign className="w-6 h-6 text-success mx-auto mb-2" />
-              <p className="text-2xl font-heading font-bold">${weekTotal.toLocaleString()}</p>
+              <p className="text-2xl font-heading font-bold">{formatCurrency(weekTotal, defaultCurrency)}</p>
               <p className="text-xs text-muted-foreground">Paid This Week</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-5 text-center">
               <TrendingDown className="w-6 h-6 text-primary mx-auto mb-2" />
-              <p className="text-2xl font-heading font-bold">${totalBalance.toLocaleString()}</p>
+              <p className="text-2xl font-heading font-bold">{formatCurrency(totalBalance, defaultCurrency)}</p>
               <p className="text-xs text-muted-foreground">Total Remaining</p>
             </CardContent>
           </Card>
@@ -64,7 +67,7 @@ export default function WeeklyReview() {
                     <div>
                       <p className="text-sm font-medium">{(p as any).debts?.debt_name ?? "Payment"}</p>
                       <p className="text-xs text-muted-foreground">
-                        ${(p.amount ?? 0).toLocaleString()} — {p.is_extra_payment ? "extra payment" : "minimum"}
+                        {formatCurrency(p.amount ?? 0, defaultCurrency)} — {p.is_extra_payment ? "extra payment" : "minimum"}
                       </p>
                     </div>
                   </div>
