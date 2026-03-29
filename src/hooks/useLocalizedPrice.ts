@@ -38,7 +38,7 @@ export function useLocalizedCurrency() {
     queryKey: ["exchange_rates_public"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("exchange_rates" as any)
+        .from("exchange_rates")
         .select("base_currency, target_currency, rate");
       if (error) throw error;
       return data as unknown as { base_currency: string; target_currency: string; rate: number }[];
