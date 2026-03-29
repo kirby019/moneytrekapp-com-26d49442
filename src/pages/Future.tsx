@@ -4,35 +4,27 @@ import { motion } from "framer-motion";
 import AppLayout from "@/components/AppLayout";
 import { useDebts } from "@/hooks/useDebts";
 import { useLocalizedCurrency } from "@/hooks/useLocalizedPrice";
+import { useDebtFreeDate } from "@/hooks/useDebtFreeDate";
 import { useMemo } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { addMonths, format } from "date-fns";
+import { format } from "date-fns";
 
 export default function Future() {
   const { data: debts, isLoading } = useDebts();
   const { format: fmt } = useLocalizedCurrency();
+  const { debtFreeDate, totalMinPayment } = useDebtFreeDate(debts as any);
 
   const stats = useMemo(() => {
-    if (!debts || debts.length === 0) return null;
-
-    const activeDebts = debts.filter((d) => d.status !== "paid_off");
-    const totalMinPayment = activeDebts.reduce((s, d) => s + (d.minimum_payment ?? 0), 0);
-    const totalBalance = activeDebts.reduce((s, d) => s + (d.current_balance ?? 0), 0);
-
-    // Estimate months to pay off (simplified: balance / monthly payment)
-    const monthsToPayoff = totalMinPayment > 0 ? Math.ceil(totalBalance / totalMinPayment) : 0;
-    const debtFreeDate = monthsToPayoff > 0 ? addMonths(new Date(), monthsToPayoff) : null;
+    if (!debts || debts.length === 0 || totalMinPayment <= 0) return null;
 
     const annualSavings = totalMinPayment * 12;
     // 7% annual return compounded monthly for 10 years
     const monthlyRate = 0.07 / 12;
     const months = 120;
-    const futureValue = totalMinPayment > 0
-      ? totalMinPayment * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate)
-      : 0;
+    const futureValue = totalMinPayment * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate);
 
-    return { totalMinPayment, annualSavings, futureValue, debtFreeDate };
-  }, [debts]);
+    return { totalMinPayment, annualSavings, futureValue };
+  }, [debts, totalMinPayment]);
 
   const projections = stats
     ? [
@@ -61,7 +53,7 @@ export default function Future() {
           >
             <Sparkles className="w-10 h-10 text-accent mx-auto mb-4" />
             <h2 className="font-heading text-3xl font-extrabold mb-2">
-              {stats?.debtFreeDate ? format(stats.debtFreeDate, "MMMM yyyy") : "Add debts to see"}
+              {debtFreeDate ? format(debtFreeDate, "MMMM yyyy") : "Add debts to see"}
             </h2>
             <p className="text-primary-foreground/70">Your projected debt-free date</p>
           </motion.div>
