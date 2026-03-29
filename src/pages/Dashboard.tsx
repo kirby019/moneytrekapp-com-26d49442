@@ -16,6 +16,9 @@ export default function Dashboard() {
   const { data: debts, isLoading } = useDebts();
   const { data: profile } = useProfile();
   const { data: rates } = useExchangeRates();
+  const { isFree } = useSubscription();
+  const { data: profile } = useProfile();
+  const { data: rates } = useExchangeRates();
 
   const defaultCurrency = (profile as any)?.default_currency ?? "USD";
   const activeDebts = debts?.filter((d) => d.status !== "paid") ?? [];
