@@ -239,7 +239,6 @@ export type Database = {
           identity: string | null
           journey_type: string | null
           name: string | null
-          password: string | null
           reason: string | null
           selected_strategy: string | null
           timezone: string | null
@@ -251,7 +250,6 @@ export type Database = {
           identity?: string | null
           journey_type?: string | null
           name?: string | null
-          password?: string | null
           reason?: string | null
           selected_strategy?: string | null
           timezone?: string | null
@@ -263,7 +261,6 @@ export type Database = {
           identity?: string | null
           journey_type?: string | null
           name?: string | null
-          password?: string | null
           reason?: string | null
           selected_strategy?: string | null
           timezone?: string | null
