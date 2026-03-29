@@ -13,19 +13,21 @@ import { useAddPayment } from "@/hooks/usePayments";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatCurrency } from "@/lib/currency";
 import { useCelebrations } from "@/hooks/useCelebrations";
+import { useUpdateStreak } from "@/hooks/useStreak";
 import CelebrationModal from "@/components/CelebrationModal";
 
 export default function RecordPayment() {
   const navigate = useNavigate();
   const { data: debts, isLoading } = useDebts();
   const addPayment = useAddPayment();
+  const updateStreak = useUpdateStreak();
   const [debtId, setDebtId] = useState("");
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [isExtra, setIsExtra] = useState(false);
   const [notes, setNotes] = useState("");
 
-  const { celebration, closeCelebration, celebratePayment, celebrateDebtPayoff } = useCelebrations();
+  const { celebration, closeCelebration, celebratePayment, celebrateDebtPayoff, checkStreakCelebration } = useCelebrations();
 
   const activeDebts = debts?.filter(d => d.status !== "paid") ?? [];
 
@@ -43,16 +45,22 @@ export default function RecordPayment() {
       // Show encouragement toast
       celebratePayment(isExtra);
 
+      // Update streak and check for streak celebrations
+      try {
+        const newStreak = await updateStreak.mutateAsync();
+        checkStreakCelebration(newStreak);
+      } catch {
+        // Streak update failure shouldn't block the flow
+      }
+
       // Check if this payment pays off the debt
       const selectedDebt = debts?.find(d => d.id === debtId);
       if (selectedDebt) {
         const newBalance = (selectedDebt.current_balance ?? 0) - parseFloat(amount);
         if (newBalance <= 0) {
-          // Small delay so toast shows first, then modal
           setTimeout(() => {
             celebrateDebtPayoff(selectedDebt.debt_name ?? "Your debt");
           }, 500);
-          // Don't navigate immediately — let them see the celebration
           return;
         }
       }
