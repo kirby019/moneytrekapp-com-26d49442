@@ -8,7 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { useLocalizedPrice } from "@/hooks/useLocalizedPrice";
+import { useLocalizedPrice, useLocalizedCurrency } from "@/hooks/useLocalizedPrice";
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -39,12 +39,18 @@ const testimonials = [
   { name: "John", country: "Australia", quote: "Multi-currency support is very useful because I have loans in different currencies.", rating: 5 },
 ];
 
-// Dashboard mockup data
-const mockStats = [
-  { label: "Total Debt", value: "$24,500", change: "-12%", icon: CreditCard },
-  { label: "Total Paid", value: "$8,200", change: "+$1,400", icon: DollarSign },
+// Raw USD amounts for mockups — will be converted at render time
+const mockStatsRaw = [
+  { label: "Total Debt", usd: 24500, change: "-12%", icon: CreditCard },
+  { label: "Total Paid", usd: 8200, changeUsd: 1400, icon: DollarSign },
   { label: "Progress", value: "33%", change: "On track", icon: Target },
   { label: "Debts Left", value: "4", change: "1 paid off!", icon: TrendingDown },
+];
+
+const mockDebtsRaw = [
+  { name: "Chase Visa", usd: 4200, pct: 35 },
+  { name: "Student Loan", usd: 12500, pct: 18 },
+  { name: "Car Loan", usd: 6300, pct: 45 },
 ];
 
 function ProPricingCard() {
