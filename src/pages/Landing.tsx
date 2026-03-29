@@ -8,7 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { useLocalizedPrice } from "@/hooks/useLocalizedPrice";
+import { useLocalizedPrice, useLocalizedCurrency } from "@/hooks/useLocalizedPrice";
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -39,12 +39,18 @@ const testimonials = [
   { name: "John", country: "Australia", quote: "Multi-currency support is very useful because I have loans in different currencies.", rating: 5 },
 ];
 
-// Dashboard mockup data
-const mockStats = [
-  { label: "Total Debt", value: "$24,500", change: "-12%", icon: CreditCard },
-  { label: "Total Paid", value: "$8,200", change: "+$1,400", icon: DollarSign },
+// Raw USD amounts for mockups — will be converted at render time
+const mockStatsRaw = [
+  { label: "Total Debt", usd: 24500, change: "-12%", icon: CreditCard },
+  { label: "Total Paid", usd: 8200, changeUsd: 1400, icon: DollarSign },
   { label: "Progress", value: "33%", change: "On track", icon: Target },
   { label: "Debts Left", value: "4", change: "1 paid off!", icon: TrendingDown },
+];
+
+const mockDebtsRaw = [
+  { name: "Chase Visa", usd: 4200, pct: 35 },
+  { name: "Student Loan", usd: 12500, pct: 18 },
+  { name: "Car Loan", usd: 6300, pct: 45 },
 ];
 
 function ProPricingCard() {
@@ -81,6 +87,19 @@ function ProPricingCard() {
 }
 
 export default function Landing() {
+  const { format: fmt } = useLocalizedCurrency();
+
+  const mockStats = mockStatsRaw.map(s => ({
+    ...s,
+    value: s.usd != null ? fmt(s.usd) : s.value!,
+    change: s.changeUsd != null ? `+${fmt(s.changeUsd)}` : s.change!,
+  }));
+
+  const mockDebts = mockDebtsRaw.map(d => ({
+    ...d,
+    bal: fmt(d.usd),
+  }));
+
   return (
     <div className="min-h-screen bg-background">
       {/* Nav */}
@@ -165,8 +184,8 @@ export default function Landing() {
                     />
                   </div>
                   <div className="flex justify-between mt-2 text-[10px] text-muted-foreground">
-                    <span>$8,200 paid</span>
-                    <span>$24,500 total</span>
+                    <span>{fmt(8200)} paid</span>
+                    <span>{fmt(24500)} total</span>
                   </div>
                 </div>
                 {/* Mini chart mockup */}
@@ -236,11 +255,7 @@ export default function Landing() {
               </div>
               {/* Debt list mockup */}
               <div className="space-y-2">
-                {[
-                  { name: "Chase Visa", bal: "$4,200", pct: 35 },
-                  { name: "Student Loan", bal: "$12,500", pct: 18 },
-                  { name: "Car Loan", bal: "$6,300", pct: 45 },
-                ].map(d => (
+                {mockDebts.map(d => (
                   <div key={d.name} className="flex items-center gap-4 bg-secondary/30 rounded-lg p-3">
                     <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
                       <CreditCard className="w-4 h-4 text-primary" />
