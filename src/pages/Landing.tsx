@@ -164,15 +164,15 @@ export default function Landing() {
                 <Zap className="w-3 h-3" /> Your path to financial freedom
               </span>
               <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold leading-[1.1] mb-5 text-primary-foreground">
-                Track Your Debt. <span className="text-accent">Make Progress.</span> Stay Motivated.
+                Track Your Money Progress. <span className="text-accent">One Step at a Time.</span>
               </h1>
               <p className="text-base sm:text-lg text-primary-foreground/70 mb-8 max-w-lg leading-relaxed">
-                MoneyTrek is a financial progress tracker that helps you track your debts, record payments, monitor your progress, and stay motivated on your journey to financial freedom.
+                MoneyTrek helps you track debt, record payments, monitor your progress, and stay motivated with milestones, reports, and visual progress tracking on your journey to financial freedom.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
                   <Link to="/signup">
-                    Get Started Free <ArrowRight className="ml-2 w-4 h-4" />
+                    Start Your Trek for Free <ArrowRight className="ml-2 w-4 h-4" />
                   </Link>
                 </Button>
                 <Button size="lg" variant="outline" className="border-white/40 text-white bg-white/10 hover:bg-white/20 backdrop-blur-sm" asChild>
@@ -180,9 +180,9 @@ export default function Landing() {
                 </Button>
               </div>
               <div className="flex items-center gap-6 mt-8 text-primary-foreground/50 text-sm">
-                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent" /> Free forever</span>
-                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent" /> No credit card</span>
-                <span className="flex items-center gap-1.5 hidden sm:flex"><CheckCircle2 className="w-4 h-4 text-accent" /> Track 3 debts free</span>
+                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent" /> Free plan available</span>
+                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent" /> No credit card required</span>
+                <span className="flex items-center gap-1.5 hidden sm:flex"><CheckCircle2 className="w-4 h-4 text-accent" /> Track up to 3 debts free</span>
               </div>
             </motion.div>
 
@@ -257,7 +257,7 @@ export default function Landing() {
       <section className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-20">
         <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
           <span className="text-xs font-semibold text-accent uppercase tracking-wider">Dashboard Preview</span>
-          <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Your Debt Payoff Command Center</h2>
+          <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Your Financial Progress Command Center</h2>
           <p className="text-muted-foreground max-w-md mx-auto text-sm">See your total debt, payments, progress, and charts — all in one clean dashboard.</p>
         </motion.div>
         <motion.div {...fadeUp} transition={{ duration: 0.6, delay: 0.15 }}>
@@ -267,7 +267,7 @@ export default function Landing() {
               <div className="w-3 h-3 rounded-full bg-destructive/60" />
               <div className="w-3 h-3 rounded-full bg-warning/60" />
               <div className="w-3 h-3 rounded-full bg-accent/60" />
-              <span className="ml-3 text-xs text-muted-foreground">app.debtfreejourney.com/dashboard</span>
+              <span className="ml-3 text-xs text-muted-foreground">app.moneytrek.com/dashboard</span>
             </div>
             <div className="p-4 sm:p-6">
               {/* Stats row */}
@@ -353,8 +353,8 @@ export default function Landing() {
       <section className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-20">
         <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
           <span className="text-xs font-semibold text-accent uppercase tracking-wider">Features</span>
-          <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Everything You Need to Crush Your Debt</h2>
-          <p className="text-muted-foreground max-w-md mx-auto text-sm">Simple yet powerful tools to track your debts, record payments, and monitor your debt payoff progress.</p>
+          <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Everything You Need to Track Your Financial Progress</h2>
+          <p className="text-muted-foreground max-w-md mx-auto text-sm">MoneyTrek helps you track your debts, record payments, visualize your progress, and stay motivated with milestones, reports, and analytics that show your financial progress over time.</p>
         </motion.div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {features.map((f, i) => (
@@ -387,7 +387,7 @@ export default function Landing() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-12">
           <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
             <span className="text-xs font-semibold text-accent uppercase tracking-wider">Analytics</span>
-            <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Visualize Your Debt Payoff Progress</h2>
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Visualize Your Financial Progress</h2>
             <p className="text-muted-foreground max-w-md mx-auto text-sm">Beautiful charts showing your debt reduction, payment trends, and progress over time.</p>
           </motion.div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
@@ -429,7 +429,7 @@ export default function Landing() {
         <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
           <span className="text-xs font-semibold text-accent uppercase tracking-wider">Testimonials</span>
           <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">What Users Say</h2>
-          <p className="text-muted-foreground max-w-md mx-auto text-sm">Real feedback from people on their debt-free journey.</p>
+          <p className="text-muted-foreground max-w-md mx-auto text-sm">Real feedback from people tracking their financial progress.</p>
         </motion.div>
         <div className="grid sm:grid-cols-3 gap-5 max-w-4xl mx-auto">
           {testimonials.map((t, i) => (
@@ -465,7 +465,7 @@ export default function Landing() {
           <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
             <span className="text-xs font-semibold text-accent uppercase tracking-wider">Pricing</span>
             <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Simple, Transparent Pricing</h2>
-            <p className="text-muted-foreground max-w-md mx-auto text-sm">Start tracking your debt for free. Upgrade when you need more.</p>
+            <p className="text-muted-foreground max-w-md mx-auto text-sm">Start tracking your financial progress for free. Upgrade when you need more.</p>
           </motion.div>
           <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
             {/* Free */}
@@ -476,7 +476,7 @@ export default function Landing() {
                     <span className="text-xs font-semibold text-accent uppercase">Free</span>
                     <p className="font-heading text-3xl font-extrabold mt-1">$0<span className="text-sm font-normal text-muted-foreground">/forever</span></p>
                   </div>
-                  <p className="text-sm text-muted-foreground mb-4">Basic debt tracking and progress monitoring.</p>
+                  <p className="text-sm text-muted-foreground mb-4">Basic financial progress tracking and debt monitoring.</p>
                   <ul className="space-y-2.5 mb-6">
                     {["Up to 3 active debts", "Record payments", "Basic dashboard & progress", "Milestones & badges", "Payoff strategies", "Single currency"].map(f => (
                       <li key={f} className="flex items-center gap-2 text-sm">
@@ -525,10 +525,10 @@ export default function Landing() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-24 text-center relative z-10">
           <motion.div {...fadeUp} transition={{ duration: 0.6 }}>
             <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-extrabold text-primary-foreground mb-4">
-              Start Your Debt-Free Journey Today
+              Start Your Journey to Financial Freedom Today
             </h2>
             <p className="text-primary-foreground/60 mb-8 max-w-md mx-auto text-sm sm:text-base">
-              Join others who are tracking their debt, making progress, and taking control of their financial future.
+              Track your debt, monitor your progress, and build better financial habits with MoneyTrek. Small steps lead to big financial progress.
             </p>
             <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
               <Link to="/signup">Create Free Account <ArrowRight className="ml-2 w-4 h-4" /></Link>
@@ -550,7 +550,7 @@ export default function Landing() {
                 </div>
                 <span className="font-heading font-bold">MoneyTrek</span>
               </Link>
-              <p className="text-sm text-muted-foreground leading-relaxed">A financial progress tracker that helps you track your debts, record payments, and stay motivated on your journey to financial freedom.</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">MoneyTrek is a financial progress tracker that helps you track debt, monitor progress, and build better financial habits on your journey to financial freedom.</p>
             </div>
             <div>
               <h4 className="font-heading font-semibold text-sm mb-3">Product</h4>
