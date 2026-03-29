@@ -1,12 +1,16 @@
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Check, Crown, X, Clock, Sparkles } from "lucide-react";
+import { Check, Crown, X, Clock, Sparkles, Loader2, Settings } from "lucide-react";
 import AppLayout from "@/components/AppLayout";
 import { cn } from "@/lib/utils";
 import { useSubscription, PRO_PRICING } from "@/hooks/useSubscription";
 import { useLocalizedCurrency } from "@/hooks/useLocalizedPrice";
 import FoundingMemberBadge from "@/components/FoundingMemberBadge";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { useSearchParams } from "react-router-dom";
 
 const FOUNDING_MEMBER_LIMIT = 500;
 
