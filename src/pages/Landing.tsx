@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import {
   ArrowRight, Sparkles, CreditCard, History, BarChart3, CalendarCheck,
   Globe, LineChart, Download, Shield, Star, CheckCircle2, TrendingDown,
-  DollarSign, Target, Users, Zap, ChevronRight
+  DollarSign, Target, Users, Zap, ChevronRight, PiggyBank, Wallet, TrendingUp
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -18,39 +18,44 @@ const fadeUp = {
 
 const features = [
   { icon: CreditCard, title: "Debt Tracking", desc: "Add all your debts in one place with balances, interest rates, and due dates." },
-  { icon: History, title: "Payment History", desc: "Record every payment and see your full transaction history at a glance." },
-  { icon: BarChart3, title: "Progress Dashboard", desc: "Visual overview of your progress with charts, stats, and milestones." },
-  { icon: CalendarCheck, title: "Weekly Reports", desc: "Automated weekly summaries showing how much you've paid and what's left." },
-  { icon: Globe, title: "Multi-Currency", desc: "Track debts in any currency with automatic exchange rate conversion." },
-  { icon: LineChart, title: "Analytics & Charts", desc: "Beautiful charts showing payments per month, progress, and trends." },
-  { icon: Download, title: "Data Export", desc: "Export your debts, payments, and reports as CSV files anytime." },
+  { icon: PiggyBank, title: "Savings Tracking", desc: "Track your savings accounts, deposits, and watch your money grow over time." },
+  { icon: Target, title: "Financial Goals", desc: "Set savings and debt payoff goals, then track your progress toward each one." },
+  { icon: BarChart3, title: "Progress Dashboard", desc: "Visual overview of your debt, savings, net worth, and milestones." },
+  { icon: CalendarCheck, title: "Weekly Reports", desc: "Automated weekly summaries of payments made, money saved, and progress." },
+  { icon: LineChart, title: "Analytics & Charts", desc: "Beautiful charts showing debt reduction, savings growth, and net worth trends." },
+  { icon: Globe, title: "Multi-Currency", desc: "Track finances in any currency with automatic exchange rate conversion." },
+  { icon: Download, title: "Data Export", desc: "Export your debts, savings, payments, and reports as CSV files anytime." },
   { icon: Shield, title: "Secure Account", desc: "Your data is protected with row-level security and encrypted authentication." },
+  { icon: Wallet, title: "Net Worth Tracking", desc: "See your full financial picture — savings minus debt — updated in real time." },
 ];
 
 const steps = [
-  { icon: CreditCard, title: "Add Your Debts", desc: "Enter your debts with balances, interest rates, and minimum payments." },
-  { icon: DollarSign, title: "Record Payments", desc: "Log each payment as you make it. Mark extra payments for bonus tracking." },
-  { icon: Target, title: "Track & Celebrate", desc: "Watch your progress, earn milestones, and get weekly reports automatically." },
+  { icon: CreditCard, title: "Add Debts & Savings", desc: "Enter your debts with balances and interest rates, and add your savings accounts." },
+  { icon: DollarSign, title: "Record Payments & Deposits", desc: "Log payments toward debt and deposits into savings as you make them." },
+  { icon: Target, title: "Track Your Progress", desc: "Watch your net worth grow, earn milestones, and get weekly reports automatically." },
 ];
 
 const testimonials = [
-  { name: "Alex", country: "Philippines", quote: "This app helped me organize all my debts in one place and track my progress every month.", rating: 5 },
-  { name: "Maria", country: "Singapore", quote: "I like the dashboard and weekly reports. It keeps me motivated to pay my debts.", rating: 5 },
-  { name: "John", country: "Australia", quote: "Multi-currency support is very useful because I have loans in different currencies.", rating: 5 },
+  { name: "Alex", country: "Philippines", quote: "This app helped me organize all my debts and savings in one place. I can finally see my full financial picture.", rating: 5 },
+  { name: "Maria", country: "Singapore", quote: "I love the dashboard showing my net worth going up as I pay off debt and save more each month.", rating: 5 },
+  { name: "John", country: "Australia", quote: "Multi-currency support is very useful because I have loans and savings in different currencies.", rating: 5 },
 ];
 
 // Raw USD amounts for mockups — will be converted at render time
 const mockStatsRaw = [
   { label: "Total Debt", usd: 24500, change: "-12%", icon: CreditCard },
-  { label: "Total Paid", usd: 8200, changeUsd: 1400, icon: DollarSign },
-  { label: "Progress", value: "33%", change: "On track", icon: Target },
-  { label: "Debts Left", value: "4", change: "1 paid off!", icon: TrendingDown },
+  { label: "Total Savings", usd: 18300, change: "+22%", icon: PiggyBank },
+  { label: "Net Worth", usd: -6200, change: "Improving", icon: TrendingUp },
+  { label: "Progress", value: "58%", change: "On track", icon: Target },
+  { label: "Paid This Month", usd: 1400, change: "3 debts", icon: DollarSign },
+  { label: "Saved This Month", usd: 850, change: "+15%", icon: Wallet },
 ];
 
 const mockDebtsRaw = [
-  { name: "Chase Visa", usd: 4200, pct: 35 },
-  { name: "Student Loan", usd: 12500, pct: 18 },
-  { name: "Car Loan", usd: 6300, pct: 45 },
+  { name: "Chase Visa", usd: 4200, pct: 35, type: "debt" as const },
+  { name: "Student Loan", usd: 12500, pct: 18, type: "debt" as const },
+  { name: "Emergency Fund", usd: 8500, pct: 68, type: "savings" as const },
+  { name: "Vacation Goal", usd: 2400, pct: 48, type: "savings" as const },
 ];
 
 function ProPricingCard() {
@@ -92,10 +97,10 @@ export default function Landing() {
   const mockStats = mockStatsRaw.map(s => ({
     ...s,
     value: s.usd != null ? fmt(s.usd) : s.value!,
-    change: s.changeUsd != null ? `+${fmt(s.changeUsd)}` : s.change!,
+    change: s.change!,
   }));
 
-  const mockDebts = mockDebtsRaw.map(d => ({
+  const mockItems = mockDebtsRaw.map(d => ({
     ...d,
     bal: fmt(d.usd),
   }));
@@ -126,7 +131,7 @@ export default function Landing() {
                 <Zap className="w-3 h-3" /> Your path to financial freedom
               </span>
               <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold leading-[1.1] mb-5 text-primary-foreground">
-                Become <span className="text-accent">Debt Free</span> Faster
+                Pay Off Debt. <span className="text-accent">Build Savings.</span> Track Progress.
               </h1>
               <p className="text-base sm:text-lg text-primary-foreground/70 mb-8 max-w-lg leading-relaxed">
                 Track your debts, grow your savings, and monitor your financial progress — all in one simple app designed to help you take control of your money.
@@ -157,8 +162,8 @@ export default function Landing() {
             >
               <div className="bg-card/10 backdrop-blur-md rounded-2xl border border-primary-foreground/10 p-5 shadow-2xl">
                 {/* Mini stat cards */}
-                <div className="grid grid-cols-2 gap-3 mb-4">
-                  {mockStats.map(s => (
+                <div className="grid grid-cols-3 gap-3 mb-4">
+                  {mockStats.slice(0, 3).map(s => (
                     <div key={s.label} className="bg-card/90 backdrop-blur rounded-xl p-3.5 border border-border/50">
                       <div className="flex items-center justify-between mb-2">
                         <s.icon className="w-4 h-4 text-muted-foreground" />
@@ -172,34 +177,46 @@ export default function Landing() {
                 {/* Progress bar mockup */}
                 <div className="bg-card/90 backdrop-blur rounded-xl p-4 border border-border/50">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-semibold text-card-foreground">Overall Progress</span>
-                    <span className="text-xs font-bold text-accent">33%</span>
+                    <span className="text-xs font-semibold text-card-foreground">Financial Progress</span>
+                    <span className="text-xs font-bold text-accent">58%</span>
                   </div>
                   <div className="h-2.5 rounded-full bg-muted overflow-hidden">
                     <motion.div
                       className="h-full rounded-full bg-accent"
                       initial={{ width: 0 }}
-                      animate={{ width: "33%" }}
+                      animate={{ width: "58%" }}
                       transition={{ duration: 1.2, delay: 0.8 }}
                     />
                   </div>
                   <div className="flex justify-between mt-2 text-[10px] text-muted-foreground">
-                    <span>{fmt(8200)} paid</span>
-                    <span>{fmt(24500)} total</span>
+                    <span>Debt: {fmt(24500)}</span>
+                    <span>Savings: {fmt(18300)}</span>
                   </div>
                 </div>
-                {/* Mini chart mockup */}
+                {/* Mini chart mockup - dual bars */}
                 <div className="bg-card/90 backdrop-blur rounded-xl p-4 border border-border/50 mt-3">
-                  <span className="text-xs font-semibold text-card-foreground mb-3 block">Monthly Payments</span>
+                  <span className="text-xs font-semibold text-card-foreground mb-3 block">Debt ↓ &amp; Savings ↑</span>
                   <div className="flex items-end gap-1.5 h-16">
-                    {[35, 50, 42, 65, 55, 70, 80, 60, 75, 85, 68, 90].map((h, i) => (
-                      <motion.div
-                        key={i}
-                        className="flex-1 rounded-t bg-accent/70"
-                        initial={{ height: 0 }}
-                        animate={{ height: `${h}%` }}
-                        transition={{ duration: 0.5, delay: 0.8 + i * 0.05 }}
-                      />
+                    {[
+                      { debt: 90, savings: 10 }, { debt: 85, savings: 18 }, { debt: 78, savings: 25 },
+                      { debt: 72, savings: 32 }, { debt: 68, savings: 40 }, { debt: 62, savings: 48 },
+                      { debt: 58, savings: 55 }, { debt: 52, savings: 60 }, { debt: 48, savings: 68 },
+                      { debt: 42, savings: 72 }, { debt: 38, savings: 78 }, { debt: 32, savings: 85 },
+                    ].map((d, i) => (
+                      <div key={i} className="flex-1 flex gap-px items-end h-full">
+                        <motion.div
+                          className="flex-1 rounded-t bg-destructive/50"
+                          initial={{ height: 0 }}
+                          animate={{ height: `${d.debt}%` }}
+                          transition={{ duration: 0.5, delay: 0.8 + i * 0.05 }}
+                        />
+                        <motion.div
+                          className="flex-1 rounded-t bg-accent/70"
+                          initial={{ height: 0 }}
+                          animate={{ height: `${d.savings}%` }}
+                          transition={{ duration: 0.5, delay: 0.9 + i * 0.05 }}
+                        />
+                      </div>
                     ))}
                   </div>
                   <div className="flex justify-between mt-1.5 text-[8px] text-muted-foreground">
@@ -219,8 +236,8 @@ export default function Landing() {
       <section className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-20">
         <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
           <span className="text-xs font-semibold text-accent uppercase tracking-wider">Dashboard Preview</span>
-          <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Everything at a Glance</h2>
-          <p className="text-muted-foreground max-w-md mx-auto text-sm">A clean dashboard that shows your total debt, progress, payments, and trends — all in one place.</p>
+          <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Your Complete Financial Picture</h2>
+          <p className="text-muted-foreground max-w-md mx-auto text-sm">See your debt, savings, net worth, and progress — all in one clean dashboard.</p>
         </motion.div>
         <motion.div {...fadeUp} transition={{ duration: 0.6, delay: 0.15 }}>
           <div className="max-w-4xl mx-auto bg-card rounded-2xl border border-border shadow-xl overflow-hidden">
@@ -233,7 +250,7 @@ export default function Landing() {
             </div>
             <div className="p-4 sm:p-6">
               {/* Stats row */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-5">
                 {mockStats.map(s => (
                   <div key={s.label} className="bg-secondary/50 rounded-xl p-3.5">
                     <div className="flex items-center gap-2 mb-1.5">
@@ -248,22 +265,30 @@ export default function Landing() {
               {/* Progress */}
               <div className="bg-secondary/50 rounded-xl p-4 mb-4">
                 <div className="flex justify-between mb-2">
-                  <span className="text-sm font-semibold">Overall Progress</span>
-                  <span className="text-sm font-bold text-accent">33%</span>
+                  <span className="text-sm font-semibold">Financial Progress</span>
+                  <span className="text-sm font-bold text-accent">58%</span>
                 </div>
-                <Progress value={33} className="h-3" />
+                <Progress value={58} className="h-3" />
               </div>
-              {/* Debt list mockup */}
+              {/* Debt & Savings list mockup */}
               <div className="space-y-2">
-                {mockDebts.map(d => (
+                {mockItems.map(d => (
                   <div key={d.name} className="flex items-center gap-4 bg-secondary/30 rounded-lg p-3">
-                    <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <CreditCard className="w-4 h-4 text-primary" />
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${d.type === "savings" ? "bg-accent/10" : "bg-primary/10"}`}>
+                      {d.type === "savings"
+                        ? <PiggyBank className="w-4 h-4 text-accent" />
+                        : <CreditCard className="w-4 h-4 text-primary" />
+                      }
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex justify-between items-center mb-1">
                         <span className="text-sm font-medium truncate">{d.name}</span>
-                        <span className="text-xs text-muted-foreground">{d.bal}</span>
+                        <div className="flex items-center gap-2">
+                          <span className={`text-[10px] font-medium ${d.type === "savings" ? "text-accent" : "text-muted-foreground"}`}>
+                            {d.type === "savings" ? "Savings" : "Debt"}
+                          </span>
+                          <span className="text-xs text-muted-foreground">{d.bal}</span>
+                        </div>
                       </div>
                       <Progress value={d.pct} className="h-1.5" />
                     </div>
@@ -313,9 +338,9 @@ export default function Landing() {
         <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
           <span className="text-xs font-semibold text-accent uppercase tracking-wider">Features</span>
           <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Everything You Need</h2>
-          <p className="text-muted-foreground max-w-md mx-auto text-sm">Simple yet powerful tools to help you take control of your finances.</p>
+          <p className="text-muted-foreground max-w-md mx-auto text-sm">Simple yet powerful tools to track your debts, grow your savings, and monitor your financial progress.</p>
         </motion.div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {features.map((f, i) => (
             <motion.div
               key={f.title}
@@ -341,16 +366,19 @@ export default function Landing() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-12">
           <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
             <span className="text-xs font-semibold text-accent uppercase tracking-wider">Analytics</span>
-            <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Visualize Your Progress</h2>
-            <p className="text-muted-foreground max-w-md mx-auto text-sm">Beautiful charts and reports to keep you informed and motivated.</p>
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Visualize Your Financial Progress</h2>
+            <p className="text-muted-foreground max-w-md mx-auto text-sm">Beautiful charts showing your debt reduction, savings growth, and net worth over time.</p>
           </motion.div>
-          <div className="grid sm:grid-cols-3 gap-4 max-w-4xl mx-auto">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
             {[
-              { title: "Payments Per Month", bars: [30, 55, 40, 70, 50, 80, 65, 90, 75, 85, 60, 95] },
-              { title: "Progress Over Time", bars: [5, 10, 15, 20, 22, 25, 28, 30, 33, 35, 38, 42] },
-              { title: "Remaining Debt", bars: [95, 90, 85, 80, 78, 75, 72, 70, 67, 65, 62, 58] },
+              { title: "Debt Over Time", bars: [95, 90, 85, 80, 78, 75, 72, 70, 67, 65, 62, 58], color: "bg-destructive/50" },
+              { title: "Savings Over Time", bars: [10, 18, 25, 32, 40, 48, 55, 60, 68, 72, 78, 85], color: "bg-accent/60" },
+              { title: "Net Worth", bars: [5, 12, 18, 25, 30, 38, 45, 50, 58, 62, 70, 78], color: "bg-primary/60" },
+              { title: "Payments Per Month", bars: [30, 55, 40, 70, 50, 80, 65, 90, 75, 85, 60, 95], color: "bg-accent/60" },
+              { title: "Savings Per Month", bars: [20, 35, 30, 45, 50, 55, 60, 50, 65, 70, 55, 80], color: "bg-accent/60" },
+              { title: "Progress Over Time", bars: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 58], color: "bg-primary/60" },
             ].map((chart, ci) => (
-              <motion.div key={chart.title} {...fadeUp} transition={{ delay: ci * 0.1 }}>
+              <motion.div key={chart.title} {...fadeUp} transition={{ delay: ci * 0.08 }}>
                 <Card className="overflow-hidden">
                   <CardContent className="p-5">
                     <h4 className="text-xs font-semibold mb-4">{chart.title}</h4>
@@ -358,7 +386,7 @@ export default function Landing() {
                       {chart.bars.map((h, i) => (
                         <motion.div
                           key={i}
-                          className={`flex-1 rounded-t ${ci === 2 ? "bg-destructive/40" : "bg-accent/60"}`}
+                          className={`flex-1 rounded-t ${chart.color}`}
                           initial={{ height: 0 }}
                           whileInView={{ height: `${h}%` }}
                           viewport={{ once: true }}
@@ -382,7 +410,7 @@ export default function Landing() {
         <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
           <span className="text-xs font-semibold text-accent uppercase tracking-wider">Testimonials</span>
           <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">What Users Say</h2>
-          <p className="text-muted-foreground max-w-md mx-auto text-sm">Real feedback from people on their debt-free journey.</p>
+          <p className="text-muted-foreground max-w-md mx-auto text-sm">Real feedback from people on their financial freedom journey.</p>
         </motion.div>
         <div className="grid sm:grid-cols-3 gap-5 max-w-4xl mx-auto">
           {testimonials.map((t, i) => (
@@ -430,7 +458,7 @@ export default function Landing() {
                     <p className="font-heading text-3xl font-extrabold mt-1">$0<span className="text-sm font-normal text-muted-foreground">/forever</span></p>
                   </div>
                   <ul className="space-y-2.5 mb-6">
-                    {["Track unlimited debts", "Record payments", "Weekly reports", "Multi-currency support", "Progress dashboard", "Data export (CSV)"].map(f => (
+                    {["Track unlimited debts", "Track savings accounts", "Record payments & deposits", "Weekly reports", "Multi-currency support", "Progress dashboard", "Data export (CSV)"].map(f => (
                       <li key={f} className="flex items-center gap-2 text-sm">
                         <CheckCircle2 className="w-4 h-4 text-accent flex-shrink-0" />
                         {f}
@@ -454,10 +482,10 @@ export default function Landing() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-24 text-center relative z-10">
           <motion.div {...fadeUp} transition={{ duration: 0.6 }}>
             <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-extrabold text-primary-foreground mb-4">
-              Start Your Debt-Free Journey Today
+              Start Your Financial Freedom Journey Today
             </h2>
             <p className="text-primary-foreground/60 mb-8 max-w-md mx-auto text-sm sm:text-base">
-              Join thousands who are tracking their progress and eliminating debt one payment at a time.
+              Join thousands who are paying off debt, building savings, and taking control of their financial future.
             </p>
             <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
               <Link to="/signup">Create Free Account <ArrowRight className="ml-2 w-4 h-4" /></Link>
@@ -479,7 +507,7 @@ export default function Landing() {
                 </div>
                 <span className="font-heading font-bold">Debt Free Journey</span>
               </Link>
-              <p className="text-sm text-muted-foreground leading-relaxed">Track your debts, record payments, and achieve financial freedom with powerful tools and insights.</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">A financial progress tracker that helps you pay off debt, build savings, and track your journey to financial freedom.</p>
             </div>
             <div>
               <h4 className="font-heading font-semibold text-sm mb-3">Product</h4>
