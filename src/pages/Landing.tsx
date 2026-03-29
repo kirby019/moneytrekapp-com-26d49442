@@ -127,6 +127,7 @@ function ProPricingCard() {
 
 export default function Landing() {
   const { format: fmt } = useLocalizedCurrency();
+  const { user, signOut } = useAuth();
 
   const mockStats = mockStatsRaw.map(s => ({
     ...s,
@@ -150,8 +151,19 @@ export default function Landing() {
           <span className="font-heading font-bold text-lg">MoneyTrek</span>
         </Link>
         <div className="flex items-center gap-2 sm:gap-3">
-          <Button variant="ghost" size="sm" asChild><Link to="/login">Log in</Link></Button>
-          <Button size="sm" asChild><Link to="/signup">Get Started</Link></Button>
+          {user ? (
+            <>
+              <Button size="sm" asChild><Link to="/dashboard">Dashboard</Link></Button>
+              <Button variant="ghost" size="sm" onClick={() => signOut()}>
+                <LogOut className="w-4 h-4 mr-1" /> Sign Out
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button variant="ghost" size="sm" asChild><Link to="/login">Log in</Link></Button>
+              <Button size="sm" asChild><Link to="/signup">Get Started</Link></Button>
+            </>
+          )}
         </div>
       </nav>
 
