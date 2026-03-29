@@ -10,6 +10,7 @@ import { formatCurrency } from "@/lib/currency";
 import UpgradePrompt from "@/components/UpgradePrompt";
 import { useFeatureAccess } from "@/hooks/useSubscription";
 import { useCelebrations } from "@/hooks/useCelebrations";
+import { useUpdateStreak } from "@/hooks/useStreak";
 import { useEffect, useRef } from "react";
 
 export default function WeeklyReview() {
@@ -21,13 +22,15 @@ export default function WeeklyReview() {
   const { data: rates } = useExchangeRates();
   const defaultCurrency = (profile as any)?.default_currency ?? "USD";
   const { celebrateWeeklyReview } = useCelebrations();
+  const updateStreak = useUpdateStreak();
   const hasShownReviewToast = useRef(false);
 
-  // Show encouragement toast when viewing weekly review with payments
+  // Show encouragement toast and update streak when viewing weekly review
   useEffect(() => {
     if (hasAccess && payments && payments.length > 0 && !hasShownReviewToast.current) {
       hasShownReviewToast.current = true;
       celebrateWeeklyReview();
+      updateStreak.mutate();
     }
   }, [hasAccess, payments, celebrateWeeklyReview]);
 
@@ -43,9 +46,7 @@ export default function WeeklyReview() {
     return pd >= weekStart && pd <= now;
   }) ?? [];
 
-  // Convert weekly payment totals to default currency
   const weekTotal = thisWeekPayments.reduce((s, p) => {
-    // Payments inherit debt currency — look up the debt
     const debt = debts?.find(d => d.id === p.debt_id);
     const cur = (debt as any)?.currency ?? defaultCurrency;
     return s + convertCurrency(p.amount ?? 0, cur, defaultCurrency, rates);
