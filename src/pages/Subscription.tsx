@@ -94,11 +94,11 @@ export default function Subscription() {
                 {isPro && <Badge className="bg-accent text-accent-foreground text-xs">Current</Badge>}
               </div>
               <div className="mb-1">
-                <span className="text-3xl font-heading font-extrabold">${PRO_PRICING.monthly}</span>
+                <span className="text-3xl font-heading font-extrabold">{monthlyPrice}</span>
                 <span className="text-sm text-muted-foreground">/month</span>
               </div>
               <p className="text-xs text-muted-foreground mb-4">
-                or ${PRO_PRICING.yearly}/year (save 44%)
+                or {yearlyPrice}/year (save 44%)
               </p>
               <ul className="space-y-2 mb-6">
                 {proPlanFeatures.map(f => (
