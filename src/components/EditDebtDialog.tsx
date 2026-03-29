@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import CurrencySelector from "@/components/CurrencySelector";
 import { DEBT_TYPES } from "@/lib/debtTypes";
+import { useSubscription } from "@/hooks/useSubscription";
 
 interface EditDebtDialogProps {
   debt: any;
@@ -18,6 +19,7 @@ interface EditDebtDialogProps {
 
 export default function EditDebtDialog({ debt, open, onOpenChange }: EditDebtDialogProps) {
   const queryClient = useQueryClient();
+  const { isFree } = useSubscription();
   const [form, setForm] = useState({
     debt_name: "",
     debt_type: "Credit Card",
@@ -91,10 +93,12 @@ export default function EditDebtDialog({ debt, open, onOpenChange }: EditDebtDia
               </SelectContent>
             </Select>
           </div>
-          <div className="space-y-2">
-            <Label>Currency</Label>
-            <CurrencySelector value={form.currency} onValueChange={v => setForm({ ...form, currency: v })} />
-          </div>
+          {!isFree && (
+            <div className="space-y-2">
+              <Label>Currency</Label>
+              <CurrencySelector value={form.currency} onValueChange={v => setForm({ ...form, currency: v })} />
+            </div>
+          )}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
               <Label>Current Balance</Label>
