@@ -8,8 +8,11 @@ import { useProfile } from "@/hooks/useProfile";
 import { formatCurrency } from "@/lib/currency";
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts";
 import { format, parseISO, startOfMonth } from "date-fns";
+import UpgradePrompt from "@/components/UpgradePrompt";
+import { useFeatureAccess } from "@/hooks/useSubscription";
 
 export default function Analytics() {
+  const { hasAccess } = useFeatureAccess("advancedAnalytics");
   const { data: debts, isLoading: debtsLoading } = useDebts();
   const { data: payments, isLoading: paymentsLoading } = usePayments();
   const { data: profile } = useProfile();
