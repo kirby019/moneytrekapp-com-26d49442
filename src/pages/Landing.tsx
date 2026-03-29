@@ -87,6 +87,19 @@ function ProPricingCard() {
 }
 
 export default function Landing() {
+  const { format: fmt } = useLocalizedCurrency();
+
+  const mockStats = mockStatsRaw.map(s => ({
+    ...s,
+    value: s.usd != null ? fmt(s.usd) : s.value!,
+    change: s.changeUsd != null ? `+${fmt(s.changeUsd)}` : s.change!,
+  }));
+
+  const mockDebts = mockDebtsRaw.map(d => ({
+    ...d,
+    bal: fmt(d.usd),
+  }));
+
   return (
     <div className="min-h-screen bg-background">
       {/* Nav */}
