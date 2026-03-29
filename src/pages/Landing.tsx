@@ -142,8 +142,8 @@ export default function Landing() {
                 </Button>
               </div>
               <div className="flex items-center gap-6 mt-8 text-primary-foreground/50 text-sm">
-                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent" /> Free to use</span>
                 <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent" /> No credit card</span>
+                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent" /> Cancel anytime</span>
                 <span className="flex items-center gap-1.5 hidden sm:flex"><CheckCircle2 className="w-4 h-4 text-accent" /> Multi-currency</span>
               </div>
             </motion.div>
