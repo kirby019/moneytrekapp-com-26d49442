@@ -29,6 +29,7 @@ export default function AppSettings() {
   const { data: reports } = useWeeklyReports();
   const { signOut } = useAuth();
   const navigate = useNavigate();
+  const { hasAccess: canExport } = useFeatureAccess("csvExport");
 
   const [currency, setCurrency] = useState<string | null>(null);
   const [newPassword, setNewPassword] = useState("");
