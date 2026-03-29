@@ -52,8 +52,9 @@ const mockStatsRaw = [
 ];
 
 const mockDebtsRaw = [
-  { name: "Chase Visa", usd: 4200, pct: 35, type: "debt" as const },
+  { name: "Credit Card", usd: 4200, pct: 35, type: "debt" as const },
   { name: "Student Loan", usd: 12500, pct: 18, type: "debt" as const },
+  { name: "Mortgage", usd: 185000, pct: 8, type: "debt" as const },
   { name: "Emergency Fund", usd: 8500, pct: 68, type: "savings" as const },
   { name: "Vacation Goal", usd: 2400, pct: 48, type: "savings" as const },
 ];
