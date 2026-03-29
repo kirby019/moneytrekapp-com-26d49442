@@ -51,7 +51,13 @@ const timezoneToCurrency: Record<string, string> = {
 };
 
 function detectCurrency(): string {
-  // 1. Try locale region first
+  // 1. Prioritize timezone (more accurate for users with English browser locale in Vietnam)
+  try {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    if (tz && timezoneToCurrency[tz]) return timezoneToCurrency[tz];
+  } catch {}
+
+  // 2. Fallback to locale region
   try {
     const locales = navigator.languages ?? [navigator.language];
     for (const locale of locales) {
@@ -61,12 +67,6 @@ function detectCurrency(): string {
         if (localeToCurrency[region]) return localeToCurrency[region];
       }
     }
-  } catch {}
-
-  // 2. Fallback to timezone detection (works even with en-US locale in Vietnam)
-  try {
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    if (tz && timezoneToCurrency[tz]) return timezoneToCurrency[tz];
   } catch {}
 
   return "USD";
