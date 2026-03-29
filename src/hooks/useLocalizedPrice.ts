@@ -81,8 +81,3 @@ export function useLocalizedPrice(baseUsd: number) {
     raw: baseUsd,
   }), [baseUsd, currency, format]);
 }
-      currency: detectedCurrency,
-      raw: rounded,
-    };
-  }, [baseUsd, detectedCurrency, rates]);
-}
