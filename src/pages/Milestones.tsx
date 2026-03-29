@@ -1,25 +1,42 @@
 import { Trophy, Star, Flame, Award, Lock } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import AppLayout from "@/components/AppLayout";
+import { useMilestones } from "@/hooks/useMilestones";
+import { useDebts } from "@/hooks/useDebts";
 
-const badges = [
-  { icon: Star, title: "First Step", desc: "Made your first payment", unlocked: true },
-  { icon: Flame, title: "On Fire", desc: "3 consecutive monthly payments", unlocked: true },
-  { icon: Trophy, title: "Debt Slayer", desc: "Paid off your first debt", unlocked: true },
-  { icon: Award, title: "Quarter Done", desc: "Eliminated 25% of total debt", unlocked: true },
-  { icon: Trophy, title: "Halfway Hero", desc: "Eliminated 50% of total debt", unlocked: false },
-  { icon: Flame, title: "Unstoppable", desc: "6 consecutive monthly payments", unlocked: false },
-  { icon: Star, title: "Almost There", desc: "Eliminated 75% of total debt", unlocked: false },
-  { icon: Award, title: "Debt Free!", desc: "Paid off all your debts!", unlocked: false },
+const badgeDefs = [
+  { icon: Star, title: "First Step", desc: "Made your first payment", percent: 1 },
+  { icon: Flame, title: "Getting Started", desc: "Eliminated 10% of total debt", percent: 10 },
+  { icon: Trophy, title: "Quarter Done", desc: "Eliminated 25% of total debt", percent: 25 },
+  { icon: Award, title: "Halfway Hero", desc: "Eliminated 50% of total debt", percent: 50 },
+  { icon: Flame, title: "Almost There", desc: "Eliminated 75% of total debt", percent: 75 },
+  { icon: Star, title: "Final Stretch", desc: "Eliminated 90% of total debt", percent: 90 },
+  { icon: Trophy, title: "Debt Free!", desc: "Paid off all your debts!", percent: 100 },
 ];
 
 export default function Milestones() {
+  const { data: milestones } = useMilestones();
+  const { data: debts } = useDebts();
+
+  const totalOriginal = debts?.reduce((s, d) => s + (d.original_amount ?? 0), 0) ?? 0;
+  const totalBalance = debts?.reduce((s, d) => s + (d.current_balance ?? 0), 0) ?? 0;
+  const currentProgress = totalOriginal > 0 ? ((totalOriginal - totalBalance) / totalOriginal) * 100 : 0;
+
+  const achievedPercents = new Set(milestones?.map(m => m.milestone_percent) ?? []);
+
+  const badges = badgeDefs.map(b => ({
+    ...b,
+    unlocked: achievedPercents.has(b.percent) || currentProgress >= b.percent,
+  }));
+
+  const unlockedCount = badges.filter(b => b.unlocked).length;
+
   return (
     <AppLayout>
       <div className="max-w-3xl mx-auto space-y-6">
         <div>
           <h1 className="font-heading text-2xl font-bold">Milestones & Badges</h1>
-          <p className="text-sm text-muted-foreground mt-1">{badges.filter(b => b.unlocked).length} of {badges.length} unlocked</p>
+          <p className="text-sm text-muted-foreground mt-1">{unlockedCount} of {badges.length} unlocked</p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {badges.map(b => (
