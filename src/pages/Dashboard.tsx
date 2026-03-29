@@ -56,7 +56,7 @@ export default function Dashboard() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="font-heading text-2xl lg:text-3xl font-bold">Welcome back, {firstName}! 👋</h1>
-            <p className="text-muted-foreground text-sm mt-1">Here's your debt payoff overview.</p>
+            <p className="text-muted-foreground text-sm mt-1">Here's your financial progress overview.</p>
           </div>
           <Button asChild>
             <Link to="/add-debt"><Plus className="w-4 h-4 mr-2" /> Add Debt</Link>
