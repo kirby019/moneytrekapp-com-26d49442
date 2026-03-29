@@ -129,7 +129,7 @@ export default function Landing() {
                 Become <span className="text-accent">Debt Free</span> Faster
               </h1>
               <p className="text-base sm:text-lg text-primary-foreground/70 mb-8 max-w-lg leading-relaxed">
-                Track your debts, record payments, monitor progress with charts and reports — all in one simple app designed to help you crush debt for good.
+                Track your debts, grow your savings, and monitor your financial progress — all in one simple app designed to help you take control of your money.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
