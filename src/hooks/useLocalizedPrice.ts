@@ -31,7 +31,7 @@ function detectCurrency(): string {
   return "USD";
 }
 
-export function useLocalizedPrice(baseUsd: number) {
+export function useLocalizedCurrency() {
   const detectedCurrency = useMemo(() => detectCurrency(), []);
 
   const { data: rates } = useQuery({
@@ -46,28 +46,41 @@ export function useLocalizedPrice(baseUsd: number) {
     staleTime: 1000 * 60 * 60,
   });
 
-  return useMemo(() => {
-    if (detectedCurrency === "USD" || !rates || rates.length === 0) {
-      return { price: formatCurrency(baseUsd, "USD"), currency: "USD", raw: baseUsd };
-    }
+  const convert = useMemo(() => {
+    return (usdAmount: number) => {
+      if (detectedCurrency === "USD" || !rates || rates.length === 0) return usdAmount;
+      const rate = rates.find(r => r.base_currency === "USD" && r.target_currency === detectedCurrency);
+      if (!rate) return usdAmount;
+      return usdAmount * rate.rate;
+    };
+  }, [detectedCurrency, rates]);
 
-    // Find USD -> detected currency rate
-    const rate = rates.find(
-      r => r.base_currency === "USD" && r.target_currency === detectedCurrency
-    );
+  const format = useMemo(() => {
+    return (usdAmount: number, round = true) => {
+      const converted = convert(usdAmount);
+      const cur = (detectedCurrency !== "USD" && rates?.length) ? detectedCurrency : "USD";
+      if (round) {
+        const rounded = converted < 10 ? Math.round(converted * 100) / 100 :
+                        converted < 100 ? Math.round(converted * 10) / 10 :
+                        Math.round(converted);
+        return formatCurrency(rounded, cur);
+      }
+      return formatCurrency(converted, cur);
+    };
+  }, [convert, detectedCurrency, rates]);
 
-    if (!rate) {
-      return { price: formatCurrency(baseUsd, "USD"), currency: "USD", raw: baseUsd };
-    }
+  return { currency: detectedCurrency, convert, format, rates };
+}
 
-    const converted = baseUsd * rate.rate;
-    // Round nicely
-    const rounded = converted < 10 ? Math.round(converted * 100) / 100 :
-                    converted < 100 ? Math.round(converted * 10) / 10 :
-                    Math.round(converted);
+export function useLocalizedPrice(baseUsd: number) {
+  const { currency, format } = useLocalizedCurrency();
 
-    return {
-      price: formatCurrency(rounded, detectedCurrency),
+  return useMemo(() => ({
+    price: format(baseUsd),
+    currency,
+    raw: baseUsd,
+  }), [baseUsd, currency, format]);
+}
       currency: detectedCurrency,
       raw: rounded,
     };
