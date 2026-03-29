@@ -198,5 +198,14 @@ export default function Dashboard() {
         )}
       </div>
     </AppLayout>
+
+      <CelebrationModal
+        open={celebration.open}
+        onOpenChange={closeCelebration}
+        emoji={celebration.emoji}
+        title={celebration.title}
+        message={celebration.message}
+      />
+    </>
   );
 }
