@@ -33,6 +33,9 @@ export default function Debts() {
     if (!deleteDebt) return;
     setDeleting(true);
     try {
+      // Delete associated payments first to avoid foreign key constraint
+      const { error: paymentsError } = await supabase.from("payments").delete().eq("debt_id", deleteDebt.id);
+      if (paymentsError) throw paymentsError;
       const { error } = await supabase.from("debts").delete().eq("id", deleteDebt.id);
       if (error) throw error;
       queryClient.invalidateQueries({ queryKey: ["debts"] });
