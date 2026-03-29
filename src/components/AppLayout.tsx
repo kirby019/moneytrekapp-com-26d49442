@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, CreditCard, Plus, History, Target, Map, Trophy, CalendarCheck,
-  Sparkles, User, Settings, Crown, LogOut, Menu, X, ChevronRight
+  Sparkles, User, Settings, Crown, LogOut, Menu, X, ChevronRight, BarChart3
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -13,6 +13,7 @@ const navItems = [
   { label: "Debts", icon: CreditCard, path: "/debts" },
   { label: "Add Debt", icon: Plus, path: "/add-debt" },
   { label: "Payment History", icon: History, path: "/payment-history" },
+  { label: "Analytics", icon: BarChart3, path: "/analytics" },
   { label: "Strategy", icon: Target, path: "/strategy" },
   { label: "Journey", icon: Map, path: "/journey" },
   { label: "Milestones", icon: Trophy, path: "/milestones" },
@@ -39,7 +40,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   const NavContent = () => (
     <div className="flex flex-col h-full">
-      <div className="p-6">
+      <div className="p-4 lg:p-6">
         <Link to="/dashboard" className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-sidebar-primary flex items-center justify-center">
             <Sparkles className="w-4 h-4 text-sidebar-primary-foreground" />
@@ -47,7 +48,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <span className="font-heading font-bold text-lg text-sidebar-foreground">Debt Free</span>
         </Link>
       </div>
-      <nav className="flex-1 px-3 space-y-1">
+      <nav className="flex-1 px-2 lg:px-3 space-y-0.5 overflow-y-auto">
         {navItems.map((item) => {
           const active = location.pathname === item.path;
           return (
@@ -56,19 +57,19 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               to={item.path}
               onClick={() => setSidebarOpen(false)}
               className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                "flex items-center gap-3 px-3 py-2 lg:py-2.5 rounded-lg text-sm font-medium transition-colors",
                 active
                   ? "bg-sidebar-accent text-sidebar-primary"
                   : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
               )}
             >
-              <item.icon className="w-4 h-4" />
-              {item.label}
+              <item.icon className="w-4 h-4 flex-shrink-0" />
+              <span className="truncate">{item.label}</span>
             </Link>
           );
         })}
       </nav>
-      <div className="px-3 pb-4 space-y-1 border-t border-sidebar-border pt-4">
+      <div className="px-2 lg:px-3 pb-4 space-y-0.5 border-t border-sidebar-border pt-4">
         {bottomItems.map((item) => {
           const active = location.pathname === item.path;
           return (
@@ -77,23 +78,23 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               to={item.path}
               onClick={() => setSidebarOpen(false)}
               className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                "flex items-center gap-3 px-3 py-2 lg:py-2.5 rounded-lg text-sm font-medium transition-colors",
                 active
                   ? "bg-sidebar-accent text-sidebar-primary"
                   : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
               )}
             >
-              <item.icon className="w-4 h-4" />
-              {item.label}
+              <item.icon className="w-4 h-4 flex-shrink-0" />
+              <span className="truncate">{item.label}</span>
             </Link>
           );
         })}
         <button
           onClick={handleSignOut}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground w-full transition-colors"
+          className="flex items-center gap-3 px-3 py-2 lg:py-2.5 rounded-lg text-sm font-medium text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground w-full transition-colors"
         >
-          <LogOut className="w-4 h-4" />
-          Sign Out
+          <LogOut className="w-4 h-4 flex-shrink-0" />
+          <span className="truncate">Sign Out</span>
         </button>
       </div>
     </div>
@@ -101,14 +102,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <aside className="hidden lg:flex w-64 flex-col bg-sidebar border-r border-sidebar-border">
+      <aside className="hidden lg:flex w-64 flex-col bg-sidebar border-r border-sidebar-border flex-shrink-0">
         <NavContent />
       </aside>
 
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="absolute inset-0 bg-foreground/40" onClick={() => setSidebarOpen(false)} />
-          <aside className="relative w-64 h-full bg-sidebar">
+          <aside className="relative w-64 h-full bg-sidebar shadow-xl">
             <button onClick={() => setSidebarOpen(false)} className="absolute top-4 right-4 text-sidebar-foreground">
               <X className="w-5 h-5" />
             </button>
@@ -117,16 +118,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </div>
       )}
 
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="h-14 border-b border-border flex items-center px-4 lg:px-6 gap-4 bg-card">
-          <button onClick={() => setSidebarOpen(true)} className="lg:hidden">
+      <div className="flex-1 flex flex-col overflow-hidden min-w-0">
+        <header className="h-14 border-b border-border flex items-center px-4 lg:px-6 gap-4 bg-card flex-shrink-0">
+          <button onClick={() => setSidebarOpen(true)} className="lg:hidden flex-shrink-0">
             <Menu className="w-5 h-5 text-foreground" />
           </button>
-          <div className="flex items-center gap-1 text-sm text-muted-foreground">
+          <div className="flex items-center gap-1 text-sm text-muted-foreground truncate">
             {navItems.concat(bottomItems).filter(i => i.path === location.pathname).map(i => (
               <span key={i.path} className="flex items-center gap-1">
-                <ChevronRight className="w-3 h-3" />
-                <span className="text-foreground font-medium">{i.label}</span>
+                <ChevronRight className="w-3 h-3 flex-shrink-0" />
+                <span className="text-foreground font-medium truncate">{i.label}</span>
               </span>
             ))}
           </div>
