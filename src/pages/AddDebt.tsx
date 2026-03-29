@@ -50,6 +50,12 @@ export default function AddDebt() {
     <AppLayout>
       <div className="max-w-lg mx-auto">
         <h1 className="font-heading text-2xl font-bold mb-6">Add New Debt</h1>
+        {!canAdd ? (
+          <UpgradePrompt
+            title="Debt Limit Reached"
+            message={`Free plan supports up to ${maxDebts} debts. Upgrade to Pro for unlimited debts.`}
+          />
+        ) : (
         <Card>
           <CardContent className="p-6">
             <form onSubmit={handleSubmit} className="space-y-5">
