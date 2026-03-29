@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { TrendingDown, DollarSign, CreditCard, Target, ArrowRight, Plus } from "lucide-react";
+import { TrendingDown, DollarSign, CreditCard, Target, ArrowRight, Plus, Crown } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -10,6 +10,7 @@ import { useProfile } from "@/hooks/useProfile";
 import { useExchangeRates, convertCurrency } from "@/hooks/useExchangeRates";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatCurrency } from "@/lib/currency";
+import { useSubscription } from "@/hooks/useSubscription";
 
 export default function Dashboard() {
   const { data: debts, isLoading } = useDebts();
