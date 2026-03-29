@@ -5,6 +5,7 @@ import { Check, Crown, X } from "lucide-react";
 import AppLayout from "@/components/AppLayout";
 import { cn } from "@/lib/utils";
 import { useSubscription, PRO_PRICING } from "@/hooks/useSubscription";
+import { useLocalizedCurrency } from "@/hooks/useLocalizedPrice";
 
 const freePlanFeatures = [
   { text: "Up to 3 debts", included: true },
