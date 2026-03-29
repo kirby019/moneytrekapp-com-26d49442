@@ -17,6 +17,7 @@ export type Database = {
       debts: {
         Row: {
           created_at: string | null
+          currency: string | null
           current_balance: number | null
           debt_name: string | null
           due_date: string | null
@@ -30,6 +31,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string | null
+          currency?: string | null
           current_balance?: number | null
           debt_name?: string | null
           due_date?: string | null
@@ -43,6 +45,7 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
+          currency?: string | null
           current_balance?: number | null
           debt_name?: string | null
           due_date?: string | null
@@ -173,18 +176,21 @@ export type Database = {
       profiles: {
         Row: {
           created_at: string | null
+          default_currency: string | null
           email: string | null
           full_name: string | null
           id: string
         }
         Insert: {
           created_at?: string | null
+          default_currency?: string | null
           email?: string | null
           full_name?: string | null
           id: string
         }
         Update: {
           created_at?: string | null
+          default_currency?: string | null
           email?: string | null
           full_name?: string | null
           id?: string
