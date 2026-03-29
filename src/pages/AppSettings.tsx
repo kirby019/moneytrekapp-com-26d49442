@@ -16,9 +16,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Download, Key, Trash2 } from "lucide-react";
+import { Download, Key, Trash2, Lock } from "lucide-react";
 import { exportToCsv } from "@/lib/exportCsv";
 import { useNavigate } from "react-router-dom";
+import { useFeatureAccess } from "@/hooks/useSubscription";
 
 export default function AppSettings() {
   const { data: profile, isLoading } = useProfile();
