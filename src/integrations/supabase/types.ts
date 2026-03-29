@@ -14,119 +14,296 @@ export type Database = {
   }
   public: {
     Tables: {
-      categories: {
+      debts: {
         Row: {
           created_at: string | null
+          current_balance: number | null
+          debt_name: string | null
+          due_date: string | null
           id: string
+          interest_rate: number | null
+          minimum_payment: number | null
+          original_amount: number | null
+          paid_off_date: string | null
+          status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          current_balance?: number | null
+          debt_name?: string | null
+          due_date?: string | null
+          id?: string
+          interest_rate?: number | null
+          minimum_payment?: number | null
+          original_amount?: number | null
+          paid_off_date?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          current_balance?: number | null
+          debt_name?: string | null
+          due_date?: string | null
+          id?: string
+          interest_rate?: number | null
+          minimum_payment?: number | null
+          original_amount?: number | null
+          paid_off_date?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "debts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      milestones: {
+        Row: {
+          achieved_date: string | null
+          id: string
+          milestone_percent: number | null
+          user_id: string | null
+        }
+        Insert: {
+          achieved_date?: string | null
+          id?: string
+          milestone_percent?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          achieved_date?: string | null
+          id?: string
+          milestone_percent?: number | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "milestones_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          date: string | null
+          id: string
+          message: string | null
+          read_status: boolean | null
+          user_id: string | null
+        }
+        Insert: {
+          date?: string | null
+          id?: string
+          message?: string | null
+          read_status?: boolean | null
+          user_id?: string | null
+        }
+        Update: {
+          date?: string | null
+          id?: string
+          message?: string | null
+          read_status?: boolean | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payments: {
+        Row: {
+          amount: number | null
+          debt_id: string | null
+          id: string
+          is_extra_payment: boolean | null
+          notes: string | null
+          payment_date: string | null
+          user_id: string | null
+        }
+        Insert: {
+          amount?: number | null
+          debt_id?: string | null
+          id?: string
+          is_extra_payment?: boolean | null
+          notes?: string | null
+          payment_date?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number | null
+          debt_id?: string | null
+          id?: string
+          is_extra_payment?: boolean | null
+          notes?: string | null
+          payment_date?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_debt_id_fkey"
+            columns: ["debt_id"]
+            isOneToOne: false
+            referencedRelation: "debts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      streaks: {
+        Row: {
+          current_streak: number | null
+          last_activity_date: string | null
+          user_id: string | null
+        }
+        Insert: {
+          current_streak?: number | null
+          last_activity_date?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          current_streak?: number | null
+          last_activity_date?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "streaks_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subscriptions: {
+        Row: {
+          end_date: string | null
+          id: string
+          plan: string | null
+          start_date: string | null
+          status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          end_date?: string | null
+          id?: string
+          plan?: string | null
+          start_date?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          end_date?: string | null
+          id?: string
+          plan?: string | null
+          start_date?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users: {
+        Row: {
+          created_at: string | null
+          email: string | null
+          id: string
+          identity: string | null
+          journey_type: string | null
           name: string | null
-          slug: string | null
+          password: string | null
+          reason: string | null
+          selected_strategy: string | null
+          timezone: string | null
         }
         Insert: {
           created_at?: string | null
+          email?: string | null
           id?: string
+          identity?: string | null
+          journey_type?: string | null
           name?: string | null
-          slug?: string | null
+          password?: string | null
+          reason?: string | null
+          selected_strategy?: string | null
+          timezone?: string | null
         }
         Update: {
           created_at?: string | null
+          email?: string | null
           id?: string
+          identity?: string | null
+          journey_type?: string | null
           name?: string | null
-          slug?: string | null
+          password?: string | null
+          reason?: string | null
+          selected_strategy?: string | null
+          timezone?: string | null
         }
         Relationships: []
       }
-      posts: {
+      weekly_reports: {
         Row: {
-          affiliate_link: string | null
-          category: string | null
-          content: string | null
-          created_at: string | null
-          featured: boolean | null
+          amount_paid: number | null
           id: string
-          image_url: string | null
-          original_link: string | null
-          published_at: string | null
-          source: string | null
-          source_url: string | null
-          status: string | null
-          subcategory: string | null
-          summary: string | null
-          tags: string | null
-          title: string | null
-          trending: boolean | null
-          views: number | null
+          notes: string | null
+          progress_percent: number | null
+          user_id: string | null
+          week_start: string | null
         }
         Insert: {
-          affiliate_link?: string | null
-          category?: string | null
-          content?: string | null
-          created_at?: string | null
-          featured?: boolean | null
+          amount_paid?: number | null
           id?: string
-          image_url?: string | null
-          original_link?: string | null
-          published_at?: string | null
-          source?: string | null
-          source_url?: string | null
-          status?: string | null
-          subcategory?: string | null
-          summary?: string | null
-          tags?: string | null
-          title?: string | null
-          trending?: boolean | null
-          views?: number | null
+          notes?: string | null
+          progress_percent?: number | null
+          user_id?: string | null
+          week_start?: string | null
         }
         Update: {
-          affiliate_link?: string | null
-          category?: string | null
-          content?: string | null
-          created_at?: string | null
-          featured?: boolean | null
+          amount_paid?: number | null
           id?: string
-          image_url?: string | null
-          original_link?: string | null
-          published_at?: string | null
-          source?: string | null
-          source_url?: string | null
-          status?: string | null
-          subcategory?: string | null
-          summary?: string | null
-          tags?: string | null
-          title?: string | null
-          trending?: boolean | null
-          views?: number | null
+          notes?: string | null
+          progress_percent?: number | null
+          user_id?: string | null
+          week_start?: string | null
         }
-        Relationships: []
-      }
-      sources: {
-        Row: {
-          category: string | null
-          created_at: string | null
-          id: string
-          rss_url: string | null
-          source_type: string | null
-          status: string | null
-          website: string | null
-        }
-        Insert: {
-          category?: string | null
-          created_at?: string | null
-          id?: string
-          rss_url?: string | null
-          source_type?: string | null
-          status?: string | null
-          website?: string | null
-        }
-        Update: {
-          category?: string | null
-          created_at?: string | null
-          id?: string
-          rss_url?: string | null
-          source_type?: string | null
-          status?: string | null
-          website?: string | null
-        }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "weekly_reports_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
