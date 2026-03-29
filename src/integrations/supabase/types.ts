@@ -94,18 +94,21 @@ export type Database = {
       milestones: {
         Row: {
           achieved_date: string | null
+          created_at: string | null
           id: string
           milestone_percent: number | null
           user_id: string | null
         }
         Insert: {
           achieved_date?: string | null
+          created_at?: string | null
           id?: string
           milestone_percent?: number | null
           user_id?: string | null
         }
         Update: {
           achieved_date?: string | null
+          created_at?: string | null
           id?: string
           milestone_percent?: number | null
           user_id?: string | null
@@ -122,6 +125,7 @@ export type Database = {
       }
       notifications: {
         Row: {
+          created_at: string | null
           date: string | null
           id: string
           message: string | null
@@ -129,6 +133,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          created_at?: string | null
           date?: string | null
           id?: string
           message?: string | null
@@ -136,6 +141,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          created_at?: string | null
           date?: string | null
           id?: string
           message?: string | null
@@ -155,6 +161,7 @@ export type Database = {
       payments: {
         Row: {
           amount: number | null
+          created_at: string | null
           debt_id: string | null
           id: string
           is_extra_payment: boolean | null
@@ -164,6 +171,7 @@ export type Database = {
         }
         Insert: {
           amount?: number | null
+          created_at?: string | null
           debt_id?: string | null
           id?: string
           is_extra_payment?: boolean | null
@@ -173,6 +181,7 @@ export type Database = {
         }
         Update: {
           amount?: number | null
+          created_at?: string | null
           debt_id?: string | null
           id?: string
           is_extra_payment?: boolean | null
@@ -223,17 +232,23 @@ export type Database = {
       }
       streaks: {
         Row: {
+          created_at: string | null
           current_streak: number | null
+          id: string
           last_activity_date: string | null
           user_id: string | null
         }
         Insert: {
+          created_at?: string | null
           current_streak?: number | null
+          id?: string
           last_activity_date?: string | null
           user_id?: string | null
         }
         Update: {
+          created_at?: string | null
           current_streak?: number | null
+          id?: string
           last_activity_date?: string | null
           user_id?: string | null
         }
@@ -249,6 +264,7 @@ export type Database = {
       }
       subscriptions: {
         Row: {
+          created_at: string | null
           end_date: string | null
           id: string
           plan: string | null
@@ -257,6 +273,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          created_at?: string | null
           end_date?: string | null
           id?: string
           plan?: string | null
@@ -265,6 +282,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          created_at?: string | null
           end_date?: string | null
           id?: string
           plan?: string | null
@@ -321,6 +339,7 @@ export type Database = {
       weekly_reports: {
         Row: {
           amount_paid: number | null
+          created_at: string | null
           id: string
           notes: string | null
           progress_percent: number | null
@@ -329,6 +348,7 @@ export type Database = {
         }
         Insert: {
           amount_paid?: number | null
+          created_at?: string | null
           id?: string
           notes?: string | null
           progress_percent?: number | null
@@ -337,6 +357,7 @@ export type Database = {
         }
         Update: {
           amount_paid?: number | null
+          created_at?: string | null
           id?: string
           notes?: string | null
           progress_percent?: number | null
