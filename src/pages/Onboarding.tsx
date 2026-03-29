@@ -16,6 +16,7 @@ import { toast } from "sonner";
 const steps = ["Welcome", "Currency", "First Debt", "Done"];
 
 export default function Onboarding() {
+  const { user } = useAuth();
   const navigate = useNavigate();
   const updateProfile = useUpdateProfile();
   const addDebt = useAddDebt();
