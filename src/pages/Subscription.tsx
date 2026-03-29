@@ -40,7 +40,10 @@ const proPlanFeatures = [
 
 export default function Subscription() {
   const { plan, isPro } = useSubscription();
+  const { format, currency } = useLocalizedCurrency();
 
+  const monthlyPrice = format(PRO_PRICING.monthly);
+  const yearlyPrice = format(PRO_PRICING.yearly);
   return (
     <AppLayout>
       <div className="max-w-3xl mx-auto space-y-6">
