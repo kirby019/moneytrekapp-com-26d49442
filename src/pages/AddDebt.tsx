@@ -10,18 +10,22 @@ import { toast } from "sonner";
 import { useAddDebt } from "@/hooks/useDebts";
 import { useProfile } from "@/hooks/useProfile";
 import CurrencySelector from "@/components/CurrencySelector";
+import UpgradePrompt from "@/components/UpgradePrompt";
+import { useCanAddDebt, useFeatureAccess } from "@/hooks/useSubscription";
 
 export default function AddDebt() {
   const navigate = useNavigate();
   const addDebt = useAddDebt();
   const { data: profile } = useProfile();
   const defaultCurrency = (profile as any)?.default_currency ?? "USD";
+  const { canAdd, remaining, maxDebts, isFree } = useCanAddDebt();
+  const { hasAccess: hasMultiCurrency } = useFeatureAccess("multiCurrency");
 
   const [form, setForm] = useState({ name: "", type: "", balance: "", rate: "", minPayment: "" });
   const [currency, setCurrency] = useState<string | null>(null);
 
   // Use per-debt currency if set, otherwise default from profile
-  const activeCurrency = currency ?? defaultCurrency;
+  const activeCurrency = hasMultiCurrency ? (currency ?? defaultCurrency) : defaultCurrency;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
