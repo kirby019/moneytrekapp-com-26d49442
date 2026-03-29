@@ -5,6 +5,7 @@ import { Check, Crown, X } from "lucide-react";
 import AppLayout from "@/components/AppLayout";
 import { cn } from "@/lib/utils";
 import { useSubscription, PRO_PRICING } from "@/hooks/useSubscription";
+import { useLocalizedCurrency } from "@/hooks/useLocalizedPrice";
 
 const freePlanFeatures = [
   { text: "Up to 3 debts", included: true },
@@ -39,7 +40,10 @@ const proPlanFeatures = [
 
 export default function Subscription() {
   const { plan, isPro } = useSubscription();
+  const { format, currency } = useLocalizedCurrency();
 
+  const monthlyPrice = format(PRO_PRICING.monthly);
+  const yearlyPrice = format(PRO_PRICING.yearly);
   return (
     <AppLayout>
       <div className="max-w-3xl mx-auto space-y-6">
@@ -90,11 +94,11 @@ export default function Subscription() {
                 {isPro && <Badge className="bg-accent text-accent-foreground text-xs">Current</Badge>}
               </div>
               <div className="mb-1">
-                <span className="text-3xl font-heading font-extrabold">${PRO_PRICING.monthly}</span>
+                <span className="text-3xl font-heading font-extrabold">{monthlyPrice}</span>
                 <span className="text-sm text-muted-foreground">/month</span>
               </div>
               <p className="text-xs text-muted-foreground mb-4">
-                or ${PRO_PRICING.yearly}/year (save 44%)
+                or {yearlyPrice}/year (save 44%)
               </p>
               <ul className="space-y-2 mb-6">
                 {proPlanFeatures.map(f => (
