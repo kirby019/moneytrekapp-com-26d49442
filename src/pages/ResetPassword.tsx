@@ -67,7 +67,7 @@ export default function ResetPassword() {
             <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "var(--gradient-primary)" }}>
               <Sparkles className="w-3.5 h-3.5 text-primary-foreground" />
             </div>
-            <span className="font-heading font-bold">Debt Free Journey</span>
+            <span className="font-heading font-bold">MoneyTrek</span>
           </div>
           <h1 className="font-heading text-2xl font-bold">Invalid Reset Link</h1>
           <p className="text-sm text-muted-foreground">
@@ -89,7 +89,7 @@ export default function ResetPassword() {
             <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "var(--gradient-primary)" }}>
               <Sparkles className="w-3.5 h-3.5 text-primary-foreground" />
             </div>
-            <span className="font-heading font-bold">Debt Free Journey</span>
+            <span className="font-heading font-bold">MoneyTrek</span>
           </div>
           <h1 className="font-heading text-2xl font-bold">Set new password</h1>
           <p className="text-sm text-muted-foreground mt-1">Enter your new password below.</p>

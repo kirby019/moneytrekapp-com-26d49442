@@ -70,7 +70,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <div className="w-8 h-8 rounded-lg bg-sidebar-primary flex items-center justify-center">
             <Sparkles className="w-4 h-4 text-sidebar-primary-foreground" />
           </div>
-          <span className="font-heading font-bold text-lg text-sidebar-foreground">Debt Free</span>
+          <span className="font-heading font-bold text-lg text-sidebar-foreground">MoneyTrek</span>
         </Link>
       </div>
       <nav className="flex-1 px-2 lg:px-3 space-y-0.5 overflow-y-auto">
