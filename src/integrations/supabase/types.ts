@@ -402,6 +402,8 @@ export type Database = {
           email: string | null
           id: string
           identity: string | null
+          journey_start_date: string | null
+          journey_starting_debt: number | null
           journey_type: string | null
           name: string | null
           reason: string | null
@@ -413,6 +415,8 @@ export type Database = {
           email?: string | null
           id?: string
           identity?: string | null
+          journey_start_date?: string | null
+          journey_starting_debt?: number | null
           journey_type?: string | null
           name?: string | null
           reason?: string | null
@@ -424,6 +428,8 @@ export type Database = {
           email?: string | null
           id?: string
           identity?: string | null
+          journey_start_date?: string | null
+          journey_starting_debt?: number | null
           journey_type?: string | null
           name?: string | null
           reason?: string | null
