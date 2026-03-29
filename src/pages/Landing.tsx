@@ -3,8 +3,9 @@ import { motion } from "framer-motion";
 import {
   ArrowRight, Sparkles, CreditCard, History, BarChart3, CalendarCheck,
   Globe, LineChart, Download, Shield, Star, CheckCircle2, TrendingDown,
-  DollarSign, Target, Users, Zap, ChevronRight, Award, Clock, Rocket
+  DollarSign, Target, Users, Zap, ChevronRight, Award, Clock, Rocket, LogOut
 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
