@@ -128,7 +128,11 @@ export default function PaymentHistory() {
         loading={deleting}
       />
       {showUpgrade && (
-        <UpgradePrompt feature="csvExport" open={showUpgrade} onOpenChange={setShowUpgrade} />
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/40" onClick={() => setShowUpgrade(false)}>
+          <div onClick={e => e.stopPropagation()}>
+            <UpgradePrompt message="CSV export is a Pro feature. Upgrade to export your payment history." />
+          </div>
+        </div>
       )}
     </AppLayout>
   );
