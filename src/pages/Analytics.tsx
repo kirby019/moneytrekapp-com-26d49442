@@ -56,6 +56,17 @@ export default function Analytics() {
   const totalPaid = cumulativeData.length > 0 ? cumulativeData[cumulativeData.length - 1].totalPaid : 0;
   const currentProgress = totalOriginal > 0 ? Math.round((totalPaid / totalOriginal) * 100) : 0;
 
+  if (!hasAccess) {
+    return (
+      <AppLayout>
+        <div className="max-w-6xl mx-auto">
+          <h1 className="font-heading text-2xl font-bold mb-6">Analytics</h1>
+          <UpgradePrompt message="Advanced analytics and charts are a Pro feature. Upgrade to visualize your financial progress." />
+        </div>
+      </AppLayout>
+    );
+  }
+
   return (
     <AppLayout>
       <div className="max-w-6xl mx-auto space-y-6">

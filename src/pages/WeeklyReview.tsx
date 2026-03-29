@@ -46,6 +46,17 @@ export default function WeeklyReview() {
 
   const report = reports?.[0];
 
+  if (!hasAccess) {
+    return (
+      <AppLayout>
+        <div className="max-w-2xl mx-auto">
+          <h1 className="font-heading text-2xl font-bold mb-6">Weekly Review</h1>
+          <UpgradePrompt message="Weekly reports are a Pro feature. Upgrade to get automated weekly summaries." />
+        </div>
+      </AppLayout>
+    );
+  }
+
   return (
     <AppLayout>
       <div className="max-w-2xl mx-auto space-y-6">
