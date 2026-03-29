@@ -19,7 +19,7 @@ const navItems = [
   { label: "Strategy", icon: Target, path: "/strategy", proOnly: false },
   { label: "Journey", icon: Map, path: "/journey", proOnly: false },
   { label: "Milestones", icon: Trophy, path: "/milestones", proOnly: false },
-  { label: "Weekly Review", icon: CalendarCheck, path: "/weekly-review", proOnly: true },
+  { label: "Weekly Review", icon: CalendarCheck, path: "/weekly-review", proOnly: false },
   { label: "Future Screen", icon: Sparkles, path: "/future", proOnly: false },
 ];
 

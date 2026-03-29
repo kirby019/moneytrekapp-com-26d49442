@@ -16,10 +16,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Download, Key, Trash2, Lock } from "lucide-react";
+import { Download, Key, Trash2, Lock, RotateCcw } from "lucide-react";
 import { exportToCsv } from "@/lib/exportCsv";
 import { useNavigate } from "react-router-dom";
 import { useFeatureAccess } from "@/hooks/useSubscription";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function AppSettings() {
   const { data: profile, isLoading } = useProfile();
@@ -27,8 +28,9 @@ export default function AppSettings() {
   const { data: debts } = useDebts();
   const { data: payments } = usePayments();
   const { data: reports } = useWeeklyReports();
-  const { signOut } = useAuth();
+  const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { hasAccess: canExport } = useFeatureAccess("csvExport");
 
   const [currency, setCurrency] = useState<string | null>(null);
@@ -36,7 +38,9 @@ export default function AppSettings() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [changingPw, setChangingPw] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showResetJourney, setShowResetJourney] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [resetting, setResetting] = useState(false);
 
   const activeCurrency = currency ?? (profile as any)?.default_currency ?? "USD";
 
@@ -72,21 +76,59 @@ export default function AppSettings() {
     }
   };
 
+  const handleResetJourney = async () => {
+    if (!user) return;
+    setResetting(true);
+    try {
+      // Calculate current total remaining debt
+      const activeDebts = debts?.filter(d => d.status !== "paid") ?? [];
+      const totalRemaining = activeDebts.reduce((s, d) => s + (d.current_balance ?? 0), 0);
+      const today = new Date().toISOString().split("T")[0];
+
+      // Update journey baseline
+      const { error: userError } = await supabase
+        .from("users")
+        .upsert({
+          id: user.id,
+          journey_start_date: today,
+          journey_starting_debt: totalRemaining,
+        }, { onConflict: "id" });
+      if (userError) throw userError;
+
+      // Delete existing milestones
+      await supabase.from("milestones").delete().eq("user_id", user.id);
+
+      // Invalidate relevant queries
+      queryClient.invalidateQueries({ queryKey: ["user-journey"] });
+      queryClient.invalidateQueries({ queryKey: ["milestones"] });
+      queryClient.invalidateQueries({ queryKey: ["onboarding-status"] });
+
+      toast.success("Journey reset! Your progress tracking starts fresh from today.");
+      setShowResetJourney(false);
+    } catch (e: any) {
+      toast.error(e.message || "Failed to reset journey");
+    } finally {
+      setResetting(false);
+    }
+  };
+
   const handleDeleteAccount = async () => {
     setDeleting(true);
     try {
-      // Delete user data from all tables
       const userId = (await supabase.auth.getUser()).data.user?.id;
       if (!userId) throw new Error("Not authenticated");
 
-      // Delete in order to avoid FK issues
       await supabase.from("payments").delete().eq("user_id", userId);
       await supabase.from("debts").delete().eq("user_id", userId);
       await supabase.from("milestones").delete().eq("user_id", userId);
       await supabase.from("streaks").delete().eq("user_id", userId);
       await supabase.from("notifications").delete().eq("user_id", userId);
       await supabase.from("weekly_reports").delete().eq("user_id", userId);
-      await supabase.from("subscriptions").delete().eq("user_id", userId);
+      await supabase.from("financial_goals").delete().eq("user_id", userId);
+      await supabase.from("savings_transactions").delete().eq("user_id", userId);
+      await supabase.from("savings_accounts").delete().eq("user_id", userId);
+      await supabase.from("net_worth_snapshots").delete().eq("user_id", userId);
+      await supabase.from("users").delete().eq("id", userId);
       await supabase.from("profiles").delete().eq("id", userId);
 
       await signOut();
@@ -233,6 +275,21 @@ export default function AppSettings() {
               </CardContent>
             </Card>
 
+            {/* Reset Journey */}
+            <Card>
+              <CardContent className="p-6 space-y-4">
+                <h2 className="font-heading font-semibold flex items-center gap-2">
+                  <RotateCcw className="w-4 h-4" /> Reset Journey
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  Start your journey progress tracking fresh from today. This resets your journey start date and milestones but keeps all your debts and payment history.
+                </p>
+                <Button variant="outline" size="sm" onClick={() => setShowResetJourney(true)}>
+                  Reset Journey Progress
+                </Button>
+              </CardContent>
+            </Card>
+
             {/* Danger Zone */}
             <Card className="border-destructive/30">
               <CardContent className="p-6 space-y-4">
@@ -258,6 +315,14 @@ export default function AppSettings() {
         description="This will permanently delete all your debts, payments, milestones, and reports. This action cannot be undone."
         onConfirm={handleDeleteAccount}
         loading={deleting}
+      />
+      <ConfirmDialog
+        open={showResetJourney}
+        onOpenChange={setShowResetJourney}
+        title="Reset Journey"
+        description="This will reset your journey start date to today and clear all milestones. Your debts and payment history will NOT be deleted. Continue?"
+        onConfirm={handleResetJourney}
+        loading={resetting}
       />
     </AppLayout>
   );

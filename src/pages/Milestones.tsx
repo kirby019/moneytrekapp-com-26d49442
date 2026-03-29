@@ -1,7 +1,10 @@
-import { Trophy, Star, Flame, Award, Lock } from "lucide-react";
+import { Trophy, Star, Flame, Award, Lock, Plus } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import AppLayout from "@/components/AppLayout";
 import { useJourneyProgress } from "@/hooks/useJourneyProgress";
+import { useDebts } from "@/hooks/useDebts";
 
 const badgeDefs = [
   { icon: Star, title: "First Step", desc: "Made your first payment since joining", percent: 1 },
@@ -15,6 +18,7 @@ const badgeDefs = [
 
 export default function Milestones() {
   const { journeyProgress, hasJourneyData } = useJourneyProgress();
+  const { data: debts } = useDebts();
 
   const badges = badgeDefs.map((b) => ({
     ...b,
@@ -32,27 +36,45 @@ export default function Milestones() {
             {unlockedCount} of {badges.length} unlocked — based on your journey progress
           </p>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {badges.map((b) => (
-            <Card key={b.title} className={!b.unlocked ? "opacity-40" : ""}>
-              <CardContent className="p-5 text-center">
-                <div
-                  className={`w-12 h-12 rounded-xl mx-auto mb-3 flex items-center justify-center ${
-                    b.unlocked ? "bg-warning/10" : "bg-muted"
-                  }`}
-                >
-                  {b.unlocked ? (
-                    <b.icon className="w-6 h-6 text-warning" />
-                  ) : (
-                    <Lock className="w-5 h-5 text-muted-foreground" />
-                  )}
-                </div>
-                <p className="font-heading font-semibold text-sm">{b.title}</p>
-                <p className="text-xs text-muted-foreground mt-1">{b.desc}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+
+        {!debts || debts.length === 0 ? (
+          <Card>
+            <CardContent className="p-8 text-center space-y-4">
+              <div className="w-14 h-14 rounded-xl bg-warning/10 flex items-center justify-center mx-auto">
+                <Trophy className="w-7 h-7 text-warning" />
+              </div>
+              <div>
+                <p className="font-heading font-semibold">No milestones yet</p>
+                <p className="text-sm text-muted-foreground mt-1">Add your first debt and start making payments to unlock badges.</p>
+              </div>
+              <Button asChild>
+                <Link to="/add-debt"><Plus className="w-4 h-4 mr-2" />Add Your First Debt</Link>
+              </Button>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {badges.map((b) => (
+              <Card key={b.title} className={!b.unlocked ? "opacity-40" : ""}>
+                <CardContent className="p-5 text-center">
+                  <div
+                    className={`w-12 h-12 rounded-xl mx-auto mb-3 flex items-center justify-center ${
+                      b.unlocked ? "bg-warning/10" : "bg-muted"
+                    }`}
+                  >
+                    {b.unlocked ? (
+                      <b.icon className="w-6 h-6 text-warning" />
+                    ) : (
+                      <Lock className="w-5 h-5 text-muted-foreground" />
+                    )}
+                  </div>
+                  <p className="font-heading font-semibold text-sm">{b.title}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{b.desc}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
       </div>
     </AppLayout>
   );

@@ -1,7 +1,9 @@
 import { motion } from "framer-motion";
-import { CheckCircle2, Circle, MapPin, Flag } from "lucide-react";
+import { CheckCircle2, Circle, MapPin, Flag, Plus } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Link } from "react-router-dom";
 import AppLayout from "@/components/AppLayout";
 import { useJourneyProgress } from "@/hooks/useJourneyProgress";
 import { useDebts } from "@/hooks/useDebts";
@@ -64,48 +66,60 @@ export default function Journey() {
                   <span>of {formatCurrency(journeyStartingDebt, defaultCurrency)} starting debt</span>
                 </div>
               </>
+            ) : !debts || debts.length === 0 ? (
+              <div className="text-center py-4 space-y-3">
+                <p className="text-sm text-muted-foreground">Add your first debt to start tracking your journey.</p>
+                <Button size="sm" asChild>
+                  <Link to="/add-debt"><Plus className="w-3 h-3 mr-1" />Add Debt</Link>
+                </Button>
+              </div>
             ) : (
-              <p className="text-sm text-muted-foreground">
-                Complete onboarding to start tracking your journey progress.
-              </p>
+              <div className="text-center py-4 space-y-3">
+                <p className="text-sm text-muted-foreground">Your journey progress will appear here once you record your first payment.</p>
+                <Button size="sm" asChild>
+                  <Link to="/record-payment">Record Payment</Link>
+                </Button>
+              </div>
             )}
           </CardContent>
         </Card>
 
-        <div className="relative pl-8">
-          <div className="absolute left-3.5 top-0 bottom-0 w-0.5 bg-border" />
-          {milestones.map((m, i) => (
-            <motion.div
-              key={m.label}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.06 }}
-              className="relative pb-6 last:pb-0"
-            >
-              <div className="absolute -left-[1.22rem] top-1">
-                {i === milestones.length - 1 ? (
-                  <Flag className="w-5 h-5 text-warning" />
-                ) : m.done ? (
-                  <CheckCircle2 className="w-5 h-5 text-success" />
-                ) : (
-                  <Circle className="w-5 h-5 text-muted-foreground/40" />
-                )}
-              </div>
-              <div
-                className={`p-3 rounded-lg ${
-                  m.done
-                    ? "bg-success/5 border border-success/20"
-                    : "bg-secondary/30 border border-border"
-                }`}
+        {hasJourneyData && (
+          <div className="relative pl-8">
+            <div className="absolute left-3.5 top-0 bottom-0 w-0.5 bg-border" />
+            {milestones.map((m, i) => (
+              <motion.div
+                key={m.label}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.06 }}
+                className="relative pb-6 last:pb-0"
               >
-                <p className={`text-sm font-medium ${m.done ? "text-foreground" : "text-muted-foreground"}`}>
-                  {m.label}
-                </p>
-                <p className="text-xs text-muted-foreground mt-0.5">{m.date}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+                <div className="absolute -left-[1.22rem] top-1">
+                  {i === milestones.length - 1 ? (
+                    <Flag className="w-5 h-5 text-warning" />
+                  ) : m.done ? (
+                    <CheckCircle2 className="w-5 h-5 text-success" />
+                  ) : (
+                    <Circle className="w-5 h-5 text-muted-foreground/40" />
+                  )}
+                </div>
+                <div
+                  className={`p-3 rounded-lg ${
+                    m.done
+                      ? "bg-success/5 border border-success/20"
+                      : "bg-secondary/30 border border-border"
+                  }`}
+                >
+                  <p className={`text-sm font-medium ${m.done ? "text-foreground" : "text-muted-foreground"}`}>
+                    {m.label}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{m.date}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
     </AppLayout>
   );

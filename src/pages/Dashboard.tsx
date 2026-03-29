@@ -1,6 +1,7 @@
 import { useEffect, useRef, useMemo } from "react";
-import { Plus } from "lucide-react";
+import { Plus, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import AppLayout from "@/components/AppLayout";
 import { useDebts } from "@/hooks/useDebts";
@@ -36,7 +37,6 @@ export default function Dashboard() {
   const persistMilestone = usePersistMilestone();
   const milestoneChecked = useRef(false);
 
-  // Get user's selected strategy for next-debt recommendation
   const { data: userRow } = useQuery({
     queryKey: ["user-strategy", user?.id],
     queryFn: async () => {
@@ -50,13 +50,11 @@ export default function Dashboard() {
     enabled: !!user,
   });
 
-  // Check for journey milestone celebrations on load
   useEffect(() => {
     if (milestoneChecked.current || !hasJourneyData) return;
     milestoneChecked.current = true;
     const achievedPercents = milestones?.map(m => m.milestone_percent ?? 0) ?? [];
     const milestone = checkMilestoneCelebration(journeyProgress, achievedPercents);
-    // Persist the milestone if newly achieved
     if (milestone) {
       persistMilestone.mutate(milestone.percent);
     }
@@ -86,10 +84,8 @@ export default function Dashboard() {
   const paidOffCount = debts?.filter((d) => d.status === "paid").length ?? 0;
   const firstName = profile?.full_name?.split(" ")[0] ?? "there";
 
-  // Debt-free date calculation with interest
   const { debtFreeDate } = useDebtFreeDate(debts as any);
 
-  // Recommended next debt based on strategy
   const nextDebt = useMemo(() => {
     if (!activeDebts.length) return null;
     const strategy = userRow?.selected_strategy ?? "snowball";
@@ -101,7 +97,6 @@ export default function Dashboard() {
     return { debt_name: d.debt_name, current_balance: d.current_balance, currency: (d as any).currency ?? defaultCurrency };
   }, [activeDebts, userRow?.selected_strategy, defaultCurrency]);
 
-  // Next milestone
   const nextMilestonePercent = useMemo(() => {
     const achievedPercents = milestones?.map(m => m.milestone_percent ?? 0) ?? [];
     for (const m of MILESTONE_CELEBRATIONS) {
@@ -111,6 +106,7 @@ export default function Dashboard() {
   }, [milestones, journeyProgress]);
 
   const currentStreak = streak?.current_streak ?? 0;
+  const hasDebts = debts && debts.length > 0;
 
   return (
     <>
@@ -121,46 +117,72 @@ export default function Dashboard() {
               <h1 className="font-heading text-2xl lg:text-3xl font-bold">Welcome back, {firstName}! 👋</h1>
               <p className="text-muted-foreground text-sm mt-1">Here's your financial progress overview.</p>
             </div>
-            <Button asChild>
-              <Link to="/add-debt"><Plus className="w-4 h-4 mr-2" /> Add Debt</Link>
-            </Button>
+            <div className="flex gap-2">
+              <Button asChild size="sm">
+                <Link to="/record-payment"><DollarSign className="w-4 h-4 mr-1" />Record Payment</Link>
+              </Button>
+              <Button asChild variant="outline" size="sm">
+                <Link to="/add-debt"><Plus className="w-4 h-4 mr-1" />Add Debt</Link>
+              </Button>
+            </div>
           </div>
 
-          <DashboardHero
-            overallProgress={overallProgress}
-            totalPaid={totalPaid}
-            totalOriginal={totalOriginal}
-            currency={defaultCurrency}
-          />
+          {!isLoading && !hasDebts ? (
+            <Card>
+              <CardContent className="p-10 text-center space-y-4">
+                <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
+                  <Plus className="w-8 h-8 text-primary" />
+                </div>
+                <div>
+                  <h2 className="font-heading text-xl font-bold">Start Your Debt-Free Journey</h2>
+                  <p className="text-muted-foreground text-sm mt-2 max-w-md mx-auto">
+                    Add your first debt to see your dashboard come to life with progress tracking, projections, and milestones.
+                  </p>
+                </div>
+                <Button asChild size="lg">
+                  <Link to="/add-debt"><Plus className="w-4 h-4 mr-2" />Add Your First Debt</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          ) : (
+            <>
+              <DashboardHero
+                overallProgress={overallProgress}
+                totalPaid={totalPaid}
+                totalOriginal={totalOriginal}
+                currency={defaultCurrency}
+              />
 
-          <DashboardStats
-            totalBalance={totalBalance}
-            totalMinPayment={totalMinPayment}
-            activeCount={activeDebts.length}
-            paidOffCount={paidOffCount}
-            overallProgress={overallProgress}
-            totalPaid={totalPaid}
-            journeyProgress={journeyProgress}
-            currentStreak={currentStreak}
-            debtFreeDate={debtFreeDate}
-            currency={defaultCurrency}
-            isLoading={isLoading}
-          />
+              <DashboardStats
+                totalBalance={totalBalance}
+                totalMinPayment={totalMinPayment}
+                activeCount={activeDebts.length}
+                paidOffCount={paidOffCount}
+                overallProgress={overallProgress}
+                totalPaid={totalPaid}
+                journeyProgress={journeyProgress}
+                currentStreak={currentStreak}
+                debtFreeDate={debtFreeDate}
+                currency={defaultCurrency}
+                isLoading={isLoading}
+              />
 
-          <DashboardNextSteps
-            nextDebt={nextDebt}
-            nextMilestonePercent={nextMilestonePercent}
-            journeyProgress={journeyProgress}
-            monthlyFreedom={totalMinPayment}
-            currency={defaultCurrency}
-            isFree={isFree}
-          />
+              <DashboardNextSteps
+                nextDebt={nextDebt}
+                nextMilestonePercent={nextMilestonePercent}
+                journeyProgress={journeyProgress}
+                monthlyFreedom={totalMinPayment}
+                currency={defaultCurrency}
+                isFree={isFree}
+              />
 
-          <DashboardDebts
-            debts={debts}
-            defaultCurrency={defaultCurrency}
-            isLoading={isLoading}
-          />
+              <DashboardDebts
+                debts={debts}
+                defaultCurrency={defaultCurrency}
+                isLoading={isLoading}
+              />
+            </>
+          )}
         </div>
       </AppLayout>
 

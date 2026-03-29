@@ -1,6 +1,8 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Sparkles, TrendingUp, Wallet, Home } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Sparkles, TrendingUp, Wallet, Home, Plus } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import AppLayout from "@/components/AppLayout";
 import { useDebts } from "@/hooks/useDebts";
 import { useLocalizedCurrency } from "@/hooks/useLocalizedPrice";
@@ -18,7 +20,6 @@ export default function Future() {
     if (!debts || debts.length === 0 || totalMinPayment <= 0) return null;
 
     const annualSavings = totalMinPayment * 12;
-    // 7% annual return compounded monthly for 10 years
     const monthlyRate = 0.07 / 12;
     const months = 120;
     const futureValue = totalMinPayment * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate);
@@ -44,41 +45,56 @@ export default function Future() {
 
         {isLoading ? (
           <Skeleton className="h-40 w-full rounded-2xl" />
+        ) : !debts || debts.length === 0 ? (
+          <Card>
+            <CardContent className="p-8 text-center space-y-4">
+              <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
+                <Sparkles className="w-7 h-7 text-primary" />
+              </div>
+              <div>
+                <p className="font-heading font-semibold">See your future</p>
+                <p className="text-sm text-muted-foreground mt-1">Add your debts to see projections of your debt-free future.</p>
+              </div>
+              <Button asChild>
+                <Link to="/add-debt"><Plus className="w-4 h-4 mr-2" />Add Your First Debt</Link>
+              </Button>
+            </CardContent>
+          </Card>
         ) : (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="p-8 rounded-2xl text-center text-primary-foreground"
-            style={{ background: "var(--gradient-hero)" }}
-          >
-            <Sparkles className="w-10 h-10 text-accent mx-auto mb-4" />
-            <h2 className="font-heading text-3xl font-extrabold mb-2">
-              {debtFreeDate ? format(debtFreeDate, "MMMM yyyy") : "Add debts to see"}
-            </h2>
-            <p className="text-primary-foreground/70">Your projected debt-free date</p>
-          </motion.div>
-        )}
+          <>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="p-8 rounded-2xl text-center text-primary-foreground"
+              style={{ background: "var(--gradient-hero)" }}
+            >
+              <Sparkles className="w-10 h-10 text-accent mx-auto mb-4" />
+              <h2 className="font-heading text-3xl font-extrabold mb-2">
+                {debtFreeDate ? format(debtFreeDate, "MMMM yyyy") : "Keep making payments!"}
+              </h2>
+              <p className="text-primary-foreground/70">Your projected debt-free date</p>
+            </motion.div>
 
-        <div className="space-y-4">
-          {isLoading
-            ? Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-24 w-full rounded-xl" />)
-            : projections.map((p, i) => (
+            <div className="space-y-4">
+              {projections.map((p, i) => (
                 <motion.div key={p.label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
                   <Card>
                     <CardContent className="p-5 flex items-center gap-4">
                       <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
                         <p.icon className="w-6 h-6 text-primary" />
                       </div>
-                      <div className="flex-1">
+                      <div className="flex-1 min-w-0">
                         <p className="text-sm text-muted-foreground">{p.label}</p>
-                        <p className="text-xl font-heading font-bold">{p.value}</p>
+                        <p className="text-xl font-heading font-bold truncate">{p.value}</p>
                         <p className="text-xs text-muted-foreground mt-0.5">{p.desc}</p>
                       </div>
                     </CardContent>
                   </Card>
                 </motion.div>
               ))}
-        </div>
+            </div>
+          </>
+        )}
       </div>
     </AppLayout>
   );

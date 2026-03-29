@@ -1,5 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { TrendingDown, DollarSign, CheckCircle2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { TrendingDown, DollarSign, CheckCircle2, Plus } from "lucide-react";
+import { Link } from "react-router-dom";
 import AppLayout from "@/components/AppLayout";
 import { useWeeklyReports } from "@/hooks/useWeeklyReports";
 import { usePayments } from "@/hooks/usePayments";
@@ -7,14 +9,11 @@ import { useDebts } from "@/hooks/useDebts";
 import { useProfile } from "@/hooks/useProfile";
 import { useExchangeRates, convertCurrency } from "@/hooks/useExchangeRates";
 import { formatCurrency } from "@/lib/currency";
-import UpgradePrompt from "@/components/UpgradePrompt";
-import { useFeatureAccess } from "@/hooks/useSubscription";
 import { useCelebrations } from "@/hooks/useCelebrations";
 import { useUpdateStreak } from "@/hooks/useStreak";
 import { useEffect, useRef } from "react";
 
 export default function WeeklyReview() {
-  const { hasAccess } = useFeatureAccess("weeklyReports");
   const { data: reports } = useWeeklyReports();
   const { data: payments } = usePayments();
   const { data: debts } = useDebts();
@@ -25,14 +24,13 @@ export default function WeeklyReview() {
   const updateStreak = useUpdateStreak();
   const hasShownReviewToast = useRef(false);
 
-  // Show encouragement toast and update streak when viewing weekly review
   useEffect(() => {
-    if (hasAccess && payments && payments.length > 0 && !hasShownReviewToast.current) {
+    if (payments && payments.length > 0 && !hasShownReviewToast.current) {
       hasShownReviewToast.current = true;
       celebrateWeeklyReview();
       updateStreak.mutate();
     }
-  }, [hasAccess, payments, celebrateWeeklyReview]);
+  }, [payments, celebrateWeeklyReview]);
 
   const now = new Date();
   const weekStart = new Date(now);
@@ -58,17 +56,6 @@ export default function WeeklyReview() {
   }, 0) ?? 0;
 
   const report = reports?.[0];
-
-  if (!hasAccess) {
-    return (
-      <AppLayout>
-        <div className="max-w-2xl mx-auto">
-          <h1 className="font-heading text-2xl font-bold mb-6">Weekly Review</h1>
-          <UpgradePrompt message="Weekly reports are a Pro feature. Upgrade to get automated weekly summaries." />
-        </div>
-      </AppLayout>
-    );
-  }
 
   return (
     <AppLayout>
@@ -117,7 +104,12 @@ export default function WeeklyReview() {
                 })}
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">No payments this week yet. Keep going!</p>
+              <div className="text-center py-6">
+                <p className="text-sm text-muted-foreground mb-3">No payments this week yet.</p>
+                <Button size="sm" asChild>
+                  <Link to="/record-payment"><Plus className="w-3 h-3 mr-1" />Record Payment</Link>
+                </Button>
+              </div>
             )}
           </CardContent>
         </Card>
