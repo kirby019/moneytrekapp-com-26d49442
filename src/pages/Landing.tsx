@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { useLocalizedPrice } from "@/hooks/useLocalizedPrice";
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -395,26 +396,7 @@ export default function Landing() {
               </Card>
             </motion.div>
             {/* Pro */}
-            <motion.div {...fadeUp} transition={{ delay: 0.2 }}>
-              <Card className="h-full relative overflow-hidden hover:shadow-lg transition-shadow">
-                <div className="absolute top-0 right-0 bg-accent text-accent-foreground text-[10px] font-bold px-3 py-1 rounded-bl-lg">Coming Soon</div>
-                <CardContent className="p-6">
-                  <div className="mb-4">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase">Pro</span>
-                    <p className="font-heading text-3xl font-extrabold mt-1">$5<span className="text-sm font-normal text-muted-foreground">/month</span></p>
-                  </div>
-                  <ul className="space-y-2.5 mb-6">
-                    {["Everything in Free", "Advanced analytics", "Payment reminders", "Priority support", "Custom reports", "Goal setting tools"].map(f => (
-                      <li key={f} className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <CheckCircle2 className="w-4 h-4 text-muted-foreground/50 flex-shrink-0" />
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                  <Button variant="outline" className="w-full" disabled>Coming Soon</Button>
-                </CardContent>
-              </Card>
-            </motion.div>
+            <ProPricingCard />
           </div>
         </div>
       </section>
