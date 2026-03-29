@@ -59,27 +59,42 @@ const mockDebtsRaw = [
 ];
 
 function ProPricingCard() {
-  const { price, currency } = useLocalizedPrice(2);
+  const { price: monthlyPrice, currency } = useLocalizedPrice(2.99);
+  const { price: yearlyPrice } = useLocalizedPrice(19.99);
   const showLocal = currency !== "USD";
 
   return (
     <motion.div {...fadeUp} transition={{ delay: 0.2 }}>
-      <Card className="h-full relative overflow-hidden hover:shadow-lg transition-shadow">
+      <Card className="h-full relative overflow-hidden hover:shadow-lg transition-shadow border-2 border-accent/30">
         <div className="absolute top-0 right-0 bg-accent text-accent-foreground text-[10px] font-bold px-3 py-1 rounded-bl-lg">Coming Soon</div>
         <CardContent className="p-6">
           <div className="mb-4">
-            <span className="text-xs font-semibold text-muted-foreground uppercase">Pro</span>
+            <span className="text-xs font-semibold text-accent uppercase">Pro</span>
             <p className="font-heading text-3xl font-extrabold mt-1">
-              {price}<span className="text-sm font-normal text-muted-foreground">/month</span>
+              {monthlyPrice}<span className="text-sm font-normal text-muted-foreground">/month</span>
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              or {yearlyPrice}/year (save 44%)
             </p>
             {showLocal && (
-              <p className="text-xs text-muted-foreground mt-1">≈ $2.00 USD</p>
+              <p className="text-xs text-muted-foreground mt-0.5">≈ $2.99/mo or $19.99/yr USD</p>
             )}
           </div>
           <ul className="space-y-2.5 mb-6">
-            {["Everything in Free", "Advanced analytics", "Payment reminders", "Priority support", "Custom reports", "Goal setting tools"].map(f => (
+            {[
+              "Everything in Free",
+              "Unlimited debts",
+              "Unlimited savings accounts",
+              "Financial goals",
+              "Net worth tracking",
+              "Weekly reports",
+              "Advanced analytics & charts",
+              "Multi-currency support",
+              "CSV data export",
+              "Payment reminders",
+            ].map(f => (
               <li key={f} className="flex items-center gap-2 text-sm text-muted-foreground">
-                <CheckCircle2 className="w-4 h-4 text-muted-foreground/50 flex-shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-accent flex-shrink-0" />
                 {f}
               </li>
             ))}
