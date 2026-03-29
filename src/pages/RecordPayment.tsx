@@ -12,6 +12,8 @@ import { useDebts } from "@/hooks/useDebts";
 import { useAddPayment } from "@/hooks/usePayments";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatCurrency } from "@/lib/currency";
+import { useCelebrations } from "@/hooks/useCelebrations";
+import CelebrationModal from "@/components/CelebrationModal";
 
 export default function RecordPayment() {
   const navigate = useNavigate();
@@ -22,6 +24,8 @@ export default function RecordPayment() {
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [isExtra, setIsExtra] = useState(false);
   const [notes, setNotes] = useState("");
+
+  const { celebration, closeCelebration, celebratePayment, celebrateDebtPayoff } = useCelebrations();
 
   const activeDebts = debts?.filter(d => d.status !== "paid") ?? [];
 
@@ -35,7 +39,24 @@ export default function RecordPayment() {
         is_extra_payment: isExtra,
         notes: notes || null,
       });
-      toast.success("Payment recorded! 🎉");
+
+      // Show encouragement toast
+      celebratePayment(isExtra);
+
+      // Check if this payment pays off the debt
+      const selectedDebt = debts?.find(d => d.id === debtId);
+      if (selectedDebt) {
+        const newBalance = (selectedDebt.current_balance ?? 0) - parseFloat(amount);
+        if (newBalance <= 0) {
+          // Small delay so toast shows first, then modal
+          setTimeout(() => {
+            celebrateDebtPayoff(selectedDebt.debt_name ?? "Your debt");
+          }, 500);
+          // Don't navigate immediately — let them see the celebration
+          return;
+        }
+      }
+
       navigate("/payment-history");
     } catch (error: any) {
       toast.error(error.message || "Failed to record payment");
@@ -91,6 +112,17 @@ export default function RecordPayment() {
           </CardContent>
         </Card>
       </div>
+
+      <CelebrationModal
+        open={celebration.open}
+        onOpenChange={(open) => {
+          closeCelebration(open);
+          if (!open) navigate("/payment-history");
+        }}
+        emoji={celebration.emoji}
+        title={celebration.title}
+        message={celebration.message}
+      />
     </AppLayout>
   );
 }
