@@ -361,11 +361,14 @@ export type Database = {
           current_period_end: string | null
           end_date: string | null
           id: string
+          is_founding_member: boolean | null
+          is_trial: boolean | null
           plan: string | null
           start_date: string | null
           status: string | null
           stripe_customer_id: string | null
           stripe_subscription_id: string | null
+          trial_ends_at: string | null
           user_id: string | null
         }
         Insert: {
@@ -374,11 +377,14 @@ export type Database = {
           current_period_end?: string | null
           end_date?: string | null
           id?: string
+          is_founding_member?: boolean | null
+          is_trial?: boolean | null
           plan?: string | null
           start_date?: string | null
           status?: string | null
           stripe_customer_id?: string | null
           stripe_subscription_id?: string | null
+          trial_ends_at?: string | null
           user_id?: string | null
         }
         Update: {
@@ -387,11 +393,14 @@ export type Database = {
           current_period_end?: string | null
           end_date?: string | null
           id?: string
+          is_founding_member?: boolean | null
+          is_trial?: boolean | null
           plan?: string | null
           start_date?: string | null
           status?: string | null
           stripe_customer_id?: string | null
           stripe_subscription_id?: string | null
+          trial_ends_at?: string | null
           user_id?: string | null
         }
         Relationships: []
