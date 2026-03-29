@@ -159,6 +159,26 @@ export default function Dashboard() {
             </Card>
           )}
         </div>
+
+        {/* Upgrade nudge for free users */}
+        {isFree && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+            <Card className="border-accent/30 bg-accent/5">
+              <CardContent className="p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+                <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
+                  <Crown className="w-5 h-5 text-accent" />
+                </div>
+                <div className="flex-1">
+                  <p className="font-semibold text-sm">Unlock weekly reports, analytics & more</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">Upgrade to Pro for advanced charts, CSV export, multi-currency, and financial goals.</p>
+                </div>
+                <Button size="sm" asChild>
+                  <Link to="/subscription">Upgrade to Pro</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
       </div>
     </AppLayout>
   );
