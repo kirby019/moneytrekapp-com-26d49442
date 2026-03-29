@@ -41,7 +41,7 @@ export function useLocalizedPrice(baseUsd: number) {
         .from("exchange_rates" as any)
         .select("base_currency, target_currency, rate");
       if (error) throw error;
-      return data as { base_currency: string; target_currency: string; rate: number }[];
+      return data as unknown as { base_currency: string; target_currency: string; rate: number }[];
     },
     staleTime: 1000 * 60 * 60,
   });
