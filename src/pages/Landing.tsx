@@ -90,8 +90,8 @@ function ProPricingCard() {
               <p className="text-xs text-muted-foreground mt-0.5">≈ $2.99/mo or $19.99/yr USD</p>
             )}
           </div>
-          <div className="bg-gradient-to-r from-amber-500/10 to-yellow-500/10 border border-amber-500/20 rounded-lg p-3 mb-4">
-            <p className="text-xs font-semibold text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
+          <div className="bg-accent/10 border border-accent/20 rounded-lg p-3 mb-4">
+            <p className="text-xs font-semibold text-accent flex items-center gap-1.5">
               <Award className="w-3.5 h-3.5" /> Founding Member Pricing
             </p>
             <p className="text-[11px] text-muted-foreground mt-0.5">
