@@ -8,8 +8,11 @@ import { useProfile } from "@/hooks/useProfile";
 import { formatCurrency } from "@/lib/currency";
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts";
 import { format, parseISO, startOfMonth } from "date-fns";
+import UpgradePrompt from "@/components/UpgradePrompt";
+import { useFeatureAccess } from "@/hooks/useSubscription";
 
 export default function Analytics() {
+  const { hasAccess } = useFeatureAccess("advancedAnalytics");
   const { data: debts, isLoading: debtsLoading } = useDebts();
   const { data: payments, isLoading: paymentsLoading } = usePayments();
   const { data: profile } = useProfile();
@@ -52,6 +55,17 @@ export default function Analytics() {
 
   const totalPaid = cumulativeData.length > 0 ? cumulativeData[cumulativeData.length - 1].totalPaid : 0;
   const currentProgress = totalOriginal > 0 ? Math.round((totalPaid / totalOriginal) * 100) : 0;
+
+  if (!hasAccess) {
+    return (
+      <AppLayout>
+        <div className="max-w-6xl mx-auto">
+          <h1 className="font-heading text-2xl font-bold mb-6">Analytics</h1>
+          <UpgradePrompt message="Advanced analytics and charts are a Pro feature. Upgrade to visualize your financial progress." />
+        </div>
+      </AppLayout>
+    );
+  }
 
   return (
     <AppLayout>

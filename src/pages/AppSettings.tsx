@@ -16,9 +16,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Download, Key, Trash2 } from "lucide-react";
+import { Download, Key, Trash2, Lock } from "lucide-react";
 import { exportToCsv } from "@/lib/exportCsv";
 import { useNavigate } from "react-router-dom";
+import { useFeatureAccess } from "@/hooks/useSubscription";
 
 export default function AppSettings() {
   const { data: profile, isLoading } = useProfile();
@@ -28,6 +29,7 @@ export default function AppSettings() {
   const { data: reports } = useWeeklyReports();
   const { signOut } = useAuth();
   const navigate = useNavigate();
+  const { hasAccess: canExport } = useFeatureAccess("csvExport");
 
   const [currency, setCurrency] = useState<string | null>(null);
   const [newPassword, setNewPassword] = useState("");
@@ -204,18 +206,30 @@ export default function AppSettings() {
                 <h2 className="font-heading font-semibold flex items-center gap-2">
                   <Download className="w-4 h-4" /> Export Data
                 </h2>
-                <p className="text-sm text-muted-foreground">Download your data as CSV files.</p>
-                <div className="flex flex-wrap gap-2">
-                  <Button variant="outline" size="sm" onClick={exportDebts}>
-                    <Download className="w-3.5 h-3.5 mr-1.5" /> Debts
-                  </Button>
-                  <Button variant="outline" size="sm" onClick={exportPayments}>
-                    <Download className="w-3.5 h-3.5 mr-1.5" /> Payments
-                  </Button>
-                  <Button variant="outline" size="sm" onClick={exportReports}>
-                    <Download className="w-3.5 h-3.5 mr-1.5" /> Weekly Reports
-                  </Button>
-                </div>
+                {canExport ? (
+                  <>
+                    <p className="text-sm text-muted-foreground">Download your data as CSV files.</p>
+                    <div className="flex flex-wrap gap-2">
+                      <Button variant="outline" size="sm" onClick={exportDebts}>
+                        <Download className="w-3.5 h-3.5 mr-1.5" /> Debts
+                      </Button>
+                      <Button variant="outline" size="sm" onClick={exportPayments}>
+                        <Download className="w-3.5 h-3.5 mr-1.5" /> Payments
+                      </Button>
+                      <Button variant="outline" size="sm" onClick={exportReports}>
+                        <Download className="w-3.5 h-3.5 mr-1.5" /> Weekly Reports
+                      </Button>
+                    </div>
+                  </>
+                ) : (
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-accent/5 border border-accent/20">
+                    <Lock className="w-4 h-4 text-accent flex-shrink-0" />
+                    <div>
+                      <p className="text-sm font-medium">CSV export is available on Pro</p>
+                      <a href="/subscription" className="text-xs text-accent hover:underline">Upgrade to Pro →</a>
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
 

@@ -7,8 +7,11 @@ import { useDebts } from "@/hooks/useDebts";
 import { useProfile } from "@/hooks/useProfile";
 import { useExchangeRates, convertCurrency } from "@/hooks/useExchangeRates";
 import { formatCurrency } from "@/lib/currency";
+import UpgradePrompt from "@/components/UpgradePrompt";
+import { useFeatureAccess } from "@/hooks/useSubscription";
 
 export default function WeeklyReview() {
+  const { hasAccess } = useFeatureAccess("weeklyReports");
   const { data: reports } = useWeeklyReports();
   const { data: payments } = usePayments();
   const { data: debts } = useDebts();
@@ -42,6 +45,17 @@ export default function WeeklyReview() {
   }, 0) ?? 0;
 
   const report = reports?.[0];
+
+  if (!hasAccess) {
+    return (
+      <AppLayout>
+        <div className="max-w-2xl mx-auto">
+          <h1 className="font-heading text-2xl font-bold mb-6">Weekly Review</h1>
+          <UpgradePrompt message="Weekly reports are a Pro feature. Upgrade to get automated weekly summaries." />
+        </div>
+      </AppLayout>
+    );
+  }
 
   return (
     <AppLayout>

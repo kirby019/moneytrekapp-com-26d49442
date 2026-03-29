@@ -10,18 +10,22 @@ import { toast } from "sonner";
 import { useAddDebt } from "@/hooks/useDebts";
 import { useProfile } from "@/hooks/useProfile";
 import CurrencySelector from "@/components/CurrencySelector";
+import UpgradePrompt from "@/components/UpgradePrompt";
+import { useCanAddDebt, useFeatureAccess } from "@/hooks/useSubscription";
 
 export default function AddDebt() {
   const navigate = useNavigate();
   const addDebt = useAddDebt();
   const { data: profile } = useProfile();
   const defaultCurrency = (profile as any)?.default_currency ?? "USD";
+  const { canAdd, remaining, maxDebts, isFree } = useCanAddDebt();
+  const { hasAccess: hasMultiCurrency } = useFeatureAccess("multiCurrency");
 
   const [form, setForm] = useState({ name: "", type: "", balance: "", rate: "", minPayment: "" });
   const [currency, setCurrency] = useState<string | null>(null);
 
   // Use per-debt currency if set, otherwise default from profile
-  const activeCurrency = currency ?? defaultCurrency;
+  const activeCurrency = hasMultiCurrency ? (currency ?? defaultCurrency) : defaultCurrency;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,6 +50,12 @@ export default function AddDebt() {
     <AppLayout>
       <div className="max-w-lg mx-auto">
         <h1 className="font-heading text-2xl font-bold mb-6">Add New Debt</h1>
+        {!canAdd ? (
+          <UpgradePrompt
+            title="Debt Limit Reached"
+            message={`Free plan supports up to ${maxDebts} debts. Upgrade to Pro for unlimited debts.`}
+          />
+        ) : (
         <Card>
           <CardContent className="p-6">
             <form onSubmit={handleSubmit} className="space-y-5">
@@ -95,6 +105,7 @@ export default function AddDebt() {
             </form>
           </CardContent>
         </Card>
+        )}
       </div>
     </AppLayout>
   );
