@@ -26,15 +26,15 @@ const freePlanFeatures = [
 const proPlanFeatures = [
   "Everything in Free",
   "Unlimited debts",
-  "Unlimited savings accounts",
-  "Financial goals",
-  "Net worth tracking",
   "Weekly reports",
   "Advanced analytics & charts",
   "Multi-currency support",
   "CSV data export",
   "Payment reminders",
   "Automation features",
+  "Financial goals (coming soon)",
+  "Net worth tracking (coming soon)",
+  "Future premium features",
 ];
 
 export default function Subscription() {
