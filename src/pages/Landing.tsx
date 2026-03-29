@@ -474,7 +474,7 @@ export default function Landing() {
                     <p className="font-heading text-3xl font-extrabold mt-1">$0<span className="text-sm font-normal text-muted-foreground">/forever</span></p>
                   </div>
                   <ul className="space-y-2.5 mb-6">
-                    {["Up to 3 debts", "Track savings accounts", "Record payments & deposits", "Basic dashboard", "Basic progress tracking", "Single currency"].map(f => (
+                    {["Up to 3 debts", "Record payments", "Basic dashboard", "Basic progress tracking", "Basic charts", "Single currency", "Monthly summary"].map(f => (
                       <li key={f} className="flex items-center gap-2 text-sm">
                         <CheckCircle2 className="w-4 h-4 text-accent flex-shrink-0" />
                         {f}

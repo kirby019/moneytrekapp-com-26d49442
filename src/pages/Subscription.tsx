@@ -8,31 +8,33 @@ import { useSubscription, PRO_PRICING } from "@/hooks/useSubscription";
 
 const freePlanFeatures = [
   { text: "Up to 3 debts", included: true },
-  { text: "Track savings accounts", included: true },
-  { text: "Record payments & deposits", included: true },
+  { text: "Record payments", included: true },
   { text: "Basic dashboard", included: true },
   { text: "Basic progress tracking", included: true },
+  { text: "Basic charts", included: true },
   { text: "Single currency", included: true },
+  { text: "Monthly summary", included: true },
   { text: "Weekly reports", included: false },
   { text: "Advanced analytics", included: false },
   { text: "CSV export", included: false },
-  { text: "Financial goals", included: false },
   { text: "Multi-currency", included: false },
+  { text: "Financial goals", included: false },
   { text: "Payment reminders", included: false },
+  { text: "Automation features", included: false },
 ];
 
 const proPlanFeatures = [
   "Everything in Free",
   "Unlimited debts",
-  "Unlimited savings accounts",
-  "Financial goals",
-  "Net worth tracking",
   "Weekly reports",
   "Advanced analytics & charts",
   "Multi-currency support",
   "CSV data export",
   "Payment reminders",
   "Automation features",
+  "Financial goals (coming soon)",
+  "Net worth tracking (coming soon)",
+  "Future premium features",
 ];
 
 export default function Subscription() {

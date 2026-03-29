@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { TrendingDown, DollarSign, CreditCard, Target, ArrowRight, Plus } from "lucide-react";
+import { TrendingDown, DollarSign, CreditCard, Target, ArrowRight, Plus, Crown } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -10,11 +10,13 @@ import { useProfile } from "@/hooks/useProfile";
 import { useExchangeRates, convertCurrency } from "@/hooks/useExchangeRates";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatCurrency } from "@/lib/currency";
+import { useSubscription } from "@/hooks/useSubscription";
 
 export default function Dashboard() {
   const { data: debts, isLoading } = useDebts();
   const { data: profile } = useProfile();
   const { data: rates } = useExchangeRates();
+  const { isFree } = useSubscription();
 
   const defaultCurrency = (profile as any)?.default_currency ?? "USD";
   const activeDebts = debts?.filter((d) => d.status !== "paid") ?? [];
@@ -54,7 +56,7 @@ export default function Dashboard() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="font-heading text-2xl lg:text-3xl font-bold">Welcome back, {firstName}! 👋</h1>
-            <p className="text-muted-foreground text-sm mt-1">Here's your debt payoff overview.</p>
+            <p className="text-muted-foreground text-sm mt-1">Here's your financial progress overview.</p>
           </div>
           <Button asChild>
             <Link to="/add-debt"><Plus className="w-4 h-4 mr-2" /> Add Debt</Link>
@@ -157,6 +159,26 @@ export default function Dashboard() {
             </Card>
           )}
         </div>
+
+        {/* Upgrade nudge for free users */}
+        {isFree && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+            <Card className="border-accent/30 bg-accent/5">
+              <CardContent className="p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+                <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
+                  <Crown className="w-5 h-5 text-accent" />
+                </div>
+                <div className="flex-1">
+                  <p className="font-semibold text-sm">Unlock weekly reports, analytics & more</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">Upgrade to Pro for advanced charts, CSV export, multi-currency, and financial goals.</p>
+                </div>
+                <Button size="sm" asChild>
+                  <Link to="/subscription">Upgrade to Pro</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
       </div>
     </AppLayout>
   );
