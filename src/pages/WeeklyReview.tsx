@@ -9,6 +9,8 @@ import { useExchangeRates, convertCurrency } from "@/hooks/useExchangeRates";
 import { formatCurrency } from "@/lib/currency";
 import UpgradePrompt from "@/components/UpgradePrompt";
 import { useFeatureAccess } from "@/hooks/useSubscription";
+import { useCelebrations } from "@/hooks/useCelebrations";
+import { useEffect, useRef } from "react";
 
 export default function WeeklyReview() {
   const { hasAccess } = useFeatureAccess("weeklyReports");
@@ -18,6 +20,16 @@ export default function WeeklyReview() {
   const { data: profile } = useProfile();
   const { data: rates } = useExchangeRates();
   const defaultCurrency = (profile as any)?.default_currency ?? "USD";
+  const { celebrateWeeklyReview } = useCelebrations();
+  const hasShownReviewToast = useRef(false);
+
+  // Show encouragement toast when viewing weekly review with payments
+  useEffect(() => {
+    if (hasAccess && payments && payments.length > 0 && !hasShownReviewToast.current) {
+      hasShownReviewToast.current = true;
+      celebrateWeeklyReview();
+    }
+  }, [hasAccess, payments, celebrateWeeklyReview]);
 
   const now = new Date();
   const weekStart = new Date(now);

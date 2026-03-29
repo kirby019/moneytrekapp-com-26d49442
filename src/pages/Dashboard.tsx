@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { TrendingDown, DollarSign, CreditCard, Target, ArrowRight, Plus, Crown } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,12 +12,28 @@ import { useExchangeRates, convertCurrency } from "@/hooks/useExchangeRates";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatCurrency } from "@/lib/currency";
 import { useSubscription } from "@/hooks/useSubscription";
+import { useJourneyProgress } from "@/hooks/useJourneyProgress";
+import { useMilestones } from "@/hooks/useMilestones";
+import { useCelebrations } from "@/hooks/useCelebrations";
+import CelebrationModal from "@/components/CelebrationModal";
 
 export default function Dashboard() {
   const { data: debts, isLoading } = useDebts();
   const { data: profile } = useProfile();
   const { data: rates } = useExchangeRates();
   const { isFree } = useSubscription();
+  const { journeyProgress, hasJourneyData } = useJourneyProgress();
+  const { data: milestones } = useMilestones();
+  const { celebration, closeCelebration, checkMilestoneCelebration } = useCelebrations();
+  const milestoneChecked = useRef(false);
+
+  // Check for journey milestone celebrations on load
+  useEffect(() => {
+    if (milestoneChecked.current || !hasJourneyData) return;
+    milestoneChecked.current = true;
+    const achievedPercents = milestones?.map(m => m.milestone_percent ?? 0) ?? [];
+    checkMilestoneCelebration(journeyProgress, achievedPercents);
+  }, [journeyProgress, hasJourneyData, milestones, checkMilestoneCelebration]);
 
   const defaultCurrency = (profile as any)?.default_currency ?? "USD";
   const activeDebts = debts?.filter((d) => d.status !== "paid") ?? [];
@@ -51,6 +68,7 @@ export default function Dashboard() {
   ];
 
   return (
+    <>
     <AppLayout>
       <div className="max-w-6xl mx-auto space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -181,5 +199,14 @@ export default function Dashboard() {
         )}
       </div>
     </AppLayout>
+
+      <CelebrationModal
+        open={celebration.open}
+        onOpenChange={closeCelebration}
+        emoji={celebration.emoji}
+        title={celebration.title}
+        message={celebration.message}
+      />
+    </>
   );
 }
