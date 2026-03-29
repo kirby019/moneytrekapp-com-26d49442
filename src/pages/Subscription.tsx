@@ -218,13 +218,21 @@ export default function Subscription() {
                   </li>
                 ))}
               </ul>
-              <Button className="w-full" disabled={isPro && !isTrial}>
-                {isPro && !isTrial ? "Current Plan" : isTrial ? "Subscribe Now — Keep Pro" : "Coming Soon"}
-              </Button>
-              {isTrial && (
-                <p className="text-center text-[10px] text-muted-foreground mt-2">
-                  Payment integration coming soon
-                </p>
+              {isPro && !isTrial ? (
+                <div className="space-y-2">
+                  <Button className="w-full" variant="outline" onClick={handlePortal} disabled={portalLoading}>
+                    {portalLoading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Loading...</> : <><Settings className="w-4 h-4 mr-2" />Manage Subscription</>}
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <Button className="w-full" onClick={() => handleCheckout("monthly")} disabled={!!checkoutLoading}>
+                    {checkoutLoading === "monthly" ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Processing...</> : `Subscribe Monthly — ${monthlyPrice}/mo`}
+                  </Button>
+                  <Button className="w-full" variant="outline" onClick={() => handleCheckout("yearly")} disabled={!!checkoutLoading}>
+                    {checkoutLoading === "yearly" ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Processing...</> : `Subscribe Yearly — ${yearlyPrice}/yr (Save 44%)`}
+                  </Button>
+                </div>
               )}
             </CardContent>
           </Card>
