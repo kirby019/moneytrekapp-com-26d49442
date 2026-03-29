@@ -11,7 +11,7 @@ import { useExchangeRates, convertCurrency } from "@/hooks/useExchangeRates";
 import { formatCurrency } from "@/lib/currency";
 import { useCelebrations } from "@/hooks/useCelebrations";
 import { useUpdateStreak } from "@/hooks/useStreak";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 
 export default function WeeklyReview() {
   const { data: reports } = useWeeklyReports();
@@ -127,12 +127,7 @@ export default function WeeklyReview() {
           </Card>
         )}
 
-        <Card>
-          <CardContent className="p-6">
-            <h2 className="font-heading font-semibold mb-2">Motivation</h2>
-            <p className="text-muted-foreground text-sm italic">"Every payment you make is a step closer to freedom. Keep going — you're doing amazing!"</p>
-          </CardContent>
-        </Card>
+        <MotivationCard />
       </div>
     </AppLayout>
   );
