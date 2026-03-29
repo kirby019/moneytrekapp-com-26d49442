@@ -3,8 +3,9 @@ import { motion } from "framer-motion";
 import {
   ArrowRight, Sparkles, CreditCard, History, BarChart3, CalendarCheck,
   Globe, LineChart, Download, Shield, Star, CheckCircle2, TrendingDown,
-  DollarSign, Target, Users, Zap, ChevronRight, Award, Clock, Rocket
+  DollarSign, Target, Users, Zap, ChevronRight, Award, Clock, Rocket, LogOut
 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -126,6 +127,7 @@ function ProPricingCard() {
 
 export default function Landing() {
   const { format: fmt } = useLocalizedCurrency();
+  const { user, signOut } = useAuth();
 
   const mockStats = mockStatsRaw.map(s => ({
     ...s,
@@ -149,8 +151,19 @@ export default function Landing() {
           <span className="font-heading font-bold text-lg">MoneyTrek</span>
         </Link>
         <div className="flex items-center gap-2 sm:gap-3">
-          <Button variant="ghost" size="sm" asChild><Link to="/login">Log in</Link></Button>
-          <Button size="sm" asChild><Link to="/signup">Get Started</Link></Button>
+          {user ? (
+            <>
+              <Button size="sm" asChild><Link to="/dashboard">Dashboard</Link></Button>
+              <Button variant="ghost" size="sm" onClick={() => signOut()}>
+                <LogOut className="w-4 h-4 mr-1" /> Sign Out
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button variant="ghost" size="sm" asChild><Link to="/login">Log in</Link></Button>
+              <Button size="sm" asChild><Link to="/signup">Get Started</Link></Button>
+            </>
+          )}
         </div>
       </nav>
 
@@ -170,14 +183,24 @@ export default function Landing() {
                 MoneyTrek helps you track debt, record payments, monitor your progress, and stay motivated with milestones, reports, and visual progress tracking on your journey to financial freedom.
               </p>
               <div className="flex flex-wrap gap-3">
-                <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
-                  <Link to="/signup">
-                    Start Your Trek for Free <ArrowRight className="ml-2 w-4 h-4" />
-                  </Link>
-                </Button>
-                <Button size="lg" variant="outline" className="border-white/40 text-white bg-white/10 hover:bg-white/20 backdrop-blur-sm" asChild>
-                  <Link to="/login">Log In</Link>
-                </Button>
+                {user ? (
+                  <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
+                    <Link to="/dashboard">
+                      Go to Dashboard <ArrowRight className="ml-2 w-4 h-4" />
+                    </Link>
+                  </Button>
+                ) : (
+                  <>
+                    <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
+                      <Link to="/signup">
+                        Start Your Trek for Free <ArrowRight className="ml-2 w-4 h-4" />
+                      </Link>
+                    </Button>
+                    <Button size="lg" variant="outline" className="border-white/40 text-white bg-white/10 hover:bg-white/20 backdrop-blur-sm" asChild>
+                      <Link to="/login">Log In</Link>
+                    </Button>
+                  </>
+                )}
               </div>
               <div className="flex items-center gap-6 mt-8 text-primary-foreground/50 text-sm">
                 <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent" /> Free plan available</span>
@@ -530,9 +553,15 @@ export default function Landing() {
             <p className="text-primary-foreground/60 mb-8 max-w-md mx-auto text-sm sm:text-base">
               Track your debt, monitor your progress, and build better financial habits with MoneyTrek. Small steps lead to big financial progress.
             </p>
-            <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
-              <Link to="/signup">Create Free Account <ArrowRight className="ml-2 w-4 h-4" /></Link>
-            </Button>
+            {user ? (
+              <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
+                <Link to="/dashboard">Go to Dashboard <ArrowRight className="ml-2 w-4 h-4" /></Link>
+              </Button>
+            ) : (
+              <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
+                <Link to="/signup">Create Free Account <ArrowRight className="ml-2 w-4 h-4" /></Link>
+              </Button>
+            )}
           </motion.div>
         </div>
         <div className="absolute top-10 left-10 w-48 h-48 rounded-full bg-accent/10 blur-3xl" />
@@ -555,8 +584,17 @@ export default function Landing() {
             <div>
               <h4 className="font-heading font-semibold text-sm mb-3">Product</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link to="/signup" className="hover:text-foreground transition-colors">Get Started</Link></li>
-                <li><Link to="/login" className="hover:text-foreground transition-colors">Log In</Link></li>
+                {user ? (
+                  <>
+                    <li><Link to="/dashboard" className="hover:text-foreground transition-colors">Dashboard</Link></li>
+                    <li><button onClick={() => signOut()} className="hover:text-foreground transition-colors">Sign Out</button></li>
+                  </>
+                ) : (
+                  <>
+                    <li><Link to="/signup" className="hover:text-foreground transition-colors">Get Started</Link></li>
+                    <li><Link to="/login" className="hover:text-foreground transition-colors">Log In</Link></li>
+                  </>
+                )}
                 <li><span className="cursor-default">Pricing</span></li>
               </ul>
             </div>
