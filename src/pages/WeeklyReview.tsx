@@ -13,6 +13,41 @@ import { useCelebrations } from "@/hooks/useCelebrations";
 import { useUpdateStreak } from "@/hooks/useStreak";
 import { useEffect, useRef, useMemo } from "react";
 
+const MOTIVATION_QUOTES = [
+  "Every payment you make is a step closer to freedom. Keep going — you're doing amazing!",
+  "Small progress is still progress. Celebrate every win, no matter how small.",
+  "You didn't come this far to only come this far. Your future self will thank you.",
+  "Financial freedom isn't about how much you earn — it's about how you manage what you have.",
+  "Consistency beats intensity. One payment at a time, you're building a better life.",
+  "Imagine the relief of being debt-free. That feeling is getting closer every day.",
+  "The best investment you can make is in your own peace of mind.",
+  "You're not just paying off debt — you're building discipline, resilience, and confidence.",
+  "Every dollar you pay down today is a dollar that stops working against you tomorrow.",
+  "Your journey matters more than your pace. Stay the course — you've got this!",
+  "Think of each payment as a gift to your future self. They'll be so grateful.",
+  "Debt-free living isn't a dream — it's a destination. And you're already on the way.",
+  "The hardest part was starting. You've already done that. Now just keep moving forward.",
+  "Money grows when you stop feeding debt and start feeding your goals.",
+  "Believe in the power of your own commitment. You chose this path for a reason.",
+];
+
+function getQuoteIndex(): number {
+  const daysSinceEpoch = Math.floor(Date.now() / (1000 * 60 * 60 * 24));
+  return Math.floor(daysSinceEpoch / 2) % MOTIVATION_QUOTES.length;
+}
+
+function MotivationCard() {
+  const quote = useMemo(() => MOTIVATION_QUOTES[getQuoteIndex()], []);
+  return (
+    <Card>
+      <CardContent className="p-6">
+        <h2 className="font-heading font-semibold mb-2">Motivation</h2>
+        <p className="text-muted-foreground text-sm italic">"{quote}"</p>
+      </CardContent>
+    </Card>
+  );
+}
+
 export default function WeeklyReview() {
   const { data: reports } = useWeeklyReports();
   const { data: payments } = usePayments();
