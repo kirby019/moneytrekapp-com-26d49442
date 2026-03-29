@@ -166,7 +166,7 @@ export default function Onboarding() {
                     <Button onClick={handleDebtSave} disabled={saving || !canAddDebt} className="flex-1">
                       {saving ? "Adding…" : "Add Debt"}
                     </Button>
-                    <Button variant="ghost" onClick={() => { setStep(3); }}>Skip</Button>
+                    <Button variant="ghost" onClick={async () => { await saveJourneyBaseline(); setStep(3); }}>Skip</Button>
                   </div>
                 </CardContent>
               </Card>
