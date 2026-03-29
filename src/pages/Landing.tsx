@@ -76,7 +76,7 @@ function ProPricingCard() {
   return (
     <motion.div {...fadeUp} transition={{ delay: 0.2 }}>
       <Card className="h-full relative overflow-hidden hover:shadow-lg transition-shadow border-2 border-accent/30">
-        <div className="absolute top-0 right-0 bg-accent text-accent-foreground text-[10px] font-bold px-3 py-1 rounded-bl-lg">Coming Soon</div>
+        <div className="absolute top-0 right-0 bg-accent text-accent-foreground text-[10px] font-bold px-3 py-1 rounded-bl-lg">7-Day Free Trial</div>
         <CardContent className="p-6">
           <div className="mb-4">
             <span className="text-xs font-semibold text-accent uppercase">Pro</span>
@@ -90,8 +90,17 @@ function ProPricingCard() {
               <p className="text-xs text-muted-foreground mt-0.5">≈ $2.99/mo or $19.99/yr USD</p>
             )}
           </div>
+          <div className="bg-accent/10 border border-accent/20 rounded-lg p-3 mb-4">
+            <p className="text-xs font-semibold text-accent flex items-center gap-1.5">
+              <Award className="w-3.5 h-3.5" /> Founding Member Pricing
+            </p>
+            <p className="text-[11px] text-muted-foreground mt-0.5">
+              Sign up now and lock in this rate for life. Early adopters keep this price forever.
+            </p>
+          </div>
           <ul className="space-y-2.5 mb-4">
             {[
+              "7-day free trial — no card needed",
               "Everything in Free",
               "Unlimited debts & savings",
               "Weekly reports",
@@ -107,7 +116,9 @@ function ProPricingCard() {
               </li>
             ))}
           </ul>
-          <Button variant="outline" className="w-full" disabled>Coming Soon</Button>
+          <Button className="w-full" asChild>
+            <Link to="/signup">Start Free Trial</Link>
+          </Button>
         </CardContent>
       </Card>
     </motion.div>
@@ -163,7 +174,7 @@ export default function Landing() {
             {/* Left - Copy */}
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-accent/20 text-accent mb-6">
-                <Zap className="w-3 h-3" /> Your path to financial freedom
+                <Zap className="w-3 h-3" /> 7-day free Pro trial — no credit card needed
               </span>
               <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold leading-[1.1] mb-5 text-primary-foreground">
                 Track Your Money Progress. <span className="text-accent">One Step at a Time.</span>
@@ -182,7 +193,7 @@ export default function Landing() {
                   <>
                     <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
                       <Link to="/signup">
-                        Start Your Trek for Free <ArrowRight className="ml-2 w-4 h-4" />
+                        Start 7-Day Free Trial <ArrowRight className="ml-2 w-4 h-4" />
                       </Link>
                     </Button>
                     <Button size="lg" variant="outline" className="border-white/40 text-white bg-white/10 hover:bg-white/20 backdrop-blur-sm" asChild>
@@ -192,9 +203,9 @@ export default function Landing() {
                 )}
               </div>
               <div className="flex items-center gap-6 mt-8 text-primary-foreground/50 text-sm flex-wrap">
-                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent" /> Free plan available</span>
+                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent" /> 7-day Pro trial included</span>
                 <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent" /> No credit card required</span>
-                <span className="flex items-center gap-1.5 hidden sm:flex"><CheckCircle2 className="w-4 h-4 text-accent" /> Track up to 3 debts free</span>
+                <span className="flex items-center gap-1.5 hidden sm:flex"><CheckCircle2 className="w-4 h-4 text-accent" /> Lock in founding member pricing</span>
               </div>
             </motion.div>
 
@@ -508,7 +519,7 @@ export default function Landing() {
           <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
             <span className="text-xs font-semibold text-accent uppercase tracking-wider">Pricing</span>
             <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Simple, Transparent Pricing</h2>
-            <p className="text-muted-foreground max-w-md mx-auto text-sm">Start tracking your financial progress for free. Upgrade when you need more.</p>
+            <p className="text-muted-foreground max-w-md mx-auto text-sm">Every new account gets a <strong>7-day free Pro trial</strong>. No credit card required. Sign up today to lock in founding member pricing for life.</p>
           </motion.div>
           <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
             {/* Free */}
@@ -568,10 +579,13 @@ export default function Landing() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-24 text-center relative z-10">
           <motion.div {...fadeUp} transition={{ duration: 0.6 }}>
             <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-extrabold text-primary-foreground mb-4">
-              Start Your Journey to Financial Freedom Today
+              Start Your 7-Day Free Pro Trial Today
             </h2>
-            <p className="text-primary-foreground/60 mb-8 max-w-md mx-auto text-sm sm:text-base">
+            <p className="text-primary-foreground/60 mb-3 max-w-md mx-auto text-sm sm:text-base">
               Track your debt, monitor your progress, and build better financial habits with MoneyTrek. Small steps lead to big financial progress.
+            </p>
+            <p className="text-primary-foreground/40 mb-8 text-xs sm:text-sm">
+              🏅 Sign up now to become a Founding Member and lock in $2.99/mo pricing for life.
             </p>
             {user ? (
               <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
@@ -579,7 +593,7 @@ export default function Landing() {
               </Button>
             ) : (
               <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
-                <Link to="/signup">Create Free Account <ArrowRight className="ml-2 w-4 h-4" /></Link>
+                <Link to="/signup">Start Free Trial <ArrowRight className="ml-2 w-4 h-4" /></Link>
               </Button>
             )}
           </motion.div>
