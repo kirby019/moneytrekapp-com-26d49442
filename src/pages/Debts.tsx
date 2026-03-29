@@ -80,6 +80,9 @@ export default function Debts() {
                           <p className="font-semibold truncate">{debt.debt_name}</p>
                           {isPaid && <Badge variant="secondary" className="bg-success/10 text-success text-xs">Paid Off!</Badge>}
                         </div>
+                        {(debt as any).debt_type && (
+                          <p className="text-xs text-muted-foreground mb-0.5">{(debt as any).debt_type}</p>
+                        )}
                         <p className="text-xs text-muted-foreground">{debt.interest_rate ?? 0}% APR · {cur}</p>
                         <div className="mt-2">
                           <Progress value={progress} className="h-2" />

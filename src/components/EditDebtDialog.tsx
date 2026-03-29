@@ -3,10 +3,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import CurrencySelector from "@/components/CurrencySelector";
+import { DEBT_TYPES } from "@/lib/debtTypes";
 
 interface EditDebtDialogProps {
   debt: any;
@@ -18,6 +20,7 @@ export default function EditDebtDialog({ debt, open, onOpenChange }: EditDebtDia
   const queryClient = useQueryClient();
   const [form, setForm] = useState({
     debt_name: "",
+    debt_type: "Credit Card",
     current_balance: "",
     original_amount: "",
     interest_rate: "",
@@ -30,6 +33,7 @@ export default function EditDebtDialog({ debt, open, onOpenChange }: EditDebtDia
     if (debt) {
       setForm({
         debt_name: debt.debt_name ?? "",
+        debt_type: debt.debt_type ?? "Credit Card",
         current_balance: String(debt.current_balance ?? ""),
         original_amount: String(debt.original_amount ?? ""),
         interest_rate: String(debt.interest_rate ?? ""),
@@ -46,6 +50,7 @@ export default function EditDebtDialog({ debt, open, onOpenChange }: EditDebtDia
         .from("debts")
         .update({
           debt_name: form.debt_name,
+          debt_type: form.debt_type,
           current_balance: parseFloat(form.current_balance),
           original_amount: parseFloat(form.original_amount),
           interest_rate: parseFloat(form.interest_rate),
@@ -74,6 +79,17 @@ export default function EditDebtDialog({ debt, open, onOpenChange }: EditDebtDia
           <div className="space-y-2">
             <Label>Debt Name</Label>
             <Input value={form.debt_name} onChange={e => setForm({ ...form, debt_name: e.target.value })} />
+          </div>
+          <div className="space-y-2">
+            <Label>Debt Type</Label>
+            <Select value={form.debt_type} onValueChange={v => setForm({ ...form, debt_type: v })}>
+              <SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger>
+              <SelectContent>
+                {DEBT_TYPES.map(t => (
+                  <SelectItem key={t} value={t}>{t}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <div className="space-y-2">
             <Label>Currency</Label>

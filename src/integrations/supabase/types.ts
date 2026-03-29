@@ -20,6 +20,7 @@ export type Database = {
           currency: string | null
           current_balance: number | null
           debt_name: string | null
+          debt_type: string | null
           due_date: string | null
           id: string
           interest_rate: number | null
@@ -34,6 +35,7 @@ export type Database = {
           currency?: string | null
           current_balance?: number | null
           debt_name?: string | null
+          debt_type?: string | null
           due_date?: string | null
           id?: string
           interest_rate?: number | null
@@ -48,6 +50,7 @@ export type Database = {
           currency?: string | null
           current_balance?: number | null
           debt_name?: string | null
+          debt_type?: string | null
           due_date?: string | null
           id?: string
           interest_rate?: number | null

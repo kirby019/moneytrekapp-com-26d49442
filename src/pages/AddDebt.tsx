@@ -12,6 +12,7 @@ import { useProfile } from "@/hooks/useProfile";
 import CurrencySelector from "@/components/CurrencySelector";
 import UpgradePrompt from "@/components/UpgradePrompt";
 import { useCanAddDebt, useFeatureAccess } from "@/hooks/useSubscription";
+import { DEBT_TYPES } from "@/lib/debtTypes";
 
 export default function AddDebt() {
   const navigate = useNavigate();
@@ -21,10 +22,9 @@ export default function AddDebt() {
   const { canAdd, remaining, maxDebts, isFree } = useCanAddDebt();
   const { hasAccess: hasMultiCurrency } = useFeatureAccess("multiCurrency");
 
-  const [form, setForm] = useState({ name: "", type: "", balance: "", rate: "", minPayment: "" });
+  const [form, setForm] = useState({ name: "", debtType: "Credit Card", balance: "", rate: "", minPayment: "" });
   const [currency, setCurrency] = useState<string | null>(null);
 
-  // Use per-debt currency if set, otherwise default from profile
   const activeCurrency = hasMultiCurrency ? (currency ?? defaultCurrency) : defaultCurrency;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -32,6 +32,7 @@ export default function AddDebt() {
     try {
       await addDebt.mutateAsync({
         debt_name: form.name,
+        debt_type: form.debtType,
         original_amount: parseFloat(form.balance),
         current_balance: parseFloat(form.balance),
         interest_rate: parseFloat(form.rate),
@@ -61,20 +62,16 @@ export default function AddDebt() {
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
                 <Label htmlFor="name">Debt Name</Label>
-                <Input id="name" placeholder="e.g., Chase Visa" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required />
+                <Input id="name" placeholder="e.g., My Credit Card" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required />
               </div>
               <div className="space-y-2">
                 <Label>Debt Type</Label>
-                <Select value={form.type} onValueChange={v => setForm({ ...form, type: v })}>
+                <Select value={form.debtType} onValueChange={v => setForm({ ...form, debtType: v })} required>
                   <SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="credit-card">Credit Card</SelectItem>
-                    <SelectItem value="student-loan">Student Loan</SelectItem>
-                    <SelectItem value="auto-loan">Auto Loan</SelectItem>
-                    <SelectItem value="mortgage">Mortgage</SelectItem>
-                    <SelectItem value="personal-loan">Personal Loan</SelectItem>
-                    <SelectItem value="medical">Medical</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
+                    {DEBT_TYPES.map(t => (
+                      <SelectItem key={t} value={t}>{t}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
