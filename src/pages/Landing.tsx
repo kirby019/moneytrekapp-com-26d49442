@@ -146,7 +146,7 @@ export default function Landing() {
           <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "var(--gradient-primary)" }}>
             <Sparkles className="w-4 h-4 text-primary-foreground" />
           </div>
-          <span className="font-heading font-bold text-lg">Debt Free Journey</span>
+          <span className="font-heading font-bold text-lg">MoneyTrek</span>
         </Link>
         <div className="flex items-center gap-2 sm:gap-3">
           <Button variant="ghost" size="sm" asChild><Link to="/login">Log in</Link></Button>
@@ -167,7 +167,7 @@ export default function Landing() {
                 Track Your Debt. <span className="text-accent">Make Progress.</span> Stay Motivated.
               </h1>
               <p className="text-base sm:text-lg text-primary-foreground/70 mb-8 max-w-lg leading-relaxed">
-                Debt Free Journey is a financial progress tracker that helps you track your debts, record payments, monitor your progress, and stay motivated on your journey to financial freedom.
+                MoneyTrek is a financial progress tracker that helps you track your debts, record payments, monitor your progress, and stay motivated on your journey to financial freedom.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
@@ -548,7 +548,7 @@ export default function Landing() {
                 <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "var(--gradient-primary)" }}>
                   <Sparkles className="w-3.5 h-3.5 text-primary-foreground" />
                 </div>
-                <span className="font-heading font-bold">Debt Free Journey</span>
+                <span className="font-heading font-bold">MoneyTrek</span>
               </Link>
               <p className="text-sm text-muted-foreground leading-relaxed">A financial progress tracker that helps you track your debts, record payments, and stay motivated on your journey to financial freedom.</p>
             </div>
@@ -570,7 +570,7 @@ export default function Landing() {
             </div>
           </div>
           <div className="border-t border-border mt-8 pt-6 text-center text-xs text-muted-foreground">
-            © {new Date().getFullYear()} Debt Free Journey. All rights reserved.
+            © {new Date().getFullYear()} MoneyTrek. All rights reserved.
           </div>
         </div>
       </footer>
