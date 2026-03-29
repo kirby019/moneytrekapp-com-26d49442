@@ -3,6 +3,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthProvider } from "@/contexts/AuthContext";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -29,25 +31,27 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/debts" element={<Debts />} />
-          <Route path="/add-debt" element={<AddDebt />} />
-          <Route path="/record-payment" element={<RecordPayment />} />
-          <Route path="/payment-history" element={<PaymentHistory />} />
-          <Route path="/strategy" element={<Strategy />} />
-          <Route path="/journey" element={<Journey />} />
-          <Route path="/milestones" element={<Milestones />} />
-          <Route path="/weekly-review" element={<WeeklyReview />} />
-          <Route path="/future" element={<Future />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/settings" element={<AppSettings />} />
-          <Route path="/subscription" element={<Subscription />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/debts" element={<ProtectedRoute><Debts /></ProtectedRoute>} />
+            <Route path="/add-debt" element={<ProtectedRoute><AddDebt /></ProtectedRoute>} />
+            <Route path="/record-payment" element={<ProtectedRoute><RecordPayment /></ProtectedRoute>} />
+            <Route path="/payment-history" element={<ProtectedRoute><PaymentHistory /></ProtectedRoute>} />
+            <Route path="/strategy" element={<ProtectedRoute><Strategy /></ProtectedRoute>} />
+            <Route path="/journey" element={<ProtectedRoute><Journey /></ProtectedRoute>} />
+            <Route path="/milestones" element={<ProtectedRoute><Milestones /></ProtectedRoute>} />
+            <Route path="/weekly-review" element={<ProtectedRoute><WeeklyReview /></ProtectedRoute>} />
+            <Route path="/future" element={<ProtectedRoute><Future /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="/settings" element={<ProtectedRoute><AppSettings /></ProtectedRoute>} />
+            <Route path="/subscription" element={<ProtectedRoute><Subscription /></ProtectedRoute>} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

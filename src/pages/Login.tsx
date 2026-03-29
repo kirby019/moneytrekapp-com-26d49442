@@ -4,14 +4,28 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      toast({ variant: "destructive", title: "Login failed", description: error.message });
+      setLoading(false);
+      return;
+    }
+
     navigate("/dashboard");
   };
 
@@ -45,7 +59,9 @@ export default function Login() {
               <Label htmlFor="password">Password</Label>
               <Input id="password" type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} required />
             </div>
-            <Button type="submit" className="w-full">Log In</Button>
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Logging in…" : "Log In"}
+            </Button>
           </form>
           <p className="text-center text-sm text-muted-foreground">
             Don't have an account? <Link to="/signup" className="text-primary font-medium hover:underline">Sign up</Link>
