@@ -23,14 +23,18 @@ export default function WeeklyReview() {
   const { celebrateWeeklyReview } = useCelebrations();
   const updateStreak = useUpdateStreak();
   const hasShownReviewToast = useRef(false);
+  const weekReviewKey = useRef("");
 
+  // Only celebrate once per unique week visit (not on every render)
   useEffect(() => {
-    if (payments && payments.length > 0 && !hasShownReviewToast.current) {
+    const weekKey = weekStart.toISOString().split("T")[0];
+    if (payments && payments.length > 0 && !hasShownReviewToast.current && weekReviewKey.current !== weekKey) {
       hasShownReviewToast.current = true;
+      weekReviewKey.current = weekKey;
       celebrateWeeklyReview();
       updateStreak.mutate();
     }
-  }, [payments, celebrateWeeklyReview]);
+  }, [payments, celebrateWeeklyReview]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const now = new Date();
   const weekStart = new Date(now);
