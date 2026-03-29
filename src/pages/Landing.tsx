@@ -21,21 +21,21 @@ const fadeUp = {
 
 const features = [
   { icon: CreditCard, title: "Debt Tracking", desc: "Add all your debts in one place with balances, interest rates, types, and due dates." },
-  { icon: PiggyBank, title: "Savings Tracking", desc: "Track your savings accounts and watch your balances grow over time." },
-  { icon: Target, title: "Financial Goals", desc: "Set savings goals with target amounts and dates, and track your progress toward each one." },
-  { icon: BarChart3, title: "Progress Dashboard", desc: "Visual overview of your debts, savings, net worth, and overall financial progress." },
+  { icon: History, title: "Payment Recording", desc: "Log every payment you make and watch your balances update automatically." },
+  { icon: BarChart3, title: "Progress Dashboard", desc: "Visual overview of your debts, payments, progress, and financial journey." },
   { icon: Award, title: "Milestones & Badges", desc: "Earn badges as you hit milestones on your journey to financial freedom." },
-  { icon: CalendarCheck, title: "Weekly Reports", desc: "Automated weekly summaries of payments, savings, and progress.", pro: true },
-  { icon: LineChart, title: "Analytics & Charts", desc: "Beautiful charts showing debt reduction, savings growth, net worth, and trends.", pro: true },
+  { icon: Clock, title: "Streaks", desc: "Stay consistent and build momentum with payment streaks that track your habits." },
+  { icon: CalendarCheck, title: "Weekly Reports", desc: "Automated weekly summaries of your payments and progress.", pro: true },
+  { icon: LineChart, title: "Analytics & Charts", desc: "Beautiful charts showing debt reduction, payment trends, and your progress over time.", pro: true },
   { icon: Globe, title: "Multi-Currency", desc: "Track finances in any currency with automatic exchange rate conversion.", pro: true },
-  { icon: Download, title: "Data Export", desc: "Export your debts, payments, savings, and reports as CSV files anytime.", pro: true },
+  { icon: Download, title: "Data Export", desc: "Export your debts, payments, and reports as CSV files anytime.", pro: true },
   { icon: Shield, title: "Secure & Private", desc: "Your data is protected with row-level security and encrypted authentication." },
 ];
 
 const steps = [
-  { icon: CreditCard, title: "Add Your Debts & Savings", desc: "Enter your debts with balances and interest rates, and add your savings accounts." },
-  { icon: DollarSign, title: "Record Payments & Deposits", desc: "Log each payment and savings deposit — balances update automatically." },
-  { icon: Target, title: "Track Your Financial Progress", desc: "Watch your debt shrink, savings grow, and reach your financial goals." },
+  { icon: CreditCard, title: "Add Your Debts", desc: "Enter your debts with balances, interest rates, and due dates to get started." },
+  { icon: DollarSign, title: "Record Payments", desc: "Log each payment you make — your balances and progress update automatically." },
+  { icon: Target, title: "Track Your Progress", desc: "Watch your debt shrink, hit milestones, and stay motivated on your journey to financial freedom." },
 ];
 
 const testimonials = [
@@ -166,10 +166,10 @@ export default function Landing() {
                 <Zap className="w-3 h-3" /> Your path to financial freedom
               </span>
               <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold leading-[1.1] mb-5 text-primary-foreground">
-                Pay Off Debt. Build Savings. <span className="text-accent">Track Your Progress.</span>
+                Track Your Money Progress. <span className="text-accent">One Step at a Time.</span>
               </h1>
               <p className="text-base sm:text-lg text-primary-foreground/70 mb-8 max-w-lg leading-relaxed">
-                Track your debts, grow your savings, and monitor your financial progress — all in one simple app designed to help you take control of your money.
+                MoneyTrek helps you track debt, record payments, monitor your progress, and stay motivated with milestones, reports, and visual progress tracking on your journey to financial freedom.
               </p>
               <div className="flex flex-wrap gap-3">
                 {user ? (
@@ -194,7 +194,7 @@ export default function Landing() {
               <div className="flex items-center gap-6 mt-8 text-primary-foreground/50 text-sm flex-wrap">
                 <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent" /> Free plan available</span>
                 <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent" /> No credit card required</span>
-                <span className="flex items-center gap-1.5 hidden sm:flex"><CheckCircle2 className="w-4 h-4 text-accent" /> Debt + Savings tracking</span>
+                <span className="flex items-center gap-1.5 hidden sm:flex"><CheckCircle2 className="w-4 h-4 text-accent" /> Track up to 3 debts free</span>
               </div>
             </motion.div>
 
@@ -395,8 +395,8 @@ export default function Landing() {
       <section className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-20">
         <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
           <span className="text-xs font-semibold text-accent uppercase tracking-wider">Features</span>
-          <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Everything You Need for Financial Freedom</h2>
-          <p className="text-muted-foreground max-w-lg mx-auto text-sm">MoneyTrek helps you track debts, grow savings, set financial goals, and visualize your progress with milestones, reports, and analytics.</p>
+          <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Everything You Need to Track Your Financial Progress</h2>
+          <p className="text-muted-foreground max-w-lg mx-auto text-sm">MoneyTrek helps you track your debts, record payments, visualize your progress, and stay motivated with milestones, reports, and analytics that show your financial progress over time.</p>
         </motion.div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {features.map((f, i) => (
@@ -571,7 +571,7 @@ export default function Landing() {
               Start Your Journey to Financial Freedom Today
             </h2>
             <p className="text-primary-foreground/60 mb-8 max-w-md mx-auto text-sm sm:text-base">
-              Pay off debt, build savings, and track your financial progress with MoneyTrek. Small steps lead to big financial freedom.
+              Track your debt, monitor your progress, and build better financial habits with MoneyTrek. Small steps lead to big financial progress.
             </p>
             {user ? (
               <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
@@ -599,7 +599,7 @@ export default function Landing() {
                 </div>
                 <span className="font-heading font-bold">MoneyTrek</span>
               </Link>
-              <p className="text-sm text-muted-foreground leading-relaxed">MoneyTrek is a financial progress tracker that helps you pay off debt, build savings, and track your journey to financial freedom.</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">MoneyTrek is a financial progress tracker that helps you track debt, monitor progress, and build better financial habits on your journey to financial freedom.</p>
             </div>
             <div>
               <h4 className="font-heading font-semibold text-sm mb-3">Product</h4>
