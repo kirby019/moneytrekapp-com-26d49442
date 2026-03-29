@@ -601,9 +601,9 @@ export default function Landing() {
             <div>
               <h4 className="font-heading font-semibold text-sm mb-3">Legal</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><span className="cursor-default">Privacy Policy</span></li>
-                <li><span className="cursor-default">Terms of Service</span></li>
-                <li><span className="cursor-default">Contact</span></li>
+                <li><Link to="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link></li>
+                <li><Link to="/terms" className="hover:text-foreground transition-colors">Terms of Service</Link></li>
+                <li><a href="mailto:hello@moneytrek.app" className="hover:text-foreground transition-colors">Contact</a></li>
               </ul>
             </div>
           </div>

@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Download } from "lucide-react";
 import AppLayout from "@/components/AppLayout";
 import { usePayments } from "@/hooks/usePayments";
 import { useProfile } from "@/hooks/useProfile";
@@ -14,6 +14,9 @@ import ConfirmDialog from "@/components/ConfirmDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useFeatureAccess } from "@/hooks/useSubscription";
+import { exportToCsv } from "@/lib/exportCsv";
+import UpgradePrompt from "@/components/UpgradePrompt";
 
 export default function PaymentHistory() {
   const { data: payments, isLoading } = usePayments();
@@ -21,9 +24,26 @@ export default function PaymentHistory() {
   const defaultCurrency = (profile as any)?.default_currency ?? "USD";
   const queryClient = useQueryClient();
 
+  const { hasAccess: canExport } = useFeatureAccess("csvExport");
   const [editPayment, setEditPayment] = useState<any>(null);
   const [deletePayment, setDeletePayment] = useState<any>(null);
   const [deleting, setDeleting] = useState(false);
+  const [showUpgrade, setShowUpgrade] = useState(false);
+
+  const handleExport = () => {
+    if (!canExport) { setShowUpgrade(true); return; }
+    if (!payments?.length) { toast.error("No payments to export"); return; }
+    const headers = ["Date", "Debt", "Amount", "Type", "Notes"];
+    const rows = payments.map(p => [
+      p.payment_date ?? "",
+      (p as any).debts?.debt_name ?? "Unknown",
+      String(p.amount ?? 0),
+      p.is_extra_payment ? "Extra" : "Minimum",
+      p.notes ?? "",
+    ]);
+    exportToCsv("moneytrek-payments.csv", headers, rows);
+    toast.success("Payments exported!");
+  };
 
   const handleDelete = async () => {
     if (!deletePayment) return;
@@ -50,7 +70,10 @@ export default function PaymentHistory() {
             <h1 className="font-heading text-2xl font-bold">Payment History</h1>
             <p className="text-sm text-muted-foreground mt-1">{payments?.length ?? 0} payments recorded</p>
           </div>
-          <Button asChild><Link to="/record-payment"><Plus className="w-4 h-4 mr-2" />Record Payment</Link></Button>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={handleExport}><Download className="w-4 h-4 mr-2" />Export CSV</Button>
+            <Button asChild><Link to="/record-payment"><Plus className="w-4 h-4 mr-2" />Record Payment</Link></Button>
+          </div>
         </div>
 
         {isLoading ? (
@@ -104,6 +127,9 @@ export default function PaymentHistory() {
         onConfirm={handleDelete}
         loading={deleting}
       />
+      {showUpgrade && (
+        <UpgradePrompt feature="csvExport" open={showUpgrade} onOpenChange={setShowUpgrade} />
+      )}
     </AppLayout>
   );
 }
