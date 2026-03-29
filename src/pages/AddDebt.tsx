@@ -8,11 +8,20 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import AppLayout from "@/components/AppLayout";
 import { toast } from "sonner";
 import { useAddDebt } from "@/hooks/useDebts";
+import { useProfile } from "@/hooks/useProfile";
+import CurrencySelector from "@/components/CurrencySelector";
 
 export default function AddDebt() {
   const navigate = useNavigate();
   const addDebt = useAddDebt();
+  const { data: profile } = useProfile();
+  const defaultCurrency = (profile as any)?.default_currency ?? "USD";
+
   const [form, setForm] = useState({ name: "", type: "", balance: "", rate: "", minPayment: "" });
+  const [currency, setCurrency] = useState<string | null>(null);
+
+  // Use per-debt currency if set, otherwise default from profile
+  const activeCurrency = currency ?? defaultCurrency;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,6 +33,7 @@ export default function AddDebt() {
         interest_rate: parseFloat(form.rate),
         minimum_payment: parseFloat(form.minPayment),
         status: "active",
+        currency: activeCurrency,
       });
       toast.success("Debt added successfully!");
       navigate("/debts");
@@ -58,9 +68,13 @@ export default function AddDebt() {
                   </SelectContent>
                 </Select>
               </div>
+              <div className="space-y-2">
+                <Label>Currency</Label>
+                <CurrencySelector value={activeCurrency} onValueChange={setCurrency} />
+              </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="balance">Current Balance ($)</Label>
+                  <Label htmlFor="balance">Current Balance</Label>
                   <Input id="balance" type="number" step="0.01" placeholder="0.00" value={form.balance} onChange={e => setForm({ ...form, balance: e.target.value })} required />
                 </div>
                 <div className="space-y-2">
@@ -69,7 +83,7 @@ export default function AddDebt() {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="minPayment">Minimum Payment ($)</Label>
+                <Label htmlFor="minPayment">Minimum Payment</Label>
                 <Input id="minPayment" type="number" step="0.01" placeholder="0.00" value={form.minPayment} onChange={e => setForm({ ...form, minPayment: e.target.value })} required />
               </div>
               <div className="flex gap-3 pt-2">

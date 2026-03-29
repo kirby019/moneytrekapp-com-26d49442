@@ -8,17 +8,20 @@ import AppLayout from "@/components/AppLayout";
 import { toast } from "sonner";
 import { useProfile, useUpdateProfile } from "@/hooks/useProfile";
 import { Skeleton } from "@/components/ui/skeleton";
+import CurrencySelector from "@/components/CurrencySelector";
 
 export default function Profile() {
   const { data: profile, isLoading } = useProfile();
   const updateProfile = useUpdateProfile();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [currency, setCurrency] = useState("USD");
 
   useEffect(() => {
     if (profile) {
       setName(profile.full_name ?? "");
       setEmail(profile.email ?? "");
+      setCurrency((profile as any).default_currency ?? "USD");
     }
   }, [profile]);
 
@@ -28,7 +31,7 @@ export default function Profile() {
 
   const handleSave = async () => {
     try {
-      await updateProfile.mutateAsync({ full_name: name, email });
+      await updateProfile.mutateAsync({ full_name: name, default_currency: currency });
       toast.success("Profile updated!");
     } catch (error: any) {
       toast.error(error.message || "Failed to update profile");
@@ -69,6 +72,10 @@ export default function Profile() {
               <div className="space-y-2">
                 <Label>Email</Label>
                 <Input value={email} type="email" disabled className="opacity-60" />
+              </div>
+              <div className="space-y-2">
+                <Label>Default Currency</Label>
+                <CurrencySelector value={currency} onValueChange={setCurrency} />
               </div>
             </div>
             <Button onClick={handleSave} disabled={updateProfile.isPending}>

@@ -6,10 +6,14 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import AppLayout from "@/components/AppLayout";
 import { useDebts } from "@/hooks/useDebts";
+import { useProfile } from "@/hooks/useProfile";
 import { Skeleton } from "@/components/ui/skeleton";
+import { formatCurrency } from "@/lib/currency";
 
 export default function Debts() {
   const { data: debts, isLoading } = useDebts();
+  const { data: profile } = useProfile();
+  const defaultCurrency = (profile as any)?.default_currency ?? "USD";
 
   const active = debts?.filter(d => d.status !== "paid").length ?? 0;
   const paid = debts?.filter(d => d.status === "paid").length ?? 0;
@@ -36,6 +40,7 @@ export default function Debts() {
               const bal = debt.current_balance ?? 0;
               const progress = orig > 0 ? Math.round(((orig - bal) / orig) * 100) : 0;
               const isPaid = debt.status === "paid";
+              const cur = (debt as any).currency ?? defaultCurrency;
               return (
                 <Card key={debt.id} className={isPaid ? "opacity-60" : ""}>
                   <CardContent className="p-5">
@@ -48,12 +53,12 @@ export default function Debts() {
                           <p className="font-semibold">{debt.debt_name}</p>
                           {isPaid && <Badge variant="secondary" className="bg-success/10 text-success text-xs">Paid Off!</Badge>}
                         </div>
-                        <p className="text-xs text-muted-foreground">{debt.interest_rate ?? 0}% APR</p>
+                        <p className="text-xs text-muted-foreground">{debt.interest_rate ?? 0}% APR · {cur}</p>
                         <div className="mt-2">
                           <Progress value={progress} className="h-2" />
                         </div>
                         <div className="flex justify-between mt-1 text-xs text-muted-foreground">
-                          <span>{isPaid ? "Fully paid" : `$${bal.toLocaleString()} of $${orig.toLocaleString()}`}</span>
+                          <span>{isPaid ? "Fully paid" : `${formatCurrency(bal, cur)} of ${formatCurrency(orig, cur)}`}</span>
                           <span>{progress}%</span>
                         </div>
                       </div>

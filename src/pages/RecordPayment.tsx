@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { useDebts } from "@/hooks/useDebts";
 import { useAddPayment } from "@/hooks/usePayments";
 import { Skeleton } from "@/components/ui/skeleton";
+import { formatCurrency } from "@/lib/currency";
 
 export default function RecordPayment() {
   const navigate = useNavigate();
@@ -56,17 +57,20 @@ export default function RecordPayment() {
                   <Select value={debtId} onValueChange={setDebtId} required>
                     <SelectTrigger><SelectValue placeholder="Choose a debt" /></SelectTrigger>
                     <SelectContent>
-                      {activeDebts.map(d => (
-                        <SelectItem key={d.id} value={d.id}>
-                          {d.debt_name} — ${(d.current_balance ?? 0).toLocaleString()}
-                        </SelectItem>
-                      ))}
+                      {activeDebts.map(d => {
+                        const cur = (d as any).currency ?? "USD";
+                        return (
+                          <SelectItem key={d.id} value={d.id}>
+                            {d.debt_name} — {formatCurrency(d.current_balance ?? 0, cur)}
+                          </SelectItem>
+                        );
+                      })}
                     </SelectContent>
                   </Select>
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="amount">Payment Amount ($)</Label>
+                <Label htmlFor="amount">Payment Amount</Label>
                 <Input id="amount" type="number" step="0.01" placeholder="0.00" value={amount} onChange={e => setAmount(e.target.value)} required />
               </div>
               <div className="space-y-2">
