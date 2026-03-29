@@ -60,7 +60,7 @@ export default function Journey() {
                   </span>
                   <span className="text-sm font-bold text-primary">{journeyProgress}%</span>
                 </div>
-                <Progress value={journeyProgress} className="h-3" />
+                <Progress value={journeyProgress} className="h-3" animated />
                 <div className="flex justify-between mt-2 text-xs text-muted-foreground">
                   <span>Paid {formatCurrency(totalJourneyPaid, defaultCurrency)} since joining</span>
                   <span>of {formatCurrency(journeyStartingDebt, defaultCurrency)} starting debt</span>

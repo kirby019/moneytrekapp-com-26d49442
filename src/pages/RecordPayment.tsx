@@ -140,6 +140,7 @@ export default function RecordPayment() {
         emoji={celebration.emoji}
         title={celebration.title}
         message={celebration.message}
+        level={celebration.level}
       />
     </AppLayout>
   );

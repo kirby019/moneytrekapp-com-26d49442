@@ -9,12 +9,14 @@ import {
   type MilestoneCelebration,
   type StreakCelebration,
 } from "@/lib/celebrations";
+import type { CelebrationLevel } from "@/components/CelebrationModal";
 
 interface CelebrationState {
   open: boolean;
   emoji: string;
   title: string;
   message: string;
+  level: CelebrationLevel;
 }
 
 export function useCelebrations() {
@@ -23,10 +25,11 @@ export function useCelebrations() {
     emoji: "",
     title: "",
     message: "",
+    level: "milestone",
   });
 
-  const showModal = useCallback((emoji: string, title: string, message: string) => {
-    setCelebration({ open: true, emoji, title, message });
+  const showModal = useCallback((emoji: string, title: string, message: string, level: CelebrationLevel = "milestone") => {
+    setCelebration({ open: true, emoji, title, message, level });
   }, []);
 
   const closeCelebration = useCallback((open: boolean) => {
@@ -39,10 +42,10 @@ export function useCelebrations() {
     toast.success(msg, { duration: 4000 });
   }, []);
 
-  // Modal for debt payoff
+  // Modal for debt payoff — major celebration
   const celebrateDebtPayoff = useCallback((debtName: string) => {
     const { emoji, title, message } = getDebtPayoffMessage(debtName);
-    showModal(emoji, title, message);
+    showModal(emoji, title, message, "major");
   }, [showModal]);
 
   // Check and celebrate journey milestones
@@ -52,7 +55,11 @@ export function useCelebrations() {
   ): MilestoneCelebration | null => {
     for (const milestone of MILESTONE_CELEBRATIONS) {
       if (currentProgress >= milestone.percent && !achievedMilestones.includes(milestone.percent)) {
-        showModal(milestone.emoji, milestone.title, milestone.message);
+        // 100% = ultimate (debt free), 50%+ = major, rest = milestone
+        const level: CelebrationLevel =
+          milestone.percent === 100 ? "ultimate" :
+          milestone.percent >= 50 ? "major" : "milestone";
+        showModal(milestone.emoji, milestone.title, milestone.message, level);
         return milestone;
       }
     }
@@ -63,7 +70,8 @@ export function useCelebrations() {
   const checkStreakCelebration = useCallback((currentStreak: number) => {
     const milestone = STREAK_CELEBRATIONS.find(s => s.days === currentStreak);
     if (milestone) {
-      showModal(milestone.emoji, milestone.title, milestone.message);
+      const level: CelebrationLevel = milestone.days >= 90 ? "major" : "milestone";
+      showModal(milestone.emoji, milestone.title, milestone.message, level);
     }
   }, [showModal]);
 
