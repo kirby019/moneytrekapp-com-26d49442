@@ -9,11 +9,14 @@ import { Sparkles, ArrowRight, Check } from "lucide-react";
 import CurrencySelector from "@/components/CurrencySelector";
 import { useUpdateProfile } from "@/hooks/useProfile";
 import { useAddDebt } from "@/hooks/useDebts";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const steps = ["Welcome", "Currency", "First Debt", "Done"];
 
 export default function Onboarding() {
+  const { user } = useAuth();
   const navigate = useNavigate();
   const updateProfile = useUpdateProfile();
   const addDebt = useAddDebt();
@@ -34,18 +37,41 @@ export default function Onboarding() {
     }
   };
 
+  const saveJourneyBaseline = async (addedDebtBalance?: number) => {
+    // Calculate total remaining debt including any just-added debt
+    const { data: existingDebts } = await supabase
+      .from("debts")
+      .select("current_balance")
+      .eq("user_id", user!.id)
+      .eq("status", "active");
+    
+    const existingTotal = existingDebts?.reduce((s, d) => s + (d.current_balance ?? 0), 0) ?? 0;
+    const totalStartingDebt = existingTotal + (addedDebtBalance ?? 0);
+    const today = new Date().toISOString().split("T")[0];
+
+    await supabase
+      .from("users")
+      .upsert({
+        id: user!.id,
+        journey_start_date: today,
+        journey_starting_debt: totalStartingDebt,
+      }, { onConflict: "id" });
+  };
+
   const handleDebtSave = async () => {
     setSaving(true);
     try {
+      const balance = parseFloat(debt.balance);
       await addDebt.mutateAsync({
         debt_name: debt.name,
-        original_amount: parseFloat(debt.balance),
-        current_balance: parseFloat(debt.balance),
+        original_amount: balance,
+        current_balance: balance,
         interest_rate: parseFloat(debt.rate),
         minimum_payment: parseFloat(debt.minPayment),
         status: "active",
         currency,
       });
+      await saveJourneyBaseline(0); // debt already inserted, so existingTotal includes it
       setStep(3);
     } catch {
       toast.error("Failed to add debt");
@@ -140,7 +166,7 @@ export default function Onboarding() {
                     <Button onClick={handleDebtSave} disabled={saving || !canAddDebt} className="flex-1">
                       {saving ? "Adding…" : "Add Debt"}
                     </Button>
-                    <Button variant="ghost" onClick={() => { setStep(3); }}>Skip</Button>
+                    <Button variant="ghost" onClick={async () => { await saveJourneyBaseline(); setStep(3); }}>Skip</Button>
                   </div>
                 </CardContent>
               </Card>
