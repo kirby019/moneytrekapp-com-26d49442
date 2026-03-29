@@ -9,6 +9,8 @@ import { Sparkles, ArrowRight, Check } from "lucide-react";
 import CurrencySelector from "@/components/CurrencySelector";
 import { useUpdateProfile } from "@/hooks/useProfile";
 import { useAddDebt } from "@/hooks/useDebts";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const steps = ["Welcome", "Currency", "First Debt", "Done"];
