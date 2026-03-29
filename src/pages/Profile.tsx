@@ -9,10 +9,13 @@ import { toast } from "sonner";
 import { useProfile, useUpdateProfile } from "@/hooks/useProfile";
 import { Skeleton } from "@/components/ui/skeleton";
 import CurrencySelector from "@/components/CurrencySelector";
+import { useSubscription } from "@/hooks/useSubscription";
+import FoundingMemberBadge from "@/components/FoundingMemberBadge";
 
 export default function Profile() {
   const { data: profile, isLoading } = useProfile();
   const updateProfile = useUpdateProfile();
+  const { isFoundingMember } = useSubscription();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [currency, setCurrency] = useState("USD");
@@ -60,7 +63,10 @@ export default function Profile() {
                 <AvatarFallback className="bg-primary text-primary-foreground text-xl font-bold">{initials}</AvatarFallback>
               </Avatar>
               <div>
-                <p className="font-heading font-semibold text-lg">{name || "Your Name"}</p>
+                <p className="font-heading font-semibold text-lg flex items-center gap-2">
+                  {name || "Your Name"}
+                  {isFoundingMember && <FoundingMemberBadge size="md" />}
+                </p>
                 <p className="text-sm text-muted-foreground">{email}</p>
               </div>
             </div>

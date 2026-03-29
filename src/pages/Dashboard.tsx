@@ -8,6 +8,8 @@ import { useDebts } from "@/hooks/useDebts";
 import { useProfile } from "@/hooks/useProfile";
 import { useExchangeRates, convertCurrency } from "@/hooks/useExchangeRates";
 import { useSubscription } from "@/hooks/useSubscription";
+import TrialBanner from "@/components/TrialBanner";
+import FoundingMemberBadge from "@/components/FoundingMemberBadge";
 import { useJourneyProgress } from "@/hooks/useJourneyProgress";
 import { useMilestones } from "@/hooks/useMilestones";
 import { useCelebrations } from "@/hooks/useCelebrations";
@@ -29,7 +31,7 @@ export default function Dashboard() {
   const { data: debts, isLoading } = useDebts();
   const { data: profile } = useProfile();
   const { data: rates } = useExchangeRates();
-  const { isFree } = useSubscription();
+  const { isFree, isFoundingMember } = useSubscription();
   const { journeyProgress, hasJourneyData } = useJourneyProgress();
   const { data: milestones } = useMilestones();
   const { data: streak } = useStreak();
@@ -112,9 +114,13 @@ export default function Dashboard() {
     <>
       <AppLayout>
         <div className="max-w-6xl mx-auto space-y-8">
+          <TrialBanner />
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="font-heading text-2xl lg:text-3xl font-bold">Welcome back, {firstName}! 👋</h1>
+              <h1 className="font-heading text-2xl lg:text-3xl font-bold flex items-center gap-2 flex-wrap">
+                Welcome back, {firstName}! 👋
+                {isFoundingMember && <FoundingMemberBadge />}
+              </h1>
               <p className="text-muted-foreground text-sm mt-1">Here's your financial progress overview.</p>
             </div>
             <div className="flex gap-2">
