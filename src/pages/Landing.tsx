@@ -183,14 +183,24 @@ export default function Landing() {
                 MoneyTrek helps you track debt, record payments, monitor your progress, and stay motivated with milestones, reports, and visual progress tracking on your journey to financial freedom.
               </p>
               <div className="flex flex-wrap gap-3">
-                <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
-                  <Link to="/signup">
-                    Start Your Trek for Free <ArrowRight className="ml-2 w-4 h-4" />
-                  </Link>
-                </Button>
-                <Button size="lg" variant="outline" className="border-white/40 text-white bg-white/10 hover:bg-white/20 backdrop-blur-sm" asChild>
-                  <Link to="/login">Log In</Link>
-                </Button>
+                {user ? (
+                  <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
+                    <Link to="/dashboard">
+                      Go to Dashboard <ArrowRight className="ml-2 w-4 h-4" />
+                    </Link>
+                  </Button>
+                ) : (
+                  <>
+                    <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
+                      <Link to="/signup">
+                        Start Your Trek for Free <ArrowRight className="ml-2 w-4 h-4" />
+                      </Link>
+                    </Button>
+                    <Button size="lg" variant="outline" className="border-white/40 text-white bg-white/10 hover:bg-white/20 backdrop-blur-sm" asChild>
+                      <Link to="/login">Log In</Link>
+                    </Button>
+                  </>
+                )}
               </div>
               <div className="flex items-center gap-6 mt-8 text-primary-foreground/50 text-sm">
                 <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent" /> Free plan available</span>
