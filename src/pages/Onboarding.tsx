@@ -78,7 +78,7 @@ export default function Onboarding() {
       .from("debts")
       .select("current_balance")
       .eq("user_id", user!.id)
-      .eq("status", "active");
+      .neq("status", "paid");
 
     const totalStartingDebt = existingDebts?.reduce((s, d) => s + (d.current_balance ?? 0), 0) ?? 0;
     const today = new Date().toISOString().split("T")[0];
@@ -89,8 +89,8 @@ export default function Onboarding() {
       journey_starting_debt: totalStartingDebt,
     }, { onConflict: "id" });
 
-    // Invalidate onboarding status so ProtectedRoute knows we're done
     queryClient.invalidateQueries({ queryKey: ["onboarding-status"] });
+    queryClient.invalidateQueries({ queryKey: ["user-journey"] });
   };
 
   const handleDebtSave = async () => {
@@ -110,6 +110,18 @@ export default function Onboarding() {
       setStep(6);
     } catch {
       toast.error("Failed to add debt");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleSkipDebt = async () => {
+    setSaving(true);
+    try {
+      await saveJourneyBaseline();
+      setStep(6);
+    } catch {
+      toast.error("Something went wrong");
     } finally {
       setSaving(false);
     }
@@ -161,7 +173,7 @@ export default function Onboarding() {
           {step === 1 && (
             <motion.div key="reason" {...slideProps}>
               <Card>
-                <CardContent className="p-8 space-y-6">
+                <CardContent className="p-6 sm:p-8 space-y-6">
                   <div>
                     <h2 className="font-heading text-xl font-bold">Why do you want to be debt free?</h2>
                     <p className="text-muted-foreground text-sm mt-1">This helps us personalize your experience.</p>
@@ -213,7 +225,7 @@ export default function Onboarding() {
           {step === 2 && (
             <motion.div key="identity" {...slideProps}>
               <Card>
-                <CardContent className="p-8 space-y-6">
+                <CardContent className="p-6 sm:p-8 space-y-6">
                   <div>
                     <h2 className="font-heading text-xl font-bold">Who do you want to become?</h2>
                     <p className="text-muted-foreground text-sm mt-1">Choose the identity that resonates with you.</p>
@@ -244,7 +256,7 @@ export default function Onboarding() {
           {step === 3 && (
             <motion.div key="journey-type" {...slideProps}>
               <Card>
-                <CardContent className="p-8 space-y-6">
+                <CardContent className="p-6 sm:p-8 space-y-6">
                   <div>
                     <h2 className="font-heading text-xl font-bold">Choose your pace</h2>
                     <p className="text-muted-foreground text-sm mt-1">How do you want to tackle your debt?</p>
@@ -287,7 +299,7 @@ export default function Onboarding() {
           {step === 4 && (
             <motion.div key="currency" {...slideProps}>
               <Card>
-                <CardContent className="p-8 space-y-6">
+                <CardContent className="p-6 sm:p-8 space-y-6">
                   <div>
                     <h2 className="font-heading text-xl font-bold">Choose Your Currency</h2>
                     <p className="text-muted-foreground text-sm mt-1">This will be your default currency for tracking debts.</p>
@@ -304,7 +316,7 @@ export default function Onboarding() {
           {step === 5 && (
             <motion.div key="debt" {...slideProps}>
               <Card>
-                <CardContent className="p-8 space-y-5">
+                <CardContent className="p-6 sm:p-8 space-y-5">
                   <div>
                     <h2 className="font-heading text-xl font-bold">Add Your First Debt</h2>
                     <p className="text-muted-foreground text-sm mt-1">Start by adding one debt. You can add more later.</p>
@@ -333,7 +345,7 @@ export default function Onboarding() {
                     <Button onClick={handleDebtSave} disabled={saving || !canAddDebt} className="flex-1">
                       {saving ? "Adding…" : "Add Debt"}
                     </Button>
-                    <Button variant="ghost" onClick={async () => { await saveJourneyBaseline(); setStep(6); }}>Skip</Button>
+                    <Button variant="ghost" onClick={handleSkipDebt} disabled={saving}>Skip</Button>
                   </div>
                 </CardContent>
               </Card>

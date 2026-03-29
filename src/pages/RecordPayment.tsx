@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Plus } from "lucide-react";
 import AppLayout from "@/components/AppLayout";
 import { toast } from "sonner";
 import { useDebts } from "@/hooks/useDebts";
@@ -42,10 +43,8 @@ export default function RecordPayment() {
         notes: notes || null,
       });
 
-      // Show encouragement toast
       celebratePayment(isExtra);
 
-      // Update streak and check for streak celebrations
       try {
         const newStreak = await updateStreak.mutateAsync();
         checkStreakCelebration(newStreak);
@@ -53,7 +52,6 @@ export default function RecordPayment() {
         // Streak update failure shouldn't block the flow
       }
 
-      // Check if this payment pays off the debt
       const selectedDebt = debts?.find(d => d.id === debtId);
       if (selectedDebt) {
         const newBalance = (selectedDebt.current_balance ?? 0) - parseFloat(amount);
@@ -75,50 +73,62 @@ export default function RecordPayment() {
     <AppLayout>
       <div className="max-w-lg mx-auto">
         <h1 className="font-heading text-2xl font-bold mb-6">Record Payment</h1>
-        <Card>
-          <CardContent className="p-6">
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="space-y-2">
-                <Label>Select Debt</Label>
-                {isLoading ? (
-                  <Skeleton className="h-10 w-full" />
-                ) : (
-                  <Select value={debtId} onValueChange={setDebtId} required>
-                    <SelectTrigger><SelectValue placeholder="Choose a debt" /></SelectTrigger>
-                    <SelectContent>
-                      {activeDebts.map(d => {
-                        const cur = (d as any).currency ?? "USD";
-                        return (
-                          <SelectItem key={d.id} value={d.id}>
-                            {d.debt_name} — {formatCurrency(d.current_balance ?? 0, cur)}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                )}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="amount">Payment Amount</Label>
-                <Input id="amount" type="number" step="0.01" placeholder="0.00" value={amount} onChange={e => setAmount(e.target.value)} required />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="date">Payment Date</Label>
-                <Input id="date" type="date" value={date} onChange={e => setDate(e.target.value)} required />
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="extra" checked={isExtra} onCheckedChange={(c) => setIsExtra(c === true)} />
-                <Label htmlFor="extra" className="text-sm">This is an extra payment (above minimum)</Label>
-              </div>
-              <div className="flex gap-3 pt-2">
-                <Button type="submit" className="flex-1" disabled={addPayment.isPending}>
-                  {addPayment.isPending ? "Recording…" : "Record Payment"}
-                </Button>
-                <Button type="button" variant="outline" onClick={() => navigate(-1)}>Cancel</Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
+
+        {!isLoading && activeDebts.length === 0 ? (
+          <Card>
+            <CardContent className="p-8 text-center space-y-4">
+              <p className="text-muted-foreground">You don't have any active debts to make a payment on.</p>
+              <Button asChild>
+                <Link to="/add-debt"><Plus className="w-4 h-4 mr-2" />Add Your First Debt</Link>
+              </Button>
+            </CardContent>
+          </Card>
+        ) : (
+          <Card>
+            <CardContent className="p-6">
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="space-y-2">
+                  <Label>Select Debt</Label>
+                  {isLoading ? (
+                    <Skeleton className="h-10 w-full" />
+                  ) : (
+                    <Select value={debtId} onValueChange={setDebtId} required>
+                      <SelectTrigger><SelectValue placeholder="Choose a debt" /></SelectTrigger>
+                      <SelectContent>
+                        {activeDebts.map(d => {
+                          const cur = (d as any).currency ?? "USD";
+                          return (
+                            <SelectItem key={d.id} value={d.id}>
+                              {d.debt_name} — {formatCurrency(d.current_balance ?? 0, cur)}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="amount">Payment Amount</Label>
+                  <Input id="amount" type="number" step="0.01" placeholder="0.00" value={amount} onChange={e => setAmount(e.target.value)} required />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="date">Payment Date</Label>
+                  <Input id="date" type="date" value={date} onChange={e => setDate(e.target.value)} required />
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="extra" checked={isExtra} onCheckedChange={(c) => setIsExtra(c === true)} />
+                  <Label htmlFor="extra" className="text-sm">This is an extra payment (above minimum)</Label>
+                </div>
+                <div className="flex gap-3 pt-2">
+                  <Button type="submit" className="flex-1" disabled={addPayment.isPending}>
+                    {addPayment.isPending ? "Recording…" : "Record Payment"}
+                  </Button>
+                  <Button type="button" variant="outline" onClick={() => navigate(-1)}>Cancel</Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+        )}
       </div>
 
       <CelebrationModal
