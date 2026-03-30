@@ -122,7 +122,7 @@ export default function Debts() {
                 character="debtMonster"
                 context="empty"
                 animation="wiggle"
-                size="lg"
+                size="xl"
                 bubblePosition="top"
                 className="mx-auto"
               />

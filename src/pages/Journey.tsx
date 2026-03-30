@@ -49,7 +49,7 @@ export default function Journey() {
             character="theClimber"
             context="journey"
             animation="float"
-            size="sm"
+            size="md"
             showBubble={true}
             bubblePosition="right"
           />

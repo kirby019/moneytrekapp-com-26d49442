@@ -56,7 +56,7 @@ export default function AddDebt() {
             character="debtMonster"
             context="debt"
             animation="wiggle"
-            size="sm"
+            size="md"
             showBubble={false}
           />
           <h1 className="font-heading text-2xl font-bold">Add New Debt</h1>

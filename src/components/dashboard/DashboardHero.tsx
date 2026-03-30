@@ -26,7 +26,7 @@ export default function DashboardHero({ overallProgress, totalPaid, totalOrigina
               character="moneyTree"
               context={context}
               animation="float"
-              size="md"
+              size="lg"
               showBubble={true}
               bubblePosition="top"
             />
