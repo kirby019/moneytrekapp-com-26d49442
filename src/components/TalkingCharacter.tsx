@@ -217,8 +217,8 @@ export default function TalkingCharacter({
     <div className={`relative inline-flex flex-col items-center ${className}`}>
       {showBubble && <SpeechBubble message={displayMessage} position={bubblePosition} />}
       <motion.div
-        initial={variant.initial}
-        animate={variant.animate}
+        initial={variant.initial as any}
+        animate={variant.animate as any}
         className="relative"
       >
         <img
