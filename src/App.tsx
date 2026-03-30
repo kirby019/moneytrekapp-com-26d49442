@@ -27,6 +27,7 @@ import Onboarding from "./pages/Onboarding";
 import Analytics from "./pages/Analytics";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
+import RefundPolicy from "./pages/RefundPolicy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
