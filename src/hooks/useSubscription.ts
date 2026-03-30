@@ -42,26 +42,39 @@ export function useSubscription() {
   const { data: subscription, isLoading } = useQuery({
     queryKey: ["subscription", user?.id],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("subscriptions")
+      const { data, error } = await (supabase
+        .from("subscriptions_safe" as any)
         .select("*")
         .eq("user_id", user!.id)
         .eq("status", "active")
         .order("created_at", { ascending: false })
         .limit(1)
-        .maybeSingle();
+        .maybeSingle() as any);
       if (error) throw error;
-      return data;
+      return data as {
+        id: string;
+        user_id: string;
+        plan: string | null;
+        status: string | null;
+        billing_cycle: string | null;
+        is_trial: boolean | null;
+        trial_ends_at: string | null;
+        is_founding_member: boolean | null;
+        start_date: string | null;
+        end_date: string | null;
+        current_period_end: string | null;
+        created_at: string | null;
+      } | null;
     },
     enabled: !!user,
   });
 
-  const isTrial = !!(subscription as any)?.is_trial;
-  const trialEndsAt = (subscription as any)?.trial_ends_at
-    ? new Date((subscription as any).trial_ends_at)
+  const isTrial = !!subscription?.is_trial;
+  const trialEndsAt = subscription?.trial_ends_at
+    ? new Date(subscription.trial_ends_at)
     : null;
   const isTrialExpired = isTrial && trialEndsAt ? trialEndsAt < new Date() : false;
-  const isFoundingMember = !!(subscription as any)?.is_founding_member;
+  const isFoundingMember = !!subscription?.is_founding_member;
 
   // If trial is expired and it's still a trial (not converted), treat as free
   const plan: PlanType =
