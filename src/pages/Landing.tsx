@@ -4,7 +4,7 @@ import {
   ArrowRight, Sparkles, CreditCard, History, BarChart3, CalendarCheck,
   Globe, LineChart, Download, Shield, Star, CheckCircle2, TrendingDown,
   DollarSign, Target, Users, Zap, ChevronRight, Award, Clock, Rocket, LogOut,
-  PiggyBank, Landmark, TrendingUp, Wallet
+  PiggyBank, Landmark, TrendingUp, Wallet, Eye
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -177,10 +177,10 @@ export default function Landing() {
                 <Zap className="w-3 h-3" /> 7-day free Pro trial — no credit card needed
               </span>
               <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold leading-[1.1] mb-5 text-primary-foreground">
-                Track Your Money Progress. <span className="text-accent">One Step at a Time.</span>
+                Track Your Financial Progress. <span className="text-accent">One Step at a Time.</span>
               </h1>
               <p className="text-base sm:text-lg text-primary-foreground/70 mb-8 max-w-lg leading-relaxed">
-                MoneyTrek helps you track debt, record payments, monitor your progress, and stay motivated with milestones, reports, and visual progress tracking on your journey to financial freedom.
+                MoneyTrek is a financial progress tracker that helps you track debt, record payments, monitor your progress, and build better financial habits on your journey to financial freedom.
               </p>
               <div className="flex flex-wrap gap-3">
                 {user ? (
@@ -193,11 +193,13 @@ export default function Landing() {
                   <>
                     <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
                       <Link to="/signup">
-                        Start 7-Day Free Trial <ArrowRight className="ml-2 w-4 h-4" />
+                        Start Your Trek for Free <ArrowRight className="ml-2 w-4 h-4" />
                       </Link>
                     </Button>
                     <Button size="lg" variant="outline" className="border-white/40 text-white bg-white/10 hover:bg-white/20 backdrop-blur-sm" asChild>
-                      <Link to="/login">Log In</Link>
+                      <Link to="/demo">
+                        <Eye className="mr-2 w-4 h-4" /> View Demo
+                      </Link>
                     </Button>
                   </>
                 )}
