@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Sparkles, ArrowRight, Check, Heart, UserCheck, Zap } from "lucide-react";
+import { Sparkles, ArrowRight, Check, Heart, UserCheck, Zap, CreditCard, DollarSign, BarChart3, Trophy, PartyPopper } from "lucide-react";
 import CurrencySelector from "@/components/CurrencySelector";
 import { useUpdateProfile } from "@/hooks/useProfile";
 import { useAddDebt } from "@/hooks/useDebts";
@@ -15,7 +15,15 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
 
-const steps = ["Welcome", "Why", "Identity", "Journey", "Currency", "First Debt", "Done"];
+const steps = ["How It Works", "Welcome", "Why", "Identity", "Journey", "Currency", "First Debt", "Done"];
+
+const HOW_STEPS = [
+  { icon: CreditCard, title: "Add Your Debts", desc: "Enter your debts with balances and interest rates." },
+  { icon: DollarSign, title: "Record Your Payments", desc: "Log payments and watch balances update automatically." },
+  { icon: BarChart3, title: "Track Your Progress", desc: "See charts, stats, and your overall financial progress." },
+  { icon: Trophy, title: "Reach Milestones", desc: "Earn badges at 10%, 25%, 50%, 75%, and 100%." },
+  { icon: PartyPopper, title: "Become Debt Free", desc: "Complete your journey to financial freedom!" },
+];
 
 const REASONS = [
   { id: "freedom", label: "Financial Freedom", desc: "I want to live without debt stress" },
@@ -56,7 +64,7 @@ export default function Onboarding() {
     setSaving(true);
     try {
       await updateProfile.mutateAsync({ default_currency: currency });
-      setStep(5);
+      setStep(6);
     } catch {
       toast.error("Failed to save currency");
     } finally {
@@ -107,7 +115,7 @@ export default function Onboarding() {
         currency,
       });
       await saveJourneyBaseline();
-      setStep(6);
+      setStep(7);
     } catch {
       toast.error("Failed to add debt");
     } finally {
@@ -119,7 +127,7 @@ export default function Onboarding() {
     setSaving(true);
     try {
       await saveJourneyBaseline();
-      setStep(6);
+      setStep(7);
     } catch {
       toast.error("Something went wrong");
     } finally {
