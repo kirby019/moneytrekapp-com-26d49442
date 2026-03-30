@@ -11,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { formatCurrency } from "@/lib/currency";
 import { toast } from "sonner";
+import CharacterGuide from "@/components/CharacterGuide";
 
 type StrategyId = "snowball" | "avalanche";
 
@@ -95,6 +96,21 @@ export default function Strategy() {
           <h1 className="font-heading text-2xl font-bold">Payoff Strategy</h1>
           <p className="text-sm text-muted-foreground mt-1">Choose the approach that works best for you.</p>
         </div>
+
+        {/* Character guide card */}
+        <Card>
+          <CardContent className="p-5 flex items-center justify-between gap-4">
+            <div className="flex-1 min-w-0">
+              <p className="font-heading font-semibold text-lg">Plan your path to the top!</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                A good strategy is your best tool. Pick one and stay the course!
+              </p>
+            </div>
+            <div className="shrink-0">
+              <CharacterGuide character="theClimber" context="strategy" animation="float" />
+            </div>
+          </CardContent>
+        </Card>
 
         <div className="grid md:grid-cols-2 gap-4">
           {strategyInfo.map((s) => (

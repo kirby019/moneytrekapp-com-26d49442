@@ -10,6 +10,8 @@ import { useDebtFreeDate } from "@/hooks/useDebtFreeDate";
 import { useMemo } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
+import CharacterGuide from "@/components/CharacterGuide";
+import TalkingCharacter from "@/components/TalkingCharacter";
 
 export default function Future() {
   const { data: debts, isLoading } = useDebts();
@@ -48,9 +50,14 @@ export default function Future() {
         ) : !debts || debts.length === 0 ? (
           <Card>
             <CardContent className="p-8 text-center space-y-4">
-              <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
-                <Sparkles className="w-7 h-7 text-primary" />
-              </div>
+              <TalkingCharacter
+                character="goalRocket"
+                context="empty"
+                animation="pulse"
+                size="xl"
+                bubblePosition="top"
+                className="mx-auto"
+              />
               <div>
                 <p className="font-heading font-semibold">See your future</p>
                 <p className="text-sm text-muted-foreground mt-1">Add your debts to see projections of your debt-free future.</p>
@@ -65,7 +72,7 @@ export default function Future() {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="p-8 rounded-2xl text-center text-primary-foreground"
+              className="p-8 rounded-2xl text-center text-primary-foreground relative overflow-hidden"
               style={{ background: "var(--gradient-hero)" }}
             >
               <Sparkles className="w-10 h-10 text-accent mx-auto mb-4" />
@@ -73,6 +80,9 @@ export default function Future() {
                 {debtFreeDate ? format(debtFreeDate, "MMMM yyyy") : "Keep making payments!"}
               </h2>
               <p className="text-primary-foreground/70">Your projected debt-free date</p>
+              <div className="absolute bottom-2 right-4 opacity-80">
+                <CharacterGuide character="goalRocket" context="future" animation="float" />
+              </div>
             </motion.div>
 
             <div className="space-y-4">
@@ -93,6 +103,21 @@ export default function Future() {
                 </motion.div>
               ))}
             </div>
+
+            {/* Savings Pig guide at the bottom */}
+            <Card>
+              <CardContent className="p-5 flex items-center justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  <p className="font-heading font-semibold text-lg">Start saving for your dreams!</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Once you're debt-free, redirect your payments into savings and investments.
+                  </p>
+                </div>
+                <div className="shrink-0">
+                  <CharacterGuide character="savingsPig" context="savings" animation="bounce" />
+                </div>
+              </CardContent>
+            </Card>
           </>
         )}
       </div>

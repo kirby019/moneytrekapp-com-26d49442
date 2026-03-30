@@ -17,6 +17,8 @@ import { toast } from "sonner";
 import { useFeatureAccess } from "@/hooks/useSubscription";
 import { exportToCsv } from "@/lib/exportCsv";
 import UpgradePrompt from "@/components/UpgradePrompt";
+import CharacterGuide from "@/components/CharacterGuide";
+import TalkingCharacter from "@/components/TalkingCharacter";
 
 export default function PaymentHistory() {
   const { data: payments, isLoading } = usePayments();
@@ -81,37 +83,62 @@ export default function PaymentHistory() {
             {[1, 2, 3].map(i => <Skeleton key={i} className="h-16 w-full rounded-xl" />)}
           </div>
         ) : payments && payments.length > 0 ? (
-          <div className="space-y-2">
-            {payments.map(p => (
-              <Card key={p.id}>
-                <CardContent className="p-4 flex items-center justify-between gap-3 flex-wrap">
-                  <div className="min-w-0">
-                    <p className="font-semibold text-sm truncate">{(p as any).debts?.debt_name ?? "Unknown Debt"}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {p.payment_date ? new Date(p.payment_date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "—"}
-                    </p>
-                    {p.notes && <p className="text-xs text-muted-foreground mt-0.5">{p.notes}</p>}
-                  </div>
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    <Badge variant={p.is_extra_payment ? "default" : "secondary"}>
-                      {p.is_extra_payment ? "Extra" : "Minimum"}
-                    </Badge>
-                    <span className="font-heading font-bold text-sm sm:text-base">{formatCurrency(p.amount ?? 0, defaultCurrency)}</span>
-                    <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => setEditPayment(p)}>
-                      <Pencil className="w-3.5 h-3.5" />
-                    </Button>
-                    <Button size="icon" variant="ghost" className="h-8 w-8 text-destructive hover:text-destructive" onClick={() => setDeletePayment(p)}>
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <>
+            {/* Character guide card */}
+            <Card>
+              <CardContent className="p-5 flex items-center justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  <p className="font-heading font-semibold text-lg">Building your track record!</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    You've made {payments.length} {payments.length === 1 ? "payment" : "payments"}. Every one brings you closer to freedom!
+                  </p>
+                </div>
+                <div className="shrink-0">
+                  <CharacterGuide character="theBuilder" context="payment" animation="bounce" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="space-y-2">
+              {payments.map(p => (
+                <Card key={p.id}>
+                  <CardContent className="p-4 flex items-center justify-between gap-3 flex-wrap">
+                    <div className="min-w-0">
+                      <p className="font-semibold text-sm truncate">{(p as any).debts?.debt_name ?? "Unknown Debt"}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {p.payment_date ? new Date(p.payment_date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "—"}
+                      </p>
+                      {p.notes && <p className="text-xs text-muted-foreground mt-0.5">{p.notes}</p>}
+                    </div>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <Badge variant={p.is_extra_payment ? "default" : "secondary"}>
+                        {p.is_extra_payment ? "Extra" : "Minimum"}
+                      </Badge>
+                      <span className="font-heading font-bold text-sm sm:text-base">{formatCurrency(p.amount ?? 0, defaultCurrency)}</span>
+                      <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => setEditPayment(p)}>
+                        <Pencil className="w-3.5 h-3.5" />
+                      </Button>
+                      <Button size="icon" variant="ghost" className="h-8 w-8 text-destructive hover:text-destructive" onClick={() => setDeletePayment(p)}>
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </>
         ) : (
           <Card>
-            <CardContent className="p-8 text-center">
-              <p className="text-muted-foreground mb-4">No payments recorded yet.</p>
+            <CardContent className="p-8 text-center space-y-4">
+              <TalkingCharacter
+                character="theBuilder"
+                context="empty"
+                animation="pulse"
+                size="xl"
+                bubblePosition="top"
+                className="mx-auto"
+              />
+              <p className="text-muted-foreground">No payments recorded yet.</p>
               <Button asChild><Link to="/record-payment"><Plus className="w-4 h-4 mr-2" />Record Your First Payment</Link></Button>
             </CardContent>
           </Card>

@@ -16,6 +16,8 @@ import { formatCurrency } from "@/lib/currency";
 import { useCelebrations } from "@/hooks/useCelebrations";
 import { useUpdateStreak } from "@/hooks/useStreak";
 import CelebrationModal from "@/components/CelebrationModal";
+import CharacterGuide from "@/components/CharacterGuide";
+import TalkingCharacter from "@/components/TalkingCharacter";
 
 export default function RecordPayment() {
   const navigate = useNavigate();
@@ -77,6 +79,14 @@ export default function RecordPayment() {
         {!isLoading && activeDebts.length === 0 ? (
           <Card>
             <CardContent className="p-8 text-center space-y-4">
+              <TalkingCharacter
+                character="moneyTree"
+                context="empty"
+                animation="pulse"
+                size="xl"
+                bubblePosition="top"
+                className="mx-auto"
+              />
               <p className="text-muted-foreground">You don't have any active debts to make a payment on.</p>
               <Button asChild>
                 <Link to="/add-debt"><Plus className="w-4 h-4 mr-2" />Add Your First Debt</Link>
@@ -86,6 +96,9 @@ export default function RecordPayment() {
         ) : (
           <Card>
             <CardContent className="p-6">
+              <div className="flex justify-end -mt-2 -mr-2 mb-2">
+                <CharacterGuide character="moneyTree" context="payment" animation="float" />
+              </div>
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="space-y-2">
                   <Label>Select Debt</Label>

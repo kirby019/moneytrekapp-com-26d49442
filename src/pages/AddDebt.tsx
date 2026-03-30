@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import TalkingCharacter from "@/components/TalkingCharacter";
+import CharacterGuide from "@/components/CharacterGuide";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -60,6 +60,9 @@ export default function AddDebt() {
         ) : (
         <Card>
           <CardContent className="p-6">
+            <div className="flex justify-end -mt-2 -mr-2 mb-2">
+              <CharacterGuide character="debtMonster" context="debt" animation="bounce" />
+            </div>
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
                 <Label htmlFor="name">Debt Name</Label>

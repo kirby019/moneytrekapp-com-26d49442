@@ -1,5 +1,6 @@
 import { Trophy, Star, Flame, Award, Lock, Plus } from "lucide-react";
 import TalkingCharacter from "@/components/TalkingCharacter";
+import CharacterGuide from "@/components/CharacterGuide";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -59,27 +60,44 @@ export default function Milestones() {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {badges.map((b) => (
-              <Card key={b.title} className={!b.unlocked ? "opacity-40" : ""}>
-                <CardContent className="p-5 text-center">
-                  <div
-                    className={`w-12 h-12 rounded-xl mx-auto mb-3 flex items-center justify-center ${
-                      b.unlocked ? "bg-warning/10" : "bg-muted"
-                    }`}
-                  >
-                    {b.unlocked ? (
-                      <b.icon className="w-6 h-6 text-warning" />
-                    ) : (
-                      <Lock className="w-5 h-5 text-muted-foreground" />
-                    )}
-                  </div>
-                  <p className="font-heading font-semibold text-sm">{b.title}</p>
-                  <p className="text-xs text-muted-foreground mt-1">{b.desc}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <>
+            {/* Character guide card */}
+            <Card>
+              <CardContent className="p-5 flex items-center justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  <p className="font-heading font-semibold text-lg">Building your achievements!</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    You've unlocked {unlockedCount} of {badges.length} milestones. Keep building!
+                  </p>
+                </div>
+                <div className="shrink-0">
+                  <CharacterGuide character="theBuilder" context="milestone" animation="bounce" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {badges.map((b) => (
+                <Card key={b.title} className={!b.unlocked ? "opacity-40" : ""}>
+                  <CardContent className="p-5 text-center">
+                    <div
+                      className={`w-12 h-12 rounded-xl mx-auto mb-3 flex items-center justify-center ${
+                        b.unlocked ? "bg-warning/10" : "bg-muted"
+                      }`}
+                    >
+                      {b.unlocked ? (
+                        <b.icon className="w-6 h-6 text-warning" />
+                      ) : (
+                        <Lock className="w-5 h-5 text-muted-foreground" />
+                      )}
+                    </div>
+                    <p className="font-heading font-semibold text-sm">{b.title}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{b.desc}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </>
         )}
       </div>
     </AppLayout>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CreditCard, Plus, Pencil, Trash2 } from "lucide-react";
 import TalkingCharacter from "@/components/TalkingCharacter";
+import CharacterGuide from "@/components/CharacterGuide";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -34,7 +35,6 @@ export default function Debts() {
     if (!deleteDebt) return;
     setDeleting(true);
     try {
-      // Delete associated payments first to avoid foreign key constraint
       const { error: paymentsError } = await supabase.from("payments").delete().eq("debt_id", deleteDebt.id);
       if (paymentsError) throw paymentsError;
       const { error } = await supabase.from("debts").delete().eq("id", deleteDebt.id);
@@ -65,56 +65,73 @@ export default function Debts() {
             {[1, 2, 3].map(i => <Skeleton key={i} className="h-28 w-full rounded-xl" />)}
           </div>
         ) : debts && debts.length > 0 ? (
-          <div className="space-y-3">
-            {debts.map(debt => {
-              const orig = debt.original_amount ?? 0;
-              const bal = debt.current_balance ?? 0;
-              const progress = orig > 0 ? Math.round(((orig - bal) / orig) * 100) : 0;
-              const isPaid = debt.status === "paid";
-              const cur = (debt as any).currency ?? defaultCurrency;
-              return (
-                <Card key={debt.id} className={isPaid ? "opacity-60" : ""}>
-                  <CardContent className="p-4 sm:p-5">
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                      <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center flex-shrink-0 hidden sm:flex">
-                        <CreditCard className="w-5 h-5 text-muted-foreground" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <p className="font-semibold truncate">{debt.debt_name}</p>
-                          {isPaid && <Badge variant="secondary" className="bg-success/10 text-success text-xs">Paid Off!</Badge>}
+          <>
+            {/* Character guide card */}
+            <Card>
+              <CardContent className="p-5 flex items-center justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  <p className="font-heading font-semibold text-lg">Battle your debts!</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    You have {active} active {active === 1 ? "debt" : "debts"} to defeat. Keep making payments to shrink the Debt Monster!
+                  </p>
+                </div>
+                <div className="shrink-0">
+                  <CharacterGuide character="debtMonster" context="debt" animation="wiggle" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="space-y-3">
+              {debts.map(debt => {
+                const orig = debt.original_amount ?? 0;
+                const bal = debt.current_balance ?? 0;
+                const progress = orig > 0 ? Math.round(((orig - bal) / orig) * 100) : 0;
+                const isPaid = debt.status === "paid";
+                const cur = (debt as any).currency ?? defaultCurrency;
+                return (
+                  <Card key={debt.id} className={isPaid ? "opacity-60" : ""}>
+                    <CardContent className="p-4 sm:p-5">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center flex-shrink-0 hidden sm:flex">
+                          <CreditCard className="w-5 h-5 text-muted-foreground" />
                         </div>
-                        {(debt as any).debt_type && (
-                          <p className="text-xs text-muted-foreground mb-0.5">{(debt as any).debt_type}</p>
-                        )}
-                        <p className="text-xs text-muted-foreground">{debt.interest_rate ?? 0}% APR · {cur}</p>
-                        <div className="mt-2">
-                          <Progress value={progress} className="h-2" />
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <p className="font-semibold truncate">{debt.debt_name}</p>
+                            {isPaid && <Badge variant="secondary" className="bg-success/10 text-success text-xs">Paid Off!</Badge>}
+                          </div>
+                          {(debt as any).debt_type && (
+                            <p className="text-xs text-muted-foreground mb-0.5">{(debt as any).debt_type}</p>
+                          )}
+                          <p className="text-xs text-muted-foreground">{debt.interest_rate ?? 0}% APR · {cur}</p>
+                          <div className="mt-2">
+                            <Progress value={progress} className="h-2" />
+                          </div>
+                          <div className="flex justify-between mt-1 text-xs text-muted-foreground">
+                            <span>{isPaid ? "Fully paid" : `${formatCurrency(bal, cur)} of ${formatCurrency(orig, cur)}`}</span>
+                            <span>{progress}%</span>
+                          </div>
                         </div>
-                        <div className="flex justify-between mt-1 text-xs text-muted-foreground">
-                          <span>{isPaid ? "Fully paid" : `${formatCurrency(bal, cur)} of ${formatCurrency(orig, cur)}`}</span>
-                          <span>{progress}%</span>
-                        </div>
-                      </div>
-                      <div className="flex gap-2 flex-shrink-0">
-                        <Button size="icon" variant="ghost" onClick={() => setEditDebt(debt)}>
-                          <Pencil className="w-4 h-4" />
-                        </Button>
-                        <Button size="icon" variant="ghost" onClick={() => setDeleteDebt(debt)} className="text-destructive hover:text-destructive">
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                        {!isPaid && (
-                          <Button size="sm" asChild>
-                            <Link to="/record-payment">Pay</Link>
+                        <div className="flex gap-2 flex-shrink-0">
+                          <Button size="icon" variant="ghost" onClick={() => setEditDebt(debt)}>
+                            <Pencil className="w-4 h-4" />
                           </Button>
-                        )}
+                          <Button size="icon" variant="ghost" onClick={() => setDeleteDebt(debt)} className="text-destructive hover:text-destructive">
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                          {!isPaid && (
+                            <Button size="sm" asChild>
+                              <Link to="/record-payment">Pay</Link>
+                            </Button>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </>
         ) : (
           <Card>
             <CardContent className="p-8 text-center space-y-4">
