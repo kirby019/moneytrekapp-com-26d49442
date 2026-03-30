@@ -42,16 +42,29 @@ export function useSubscription() {
   const { data: subscription, isLoading } = useQuery({
     queryKey: ["subscription", user?.id],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase
         .from("subscriptions_safe" as any)
         .select("*")
         .eq("user_id", user!.id)
         .eq("status", "active")
         .order("created_at", { ascending: false })
         .limit(1)
-        .maybeSingle();
+        .maybeSingle() as any);
       if (error) throw error;
-      return data;
+      return data as {
+        id: string;
+        user_id: string;
+        plan: string | null;
+        status: string | null;
+        billing_cycle: string | null;
+        is_trial: boolean | null;
+        trial_ends_at: string | null;
+        is_founding_member: boolean | null;
+        start_date: string | null;
+        end_date: string | null;
+        current_period_end: string | null;
+        created_at: string | null;
+      } | null;
     },
     enabled: !!user,
   });
