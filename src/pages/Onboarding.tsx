@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Sparkles, ArrowRight, Check, Heart, UserCheck, Zap } from "lucide-react";
+import { Sparkles, ArrowRight, Check, Heart, UserCheck, Zap, CreditCard, DollarSign, BarChart3, Trophy, PartyPopper } from "lucide-react";
 import CurrencySelector from "@/components/CurrencySelector";
 import { useUpdateProfile } from "@/hooks/useProfile";
 import { useAddDebt } from "@/hooks/useDebts";
@@ -15,7 +15,15 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
 
-const steps = ["Welcome", "Why", "Identity", "Journey", "Currency", "First Debt", "Done"];
+const steps = ["How It Works", "Welcome", "Why", "Identity", "Journey", "Currency", "First Debt", "Done"];
+
+const HOW_STEPS = [
+  { icon: CreditCard, title: "Add Your Debts", desc: "Enter your debts with balances and interest rates." },
+  { icon: DollarSign, title: "Record Your Payments", desc: "Log payments and watch balances update automatically." },
+  { icon: BarChart3, title: "Track Your Progress", desc: "See charts, stats, and your overall financial progress." },
+  { icon: Trophy, title: "Reach Milestones", desc: "Earn badges at 10%, 25%, 50%, 75%, and 100%." },
+  { icon: PartyPopper, title: "Become Debt Free", desc: "Complete your journey to financial freedom!" },
+];
 
 const REASONS = [
   { id: "freedom", label: "Financial Freedom", desc: "I want to live without debt stress" },
@@ -56,7 +64,7 @@ export default function Onboarding() {
     setSaving(true);
     try {
       await updateProfile.mutateAsync({ default_currency: currency });
-      setStep(5);
+      setStep(6);
     } catch {
       toast.error("Failed to save currency");
     } finally {
@@ -107,7 +115,7 @@ export default function Onboarding() {
         currency,
       });
       await saveJourneyBaseline();
-      setStep(6);
+      setStep(7);
     } catch {
       toast.error("Failed to add debt");
     } finally {
@@ -119,7 +127,7 @@ export default function Onboarding() {
     setSaving(true);
     try {
       await saveJourneyBaseline();
-      setStep(6);
+      setStep(7);
     } catch {
       toast.error("Something went wrong");
     } finally {
@@ -152,6 +160,39 @@ export default function Onboarding() {
 
         <AnimatePresence mode="wait">
           {step === 0 && (
+            <motion.div key="how-it-works" {...slideProps}>
+              <Card>
+                <CardContent className="p-6 sm:p-8 space-y-6">
+                  <div className="text-center">
+                    <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
+                      <Sparkles className="w-7 h-7 text-primary" />
+                    </div>
+                    <h1 className="font-heading text-2xl font-bold">How MoneyTrek Works</h1>
+                    <p className="text-muted-foreground text-sm mt-1">Five simple steps to financial freedom.</p>
+                  </div>
+                  <div className="space-y-2">
+                    {HOW_STEPS.map((s, i) => (
+                      <div key={s.title} className="flex items-center gap-3 p-2.5 rounded-lg border border-border">
+                        <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center flex-shrink-0">{i + 1}</span>
+                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <s.icon className="w-4 h-4 text-primary" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-sm">{s.title}</p>
+                          <p className="text-xs text-muted-foreground">{s.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <Button onClick={() => setStep(1)} className="w-full">
+                    Got It! Let's Go <ArrowRight className="ml-2 w-4 h-4" />
+                  </Button>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
+
+          {step === 1 && (
             <motion.div key="welcome" {...slideProps}>
               <Card>
                 <CardContent className="p-8 text-center space-y-6">
@@ -160,9 +201,9 @@ export default function Onboarding() {
                   </div>
                   <div>
                     <h1 className="font-heading text-2xl font-bold">Welcome to MoneyTrek! 🎉</h1>
-                    <p className="text-muted-foreground mt-2">Let's set up your debt-free journey in just a few steps.</p>
+                    <p className="text-muted-foreground mt-2">Let's set up your financial progress journey in just a few steps.</p>
                   </div>
-                  <Button onClick={() => setStep(1)} className="w-full">
+                  <Button onClick={() => setStep(2)} className="w-full">
                     Get Started <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </CardContent>
@@ -170,7 +211,7 @@ export default function Onboarding() {
             </motion.div>
           )}
 
-          {step === 1 && (
+          {step === 2 && (
             <motion.div key="reason" {...slideProps}>
               <Card>
                 <CardContent className="p-6 sm:p-8 space-y-6">
@@ -211,7 +252,7 @@ export default function Onboarding() {
                     )}
                   </div>
                   <Button
-                    onClick={() => setStep(2)}
+                    onClick={() => setStep(3)}
                     disabled={!reason || (reason === "custom" && !customReason)}
                     className="w-full"
                   >
@@ -222,7 +263,7 @@ export default function Onboarding() {
             </motion.div>
           )}
 
-          {step === 2 && (
+          {step === 3 && (
             <motion.div key="identity" {...slideProps}>
               <Card>
                 <CardContent className="p-6 sm:p-8 space-y-6">
@@ -245,7 +286,7 @@ export default function Onboarding() {
                       </button>
                     ))}
                   </div>
-                  <Button onClick={() => setStep(3)} disabled={!identity} className="w-full">
+                  <Button onClick={() => setStep(4)} disabled={!identity} className="w-full">
                     Continue <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </CardContent>
@@ -253,7 +294,7 @@ export default function Onboarding() {
             </motion.div>
           )}
 
-          {step === 3 && (
+          {step === 4 && (
             <motion.div key="journey-type" {...slideProps}>
               <Card>
                 <CardContent className="p-6 sm:p-8 space-y-6">
@@ -284,7 +325,7 @@ export default function Onboarding() {
                   <Button
                     onClick={async () => {
                       await saveUserData();
-                      setStep(4);
+                      setStep(5);
                     }}
                     disabled={!journeyType}
                     className="w-full"
@@ -296,7 +337,7 @@ export default function Onboarding() {
             </motion.div>
           )}
 
-          {step === 4 && (
+          {step === 5 && (
             <motion.div key="currency" {...slideProps}>
               <Card>
                 <CardContent className="p-6 sm:p-8 space-y-6">
@@ -313,7 +354,7 @@ export default function Onboarding() {
             </motion.div>
           )}
 
-          {step === 5 && (
+          {step === 6 && (
             <motion.div key="debt" {...slideProps}>
               <Card>
                 <CardContent className="p-6 sm:p-8 space-y-5">
@@ -352,7 +393,7 @@ export default function Onboarding() {
             </motion.div>
           )}
 
-          {step === 6 && (
+          {step === 7 && (
             <motion.div key="done" {...slideProps}>
               <Card>
                 <CardContent className="p-8 text-center space-y-6">
@@ -361,7 +402,7 @@ export default function Onboarding() {
                   </div>
                   <div>
                     <h2 className="font-heading text-2xl font-bold">You're All Set!</h2>
-                    <p className="text-muted-foreground mt-2">Your debt-free journey starts now.</p>
+                    <p className="text-muted-foreground mt-2">Your journey to financial freedom starts now.</p>
                   </div>
                   <Button onClick={() => navigate("/dashboard")} className="w-full">
                     Go to Dashboard <ArrowRight className="ml-2 w-4 h-4" />
