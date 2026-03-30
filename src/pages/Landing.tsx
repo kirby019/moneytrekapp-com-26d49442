@@ -46,13 +46,66 @@ const testimonials = [
   { name: "John", country: "Australia", quote: "Multi-currency support is great because I have accounts in different currencies. Everything converts automatically.", rating: 5 },
 ];
 
-const comingSoonFeatures = [
-  "Payment reminders",
-  "Monthly summaries",
-  "Advanced financial planning",
-  "Budget tracking",
-  "Shared household finances",
-  "Mobile app",
+const roadmapVersions = [
+  {
+    version: "Version 1",
+    title: "Debt + Financial Progress",
+    status: "current" as const,
+    statusLabel: "Current",
+    icon: TrendingDown,
+    features: [
+      "Debt tracking",
+      "Payment tracking",
+      "Progress dashboard",
+      "Milestones & achievements",
+      "Streak tracking",
+      "Reports & analytics",
+      "Demo mode",
+      "Gamified characters",
+    ],
+  },
+  {
+    version: "Version 2",
+    title: "Savings + Goals",
+    status: "coming" as const,
+    statusLabel: "Coming Soon",
+    icon: PiggyBank,
+    features: [
+      "Savings tracking",
+      "Savings goals",
+      "Goal progress tracking",
+      "Goal milestones",
+      "Savings & Goal characters",
+    ],
+  },
+  {
+    version: "Version 3",
+    title: "Net Worth + Budget",
+    status: "future" as const,
+    statusLabel: "Future",
+    icon: Landmark,
+    features: [
+      "Net worth dashboard",
+      "Asset tracking",
+      "Budget tracking",
+      "Expense categories",
+      "Monthly financial overview",
+    ],
+  },
+  {
+    version: "Version 4",
+    title: "Mobile App + Automation",
+    status: "future" as const,
+    statusLabel: "Future",
+    icon: Zap,
+    features: [
+      "Mobile app",
+      "Payment reminders",
+      "Monthly summaries",
+      "Shared household finances",
+      "Automated financial insights",
+    ],
+  },
 ];
 
 // Raw USD amounts for mockups
@@ -599,26 +652,85 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ==================== COMING SOON ==================== */}
+      {/* ==================== ROADMAP ==================== */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-20">
         <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
           <span className="text-xs font-semibold text-accent uppercase tracking-wider">Roadmap</span>
-          <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Coming Soon</h2>
-          <p className="text-muted-foreground max-w-md mx-auto text-sm">We're building more tools to help you take full control of your finances.</p>
+          <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">The MoneyTrek Journey</h2>
+          <p className="text-muted-foreground max-w-lg mx-auto text-sm">
+            From debt tracking to a full financial system — here's where MoneyTrek is headed.
+          </p>
         </motion.div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-3xl mx-auto">
-          {comingSoonFeatures.map((f, i) => (
-            <motion.div key={f} {...fadeUp} transition={{ delay: i * 0.08 }}>
-              <Card className="border-dashed border-border/60">
-                <CardContent className="p-4 flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-                    <Rocket className="w-4 h-4 text-accent" />
+
+        {/* Timeline connector */}
+        <div className="relative max-w-4xl mx-auto">
+          {/* Vertical line */}
+          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-border -translate-x-1/2" />
+
+          <div className="grid gap-8">
+            {roadmapVersions.map((v, i) => {
+              const Icon = v.icon;
+              const statusColors = {
+                current: "bg-accent text-accent-foreground",
+                coming: "bg-primary text-primary-foreground",
+                future: "bg-muted text-muted-foreground",
+              };
+              const borderColors = {
+                current: "border-accent/40",
+                coming: "border-primary/30 border-dashed",
+                future: "border-border/60 border-dashed",
+              };
+              return (
+                <motion.div
+                  key={v.version}
+                  {...fadeUp}
+                  transition={{ delay: i * 0.12 }}
+                  className={`relative md:w-[calc(50%-1.5rem)] ${i % 2 === 0 ? "md:mr-auto" : "md:ml-auto"}`}
+                >
+                  {/* Timeline dot */}
+                  <div className="hidden md:flex absolute top-6 w-4 h-4 rounded-full bg-card border-2 border-accent items-center justify-center"
+                    style={{ [i % 2 === 0 ? "right" : "left"]: "-2.5rem" }}
+                  >
+                    <div className={`w-2 h-2 rounded-full ${v.status === "current" ? "bg-accent" : "bg-muted-foreground/40"}`} />
                   </div>
-                  <span className="text-sm font-medium text-muted-foreground">{f}</span>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+
+                  <Card className={`${borderColors[v.status]} overflow-hidden`}>
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center justify-between gap-2 flex-wrap">
+                        <div className="flex items-center gap-2">
+                          <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${v.status === "current" ? "bg-accent/15" : "bg-muted"}`}>
+                            <Icon className={`w-4 h-4 ${v.status === "current" ? "text-accent" : "text-muted-foreground"}`} />
+                          </div>
+                          <div>
+                            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{v.version}</p>
+                            <CardTitle className="text-base">{v.title}</CardTitle>
+                          </div>
+                        </div>
+                        <Badge className={`${statusColors[v.status]} text-[10px] px-2`}>{v.statusLabel}</Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="pt-0">
+                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5">
+                        {v.features.map((f) => (
+                          <li key={f} className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <CheckCircle2 className={`w-3.5 h-3.5 flex-shrink-0 ${v.status === "current" ? "text-accent" : "text-muted-foreground/40"}`} />
+                            {f}
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Journey arrow */}
+          <motion.div {...fadeUp} transition={{ delay: 0.5 }} className="text-center mt-10">
+            <p className="text-xs text-muted-foreground font-medium">
+              Debt → Savings → Net Worth → Full Financial System
+            </p>
+          </motion.div>
         </div>
       </section>
 
