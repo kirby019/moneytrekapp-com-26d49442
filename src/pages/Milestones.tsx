@@ -45,7 +45,7 @@ export default function Milestones() {
                 character="theBuilder"
                 context="empty"
                 animation="pulse"
-                size="lg"
+                size="xl"
                 bubblePosition="top"
                 className="mx-auto"
               />

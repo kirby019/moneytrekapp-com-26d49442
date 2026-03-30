@@ -46,7 +46,7 @@ function MotivationCard() {
           character="streakFlame"
           context="weekly"
           animation="wiggle"
-          size="sm"
+          size="md"
           showBubble={false}
         />
         <div>

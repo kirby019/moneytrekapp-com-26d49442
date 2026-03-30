@@ -141,7 +141,7 @@ export default function Dashboard() {
                   character="theClimber"
                   context="empty"
                   animation="bounce"
-                  size="lg"
+                  size="xl"
                   bubblePosition="top"
                   className="mx-auto"
                 />

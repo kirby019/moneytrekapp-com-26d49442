@@ -53,7 +53,7 @@ export default function CelebrationModal({
                     character={config.character}
                     context={config.context}
                     animation="celebrate"
-                    size="lg"
+                    size="xl"
                     showBubble={true}
                     bubblePosition="top"
                   />
