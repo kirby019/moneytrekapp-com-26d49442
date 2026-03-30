@@ -55,37 +55,47 @@ export default function Journey() {
           <CardContent className="p-6">
             <div className="flex flex-col sm:flex-row sm:items-center gap-4">
               <div className="flex-1">
-
-          <CardContent className="p-6">
-            {hasJourneyData ? (
-              <>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium">
-                    {completed} of {milestones.length} milestones reached
-                  </span>
-                  <span className="text-sm font-bold text-primary">{journeyProgress}%</span>
-                </div>
-                <Progress value={journeyProgress} className="h-3" animated />
-                <div className="flex justify-between mt-2 text-xs text-muted-foreground">
-                  <span>Paid {formatCurrency(totalJourneyPaid, defaultCurrency)} since joining</span>
-                  <span>of {formatCurrency(journeyStartingDebt, defaultCurrency)} starting debt</span>
-                </div>
-              </>
-            ) : !debts || debts.length === 0 ? (
-              <div className="text-center py-4 space-y-3">
-                <p className="text-sm text-muted-foreground">Add your first debt to start tracking your journey.</p>
-                <Button size="sm" asChild>
-                  <Link to="/add-debt"><Plus className="w-3 h-3 mr-1" />Add Debt</Link>
-                </Button>
+                {hasJourneyData ? (
+                  <>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium">
+                        {completed} of {milestones.length} milestones reached
+                      </span>
+                      <span className="text-sm font-bold text-primary">{journeyProgress}%</span>
+                    </div>
+                    <Progress value={journeyProgress} className="h-3" animated />
+                    <div className="flex justify-between mt-2 text-xs text-muted-foreground">
+                      <span>Paid {formatCurrency(totalJourneyPaid, defaultCurrency)} since joining</span>
+                      <span>of {formatCurrency(journeyStartingDebt, defaultCurrency)} starting debt</span>
+                    </div>
+                  </>
+                ) : !debts || debts.length === 0 ? (
+                  <div className="text-center py-4 space-y-3">
+                    <p className="text-sm text-muted-foreground">Add your first debt to start tracking your journey.</p>
+                    <Button size="sm" asChild>
+                      <Link to="/add-debt"><Plus className="w-3 h-3 mr-1" />Add Debt</Link>
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="text-center py-4 space-y-3">
+                    <p className="text-sm text-muted-foreground">Your journey progress will appear here once you record your first payment.</p>
+                    <Button size="sm" asChild>
+                      <Link to="/record-payment">Record Payment</Link>
+                    </Button>
+                  </div>
+                )}
               </div>
-            ) : (
-              <div className="text-center py-4 space-y-3">
-                <p className="text-sm text-muted-foreground">Your journey progress will appear here once you record your first payment.</p>
-                <Button size="sm" asChild>
-                  <Link to="/record-payment">Record Payment</Link>
-                </Button>
+              <div className="hidden sm:block shrink-0">
+                <TalkingCharacter
+                  character="theClimber"
+                  context="journey"
+                  animation="float"
+                  size="lg"
+                  showBubble={true}
+                  bubblePosition="top"
+                />
               </div>
-            )}
+            </div>
           </CardContent>
         </Card>
 
