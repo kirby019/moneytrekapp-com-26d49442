@@ -190,10 +190,10 @@ interface TalkingCharacterProps {
 }
 
 const sizeMap = {
-  sm: { img: "w-10 h-10", px: 40 },
-  md: { img: "w-16 h-16", px: 64 },
-  lg: { img: "w-24 h-24", px: 96 },
-  xl: { img: "w-32 h-32", px: 128 },
+  sm: { img: "w-12 h-12", px: 48 },
+  md: { img: "w-20 h-20", px: 80 },
+  lg: { img: "w-32 h-32", px: 128 },
+  xl: { img: "w-44 h-44", px: 176 },
 };
 
 export default function TalkingCharacter({
