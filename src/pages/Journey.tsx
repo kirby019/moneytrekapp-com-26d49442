@@ -44,24 +44,18 @@ export default function Journey() {
   return (
     <AppLayout>
       <div className="max-w-2xl mx-auto space-y-6">
-        <div className="flex items-center gap-4">
-          <TalkingCharacter
-            character="theClimber"
-            context="journey"
-            animation="float"
-            size="md"
-            showBubble={true}
-            bubblePosition="right"
-          />
-          <div>
-            <h1 className="font-heading text-2xl font-bold">Your Journey</h1>
-            <p className="text-sm text-muted-foreground mt-1">
-              Track your progress since you started using the app.
-            </p>
-          </div>
+        <div>
+          <h1 className="font-heading text-2xl font-bold">Your Journey</h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            Track your progress since you started using the app.
+          </p>
         </div>
 
-        <Card>
+        <Card className="overflow-visible">
+          <CardContent className="p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="flex-1">
+
           <CardContent className="p-6">
             {hasJourneyData ? (
               <>
