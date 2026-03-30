@@ -675,7 +675,7 @@ export default function Landing() {
                   </div>
 
                   {/* Content card */}
-                  <Card className="border-border/60 overflow-hidden hover:shadow-md transition-shadow">
+                  <Card className="border-border/60 overflow-visible hover:shadow-md transition-shadow">
                     <CardContent className="p-5 sm:p-6">
                       <div className="flex items-start gap-4">
                         <div className="flex-1">
@@ -689,7 +689,7 @@ export default function Landing() {
                         </div>
 
                         {/* Character */}
-                        <div className="flex-shrink-0 flex flex-col items-center gap-2">
+                        <div className="flex-shrink-0 flex flex-col items-center gap-2 pt-6">
                           <TalkingCharacter
                             character={step.character}
                             customMessage={step.characterMessage}
