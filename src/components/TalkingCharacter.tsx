@@ -118,6 +118,34 @@ export const characterMessages: Record<string, string[]> = {
     "How did you do this week?",
     "Keep the momentum going!",
   ],
+  payment: [
+    "Every payment counts! 💪",
+    "You're crushing it!",
+    "Chip away at that debt!",
+    "Money well spent!",
+    "One payment closer to freedom!",
+  ],
+  analytics: [
+    "Knowledge is power! 📊",
+    "Look at those numbers!",
+    "Data-driven decisions!",
+    "Track and conquer!",
+    "Your progress tells a story!",
+  ],
+  strategy: [
+    "Smart planning pays off! 🧠",
+    "Pick your path to freedom!",
+    "Strategy makes the difference!",
+    "You've got a plan!",
+    "Stick to the strategy!",
+  ],
+  future: [
+    "Your future is bright! ✨",
+    "Imagine the possibilities!",
+    "Freedom is coming!",
+    "Dream big, plan bigger!",
+    "Worth every sacrifice!",
+  ],
 };
 
 export type MessageContext = keyof typeof characterMessages;

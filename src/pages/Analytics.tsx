@@ -10,6 +10,7 @@ import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, R
 import { format, parseISO, startOfMonth } from "date-fns";
 import UpgradePrompt from "@/components/UpgradePrompt";
 import { useFeatureAccess } from "@/hooks/useSubscription";
+import CharacterGuide from "@/components/CharacterGuide";
 
 export default function Analytics() {
   const { hasAccess } = useFeatureAccess("advancedAnalytics");
@@ -21,7 +22,6 @@ export default function Analytics() {
 
   const totalOriginal = useMemo(() => debts?.reduce((s, d) => s + (d.original_amount ?? 0), 0) ?? 0, [debts]);
 
-  // Payments per month
   const monthlyData = useMemo(() => {
     if (!payments || payments.length === 0) return [];
     const map = new Map<string, number>();
@@ -35,7 +35,6 @@ export default function Analytics() {
       .map(([month, amount]) => ({ month: format(parseISO(month + "-01"), "MMM yyyy"), amount }));
   }, [payments]);
 
-  // Cumulative paid over time
   const cumulativeData = useMemo(() => {
     if (!payments || payments.length === 0) return [];
     const sorted = [...payments].filter(p => p.payment_date).sort((a, b) => a.payment_date!.localeCompare(b.payment_date!));
@@ -70,7 +69,24 @@ export default function Analytics() {
   return (
     <AppLayout>
       <div className="max-w-6xl mx-auto space-y-6">
-        <h1 className="font-heading text-2xl font-bold">Analytics</h1>
+        <div className="flex items-center justify-between">
+          <h1 className="font-heading text-2xl font-bold">Analytics</h1>
+        </div>
+
+        {/* Character guide card */}
+        <Card>
+          <CardContent className="p-5 flex items-center justify-between gap-4">
+            <div className="flex-1 min-w-0">
+              <p className="font-heading font-semibold text-lg">Climbing the data mountain!</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                Your numbers tell the story of your progress. Keep climbing!
+              </p>
+            </div>
+            <div className="shrink-0">
+              <CharacterGuide character="theClimber" context="analytics" animation="float" />
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Summary cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -96,7 +112,6 @@ export default function Analytics() {
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Payments per month */}
             <Card>
               <CardContent className="p-5">
                 <h3 className="font-heading font-semibold mb-4">Payments Per Month</h3>
@@ -114,7 +129,6 @@ export default function Analytics() {
               </CardContent>
             </Card>
 
-            {/* Total paid over time */}
             <Card>
               <CardContent className="p-5">
                 <h3 className="font-heading font-semibold mb-4">Total Paid Over Time</h3>
@@ -132,7 +146,6 @@ export default function Analytics() {
               </CardContent>
             </Card>
 
-            {/* Remaining debt over time */}
             <Card>
               <CardContent className="p-5">
                 <h3 className="font-heading font-semibold mb-4">Remaining Debt Over Time</h3>
@@ -150,7 +163,6 @@ export default function Analytics() {
               </CardContent>
             </Card>
 
-            {/* Progress over time */}
             <Card>
               <CardContent className="p-5">
                 <h3 className="font-heading font-semibold mb-4">Progress Over Time</h3>
