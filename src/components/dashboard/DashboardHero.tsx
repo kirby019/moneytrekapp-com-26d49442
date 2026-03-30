@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { formatCurrency } from "@/lib/currency";
+import { characters } from "@/lib/characters";
 
 interface Props {
   overallProgress: number;
@@ -17,12 +18,21 @@ export default function DashboardHero({ overallProgress, totalPaid, totalOrigina
       style={{ background: "var(--gradient-hero)" }}
     >
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <p className="text-primary-foreground/70 text-sm font-medium">Overall Progress</p>
-          <p className="text-4xl font-heading font-extrabold mt-1">{overallProgress}% Paid Off</p>
-          <p className="text-primary-foreground/60 text-sm mt-1">
-            {formatCurrency(totalPaid, currency)} of {formatCurrency(totalOriginal, currency)} eliminated
-          </p>
+        <div className="flex items-center gap-4">
+          <img
+            src={characters.moneyTree.src}
+            alt={characters.moneyTree.alt}
+            width={64}
+            height={64}
+            className="w-16 h-16 object-contain hidden sm:block"
+          />
+          <div>
+            <p className="text-primary-foreground/70 text-sm font-medium">Overall Progress</p>
+            <p className="text-4xl font-heading font-extrabold mt-1">{overallProgress}% Paid Off</p>
+            <p className="text-primary-foreground/60 text-sm mt-1">
+              {formatCurrency(totalPaid, currency)} of {formatCurrency(totalOriginal, currency)} eliminated
+            </p>
+          </div>
         </div>
         <div className="w-full md:w-64">
           <div className="h-3 rounded-full bg-primary-foreground/20 overflow-hidden">

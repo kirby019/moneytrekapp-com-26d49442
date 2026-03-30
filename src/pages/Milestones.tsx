@@ -1,4 +1,5 @@
 import { Trophy, Star, Flame, Award, Lock, Plus } from "lucide-react";
+import { characters } from "@/lib/characters";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -40,9 +41,14 @@ export default function Milestones() {
         {!debts || debts.length === 0 ? (
           <Card>
             <CardContent className="p-8 text-center space-y-4">
-              <div className="w-14 h-14 rounded-xl bg-warning/10 flex items-center justify-center mx-auto">
-                <Trophy className="w-7 h-7 text-warning" />
-              </div>
+              <img
+                src={characters.theBuilder.src}
+                alt={characters.theBuilder.alt}
+                width={96}
+                height={96}
+                loading="lazy"
+                className="w-24 h-24 object-contain mx-auto"
+              />
               <div>
                 <p className="font-heading font-semibold">No milestones yet</p>
                 <p className="text-sm text-muted-foreground mt-1">Add your first debt and start making payments to unlock badges.</p>

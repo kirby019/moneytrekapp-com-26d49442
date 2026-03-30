@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { CheckCircle2, Circle, MapPin, Flag, Plus } from "lucide-react";
+import { characters } from "@/lib/characters";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -43,11 +44,20 @@ export default function Journey() {
   return (
     <AppLayout>
       <div className="max-w-2xl mx-auto space-y-6">
-        <div>
-          <h1 className="font-heading text-2xl font-bold">Your Journey</h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            Track your progress since you started using the app.
-          </p>
+        <div className="flex items-center gap-4">
+          <img
+            src={characters.theClimber.src}
+            alt={characters.theClimber.alt}
+            width={48}
+            height={48}
+            className="w-12 h-12 object-contain"
+          />
+          <div>
+            <h1 className="font-heading text-2xl font-bold">Your Journey</h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              Track your progress since you started using the app.
+            </p>
+          </div>
         </div>
 
         <Card>

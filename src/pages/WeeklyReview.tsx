@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TrendingDown, DollarSign, CheckCircle2, Plus } from "lucide-react";
+import { characters } from "@/lib/characters";
 import { Link } from "react-router-dom";
 import AppLayout from "@/components/AppLayout";
 import { useWeeklyReports } from "@/hooks/useWeeklyReports";
@@ -40,9 +41,19 @@ function MotivationCard() {
   const quote = useMemo(() => MOTIVATION_QUOTES[getQuoteIndex()], []);
   return (
     <Card>
-      <CardContent className="p-6">
-        <h2 className="font-heading font-semibold mb-2">Motivation</h2>
-        <p className="text-muted-foreground text-sm italic">"{quote}"</p>
+      <CardContent className="p-6 flex items-start gap-4">
+        <img
+          src={characters.streakFlame.src}
+          alt={characters.streakFlame.alt}
+          width={48}
+          height={48}
+          loading="lazy"
+          className="w-12 h-12 object-contain flex-shrink-0"
+        />
+        <div>
+          <h2 className="font-heading font-semibold mb-2">Motivation</h2>
+          <p className="text-muted-foreground text-sm italic">"{quote}"</p>
+        </div>
       </CardContent>
     </Card>
   );

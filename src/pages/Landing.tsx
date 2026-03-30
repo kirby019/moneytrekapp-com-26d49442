@@ -6,6 +6,7 @@ import {
   DollarSign, Target, Users, Zap, ChevronRight, Award, Clock, Rocket, LogOut,
   PiggyBank, Landmark, TrendingUp, Wallet, Eye
 } from "lucide-react";
+import { characters } from "@/lib/characters";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -554,6 +555,45 @@ export default function Landing() {
             {/* Pro */}
             <ProPricingCard />
           </div>
+        </div>
+      </section>
+
+      {/* ==================== CHARACTERS ==================== */}
+      <section className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-20">
+        <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
+          <span className="text-xs font-semibold text-accent uppercase tracking-wider">Meet Your Guides</span>
+          <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Meet the MoneyTrek Characters</h2>
+          <p className="text-muted-foreground max-w-lg mx-auto text-sm">Every step of your financial journey has a companion. These characters guide, motivate, and celebrate with you along the way.</p>
+        </motion.div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-4 max-w-5xl mx-auto">
+          {Object.values(characters).map((c, i) => (
+            <motion.div
+              key={c.name}
+              {...fadeUp}
+              transition={{ delay: i * 0.08 }}
+              className="text-center group"
+            >
+              <Card className={`h-full hover:shadow-lg hover:-translate-y-1 transition-all duration-300 ${c.comingSoon ? "opacity-60" : ""}`}>
+                <CardContent className="p-4">
+                  <div className="w-16 h-16 mx-auto mb-3 relative">
+                    <img
+                      src={c.src}
+                      alt={c.alt}
+                      width={64}
+                      height={64}
+                      loading="lazy"
+                      className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
+                    />
+                  </div>
+                  <h3 className="font-heading font-semibold text-xs mb-0.5">{c.name}</h3>
+                  <p className="text-muted-foreground text-[10px] leading-tight">{c.tagline}</p>
+                  {c.comingSoon && (
+                    <Badge variant="secondary" className="mt-2 text-[9px] px-1.5 py-0">Coming Soon</Badge>
+                  )}
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
         </div>
       </section>
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { characters } from "@/lib/characters";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -50,7 +51,16 @@ export default function AddDebt() {
   return (
     <AppLayout>
       <div className="max-w-lg mx-auto">
-        <h1 className="font-heading text-2xl font-bold mb-6">Add New Debt</h1>
+        <div className="flex items-center gap-3 mb-6">
+          <img
+            src={characters.debtMonster.src}
+            alt={characters.debtMonster.alt}
+            width={48}
+            height={48}
+            className="w-12 h-12 object-contain"
+          />
+          <h1 className="font-heading text-2xl font-bold">Add New Debt</h1>
+        </div>
         {!canAdd ? (
           <UpgradePrompt
             title="Debt Limit Reached"
