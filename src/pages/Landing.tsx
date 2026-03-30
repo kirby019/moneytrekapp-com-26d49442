@@ -46,12 +46,13 @@ const testimonials = [
   { name: "John", country: "Australia", quote: "Multi-currency support is great because I have accounts in different currencies. Everything converts automatically.", rating: 5 },
 ];
 
-const roadmapVersions = [
+const roadmapStages = [
   {
-    version: "Version 1",
-    title: "Debt + Financial Progress",
+    stage: "Stage 1",
+    title: "Eliminate Debt",
+    description: "Track debts, record payments, and watch your balances go down while your progress goes up.",
     status: "current" as const,
-    statusLabel: "Current",
+    statusLabel: "Available Now",
     icon: TrendingDown,
     features: [
       "Debt tracking",
@@ -65,8 +66,9 @@ const roadmapVersions = [
     ],
   },
   {
-    version: "Version 2",
-    title: "Savings + Goals",
+    stage: "Stage 2",
+    title: "Build Savings",
+    description: "Create savings goals and grow your savings over time.",
     status: "coming" as const,
     statusLabel: "Coming Soon",
     icon: PiggyBank,
@@ -79,8 +81,9 @@ const roadmapVersions = [
     ],
   },
   {
-    version: "Version 3",
-    title: "Net Worth + Budget",
+    stage: "Stage 3",
+    title: "Grow Net Worth",
+    description: "Track assets and liabilities and see your net worth increase.",
     status: "future" as const,
     statusLabel: "Future",
     icon: Landmark,
@@ -93,8 +96,9 @@ const roadmapVersions = [
     ],
   },
   {
-    version: "Version 4",
-    title: "Mobile App + Automation",
+    stage: "Stage 4",
+    title: "Full Financial System",
+    description: "Budgeting, reports, automation, shared finances, and mobile app.",
     status: "future" as const,
     statusLabel: "Future",
     icon: Zap,
@@ -668,7 +672,7 @@ export default function Landing() {
           <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-border -translate-x-1/2" />
 
           <div className="grid gap-8">
-            {roadmapVersions.map((v, i) => {
+            {roadmapStages.map((v, i) => {
               const Icon = v.icon;
               const statusColors = {
                 current: "bg-accent text-accent-foreground",
@@ -682,7 +686,7 @@ export default function Landing() {
               };
               return (
                 <motion.div
-                  key={v.version}
+                  key={v.stage}
                   {...fadeUp}
                   transition={{ delay: i * 0.12 }}
                   className={`relative md:w-[calc(50%-1.5rem)] ${i % 2 === 0 ? "md:mr-auto" : "md:ml-auto"}`}
@@ -702,12 +706,13 @@ export default function Landing() {
                             <Icon className={`w-4 h-4 ${v.status === "current" ? "text-accent" : "text-muted-foreground"}`} />
                           </div>
                           <div>
-                            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{v.version}</p>
+                            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{v.stage}</p>
                             <CardTitle className="text-base">{v.title}</CardTitle>
                           </div>
                         </div>
                         <Badge className={`${statusColors[v.status]} text-[10px] px-2`}>{v.statusLabel}</Badge>
                       </div>
+                      <p className="text-xs text-muted-foreground mt-2">{v.description}</p>
                     </CardHeader>
                     <CardContent className="pt-0">
                       <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5">
