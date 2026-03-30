@@ -69,12 +69,12 @@ export function useSubscription() {
     enabled: !!user,
   });
 
-  const isTrial = !!(subscription as any)?.is_trial;
-  const trialEndsAt = (subscription as any)?.trial_ends_at
-    ? new Date((subscription as any).trial_ends_at)
+  const isTrial = !!subscription?.is_trial;
+  const trialEndsAt = subscription?.trial_ends_at
+    ? new Date(subscription.trial_ends_at)
     : null;
   const isTrialExpired = isTrial && trialEndsAt ? trialEndsAt < new Date() : false;
-  const isFoundingMember = !!(subscription as any)?.is_founding_member;
+  const isFoundingMember = !!subscription?.is_founding_member;
 
   // If trial is expired and it's still a trial (not converted), treat as free
   const plan: PlanType =
