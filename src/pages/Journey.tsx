@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { CheckCircle2, Circle, MapPin, Flag, Plus } from "lucide-react";
-import { characters } from "@/lib/characters";
+import TalkingCharacter from "@/components/TalkingCharacter";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -45,12 +45,13 @@ export default function Journey() {
     <AppLayout>
       <div className="max-w-2xl mx-auto space-y-6">
         <div className="flex items-center gap-4">
-          <img
-            src={characters.theClimber.src}
-            alt={characters.theClimber.alt}
-            width={48}
-            height={48}
-            className="w-12 h-12 object-contain"
+          <TalkingCharacter
+            character="theClimber"
+            context="journey"
+            animation="float"
+            size="sm"
+            showBubble={true}
+            bubblePosition="right"
           />
           <div>
             <h1 className="font-heading text-2xl font-bold">Your Journey</h1>

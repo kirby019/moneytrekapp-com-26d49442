@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { CreditCard, Plus, Pencil, Trash2 } from "lucide-react";
-import { characters } from "@/lib/characters";
+import TalkingCharacter from "@/components/TalkingCharacter";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -118,13 +118,13 @@ export default function Debts() {
         ) : (
           <Card>
             <CardContent className="p-8 text-center space-y-4">
-              <img
-                src={characters.debtMonster.src}
-                alt={characters.debtMonster.alt}
-                width={96}
-                height={96}
-                loading="lazy"
-                className="w-24 h-24 object-contain mx-auto"
+              <TalkingCharacter
+                character="debtMonster"
+                context="empty"
+                animation="wiggle"
+                size="lg"
+                bubblePosition="top"
+                className="mx-auto"
               />
               <p className="text-muted-foreground">No debts added yet. Let's defeat the Debt Monster!</p>
               <Button asChild><Link to="/add-debt"><Plus className="w-4 h-4 mr-2" />Add Your First Debt</Link></Button>

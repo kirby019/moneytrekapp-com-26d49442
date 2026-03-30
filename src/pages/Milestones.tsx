@@ -1,5 +1,5 @@
 import { Trophy, Star, Flame, Award, Lock, Plus } from "lucide-react";
-import { characters } from "@/lib/characters";
+import TalkingCharacter from "@/components/TalkingCharacter";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -41,13 +41,13 @@ export default function Milestones() {
         {!debts || debts.length === 0 ? (
           <Card>
             <CardContent className="p-8 text-center space-y-4">
-              <img
-                src={characters.theBuilder.src}
-                alt={characters.theBuilder.alt}
-                width={96}
-                height={96}
-                loading="lazy"
-                className="w-24 h-24 object-contain mx-auto"
+              <TalkingCharacter
+                character="theBuilder"
+                context="empty"
+                animation="pulse"
+                size="lg"
+                bubblePosition="top"
+                className="mx-auto"
               />
               <div>
                 <p className="font-heading font-semibold">No milestones yet</p>
