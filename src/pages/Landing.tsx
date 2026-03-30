@@ -49,66 +49,41 @@ const testimonials = [
 const roadmapStages = [
   {
     stage: "Stage 1",
-    title: "Eliminate Debt",
-    description: "Track debts, record payments, and watch your balances go down while your progress goes up.",
+    title: "Track Your Progress",
+    description: "Start by tracking your debts, payments, and financial progress in one place.",
     status: "current" as const,
     statusLabel: "Available Now",
     icon: TrendingDown,
-    features: [
-      "Debt tracking",
-      "Payment tracking",
-      "Progress dashboard",
-      "Milestones & achievements",
-      "Streak tracking",
-      "Reports & analytics",
-      "Demo mode",
-      "Gamified characters",
-    ],
+    character: "moneyTree" as const,
+    secondaryCharacter: "debtMonster" as const,
   },
   {
     stage: "Stage 2",
-    title: "Build Savings",
-    description: "Create savings goals and grow your savings over time.",
+    title: "Build Your Foundation",
+    description: "Grow your savings and build your financial safety net.",
     status: "coming" as const,
     statusLabel: "Coming Soon",
     icon: PiggyBank,
-    features: [
-      "Savings tracking",
-      "Savings goals",
-      "Goal progress tracking",
-      "Goal milestones",
-      "Savings & Goal characters",
-    ],
+    character: "savingsPig" as const,
   },
   {
     stage: "Stage 3",
-    title: "Grow Net Worth",
-    description: "Track assets and liabilities and see your net worth increase.",
+    title: "Grow Your Wealth",
+    description: "Track your net worth and watch your financial position improve over time.",
     status: "future" as const,
     statusLabel: "Future",
     icon: Landmark,
-    features: [
-      "Net worth dashboard",
-      "Asset tracking",
-      "Budget tracking",
-      "Expense categories",
-      "Monthly financial overview",
-    ],
+    character: "theClimber" as const,
+    secondaryCharacter: "theBuilder" as const,
   },
   {
     stage: "Stage 4",
-    title: "Full Financial System",
-    description: "Budgeting, reports, automation, shared finances, and mobile app.",
+    title: "Master Your Money",
+    description: "Budgeting, automation, reports, and full financial control in one system.",
     status: "future" as const,
     statusLabel: "Future",
     icon: Zap,
-    features: [
-      "Mobile app",
-      "Payment reminders",
-      "Monthly summaries",
-      "Shared household finances",
-      "Automated financial insights",
-    ],
+    character: "goalRocket" as const,
   },
 ];
 
@@ -659,19 +634,30 @@ export default function Landing() {
       {/* ==================== ROADMAP ==================== */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-20">
         <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
-          <span className="text-xs font-semibold text-accent uppercase tracking-wider">Roadmap</span>
+          <span className="text-xs font-semibold text-accent uppercase tracking-wider">Your Journey</span>
           <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">The MoneyTrek Journey</h2>
           <p className="text-muted-foreground max-w-lg mx-auto text-sm">
-            From debt tracking to a full financial system — here's where MoneyTrek is headed.
+            From tracking your first payment to mastering your entire financial life — one step at a time.
           </p>
         </motion.div>
 
-        {/* Timeline connector */}
+        {/* Timeline with characters */}
         <div className="relative max-w-4xl mx-auto">
           {/* Vertical line */}
           <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-border -translate-x-1/2" />
 
-          <div className="grid gap-8">
+          {/* Floating Streak Flame — motivational accent */}
+          <div className="hidden md:block absolute -right-4 top-1/2 -translate-y-1/2 z-10 opacity-70">
+            <TalkingCharacter
+              character="streakFlame"
+              context="streak"
+              animation="float"
+              size="sm"
+              showBubble={false}
+            />
+          </div>
+
+          <div className="grid gap-10">
             {roadmapStages.map((v, i) => {
               const Icon = v.icon;
               const statusColors = {
@@ -684,22 +670,66 @@ export default function Landing() {
                 coming: "border-primary/30 border-dashed",
                 future: "border-border/60 border-dashed",
               };
+
+              const characterMessages: Record<string, string> = {
+                moneyTree: "Your journey starts here!",
+                savingsPig: "Savings growing!",
+                theClimber: "Keep climbing!",
+                goalRocket: "Ready for launch!",
+                debtMonster: "Let's defeat debt!",
+                theBuilder: "You're building your future!",
+              };
+
+              const isLeft = i % 2 === 0;
+
               return (
                 <motion.div
                   key={v.stage}
                   {...fadeUp}
                   transition={{ delay: i * 0.12 }}
-                  className={`relative md:w-[calc(50%-1.5rem)] ${i % 2 === 0 ? "md:mr-auto" : "md:ml-auto"}`}
+                  className={`relative md:w-[calc(50%-1.5rem)] ${isLeft ? "md:mr-auto" : "md:ml-auto"}`}
                 >
                   {/* Timeline dot */}
                   <div className="hidden md:flex absolute top-6 w-4 h-4 rounded-full bg-card border-2 border-accent items-center justify-center"
-                    style={{ [i % 2 === 0 ? "right" : "left"]: "-2.5rem" }}
+                    style={{ [isLeft ? "right" : "left"]: "-2.5rem" }}
                   >
                     <div className={`w-2 h-2 rounded-full ${v.status === "current" ? "bg-accent" : "bg-muted-foreground/40"}`} />
                   </div>
 
+                  {/* Character placed on the opposite side of the card */}
+                  <div
+                    className={`hidden md:block absolute top-2 z-10 ${isLeft ? "-right-20" : "-left-20"}`}
+                    style={{ [isLeft ? "right" : "left"]: "-5.5rem" }}
+                  >
+                    <TalkingCharacter
+                      character={v.character}
+                      customMessage={characterMessages[v.character]}
+                      animation={v.status === "current" ? "bounce" : v.status === "coming" ? "wiggle" : "pulse"}
+                      size="sm"
+                      showBubble={true}
+                      bubblePosition={isLeft ? "right" : "right"}
+                      bubbleInterval={7000 + i * 1500}
+                    />
+                  </div>
+
+                  {/* Secondary character (smaller, decorative) */}
+                  {v.secondaryCharacter && (
+                    <div
+                      className={`hidden lg:block absolute -bottom-3 z-10 ${isLeft ? "right-4" : "left-4"}`}
+                    >
+                      <TalkingCharacter
+                        character={v.secondaryCharacter}
+                        customMessage={characterMessages[v.secondaryCharacter]}
+                        animation="float"
+                        size="sm"
+                        showBubble={false}
+                        className="opacity-60"
+                      />
+                    </div>
+                  )}
+
                   <Card className={`${borderColors[v.status]} overflow-hidden`}>
-                    <CardHeader className="pb-3">
+                    <CardHeader className="pb-2">
                       <div className="flex items-center justify-between gap-2 flex-wrap">
                         <div className="flex items-center gap-2">
                           <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${v.status === "current" ? "bg-accent/15" : "bg-muted"}`}>
@@ -712,28 +742,31 @@ export default function Landing() {
                         </div>
                         <Badge className={`${statusColors[v.status]} text-[10px] px-2`}>{v.statusLabel}</Badge>
                       </div>
-                      <p className="text-xs text-muted-foreground mt-2">{v.description}</p>
+                      <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{v.description}</p>
                     </CardHeader>
-                    <CardContent className="pt-0">
-                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5">
-                        {v.features.map((f) => (
-                          <li key={f} className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <CheckCircle2 className={`w-3.5 h-3.5 flex-shrink-0 ${v.status === "current" ? "text-accent" : "text-muted-foreground/40"}`} />
-                            {f}
-                          </li>
-                        ))}
-                      </ul>
-                    </CardContent>
                   </Card>
+
+                  {/* Mobile-only character */}
+                  <div className="flex md:hidden justify-center mt-3">
+                    <TalkingCharacter
+                      character={v.character}
+                      customMessage={characterMessages[v.character]}
+                      animation={v.status === "current" ? "bounce" : "pulse"}
+                      size="sm"
+                      showBubble={true}
+                      bubblePosition="top"
+                      bubbleInterval={7000 + i * 1500}
+                    />
+                  </div>
                 </motion.div>
               );
             })}
           </div>
 
-          {/* Journey arrow */}
-          <motion.div {...fadeUp} transition={{ delay: 0.5 }} className="text-center mt-10">
-            <p className="text-xs text-muted-foreground font-medium">
-              Debt → Savings → Net Worth → Full Financial System
+          {/* Journey summary */}
+          <motion.div {...fadeUp} transition={{ delay: 0.5 }} className="text-center mt-12">
+            <p className="text-sm text-muted-foreground font-medium">
+              Track → Save → Grow → Master
             </p>
           </motion.div>
         </div>
