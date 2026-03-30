@@ -10,7 +10,7 @@ import { characters } from "@/lib/characters";
 import TalkingCharacter from "@/components/TalkingCharacter";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useLocalizedPrice, useLocalizedCurrency } from "@/hooks/useLocalizedPrice";
