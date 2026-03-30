@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { characters } from "@/lib/characters";
+import TalkingCharacter from "@/components/TalkingCharacter";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -52,12 +52,12 @@ export default function AddDebt() {
     <AppLayout>
       <div className="max-w-lg mx-auto">
         <div className="flex items-center gap-3 mb-6">
-          <img
-            src={characters.debtMonster.src}
-            alt={characters.debtMonster.alt}
-            width={48}
-            height={48}
-            className="w-12 h-12 object-contain"
+          <TalkingCharacter
+            character="debtMonster"
+            context="debt"
+            animation="wiggle"
+            size="sm"
+            showBubble={false}
           />
           <h1 className="font-heading text-2xl font-bold">Add New Debt</h1>
         </div>

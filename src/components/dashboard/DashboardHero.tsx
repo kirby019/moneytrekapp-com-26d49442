@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { formatCurrency } from "@/lib/currency";
-import { characters } from "@/lib/characters";
+import TalkingCharacter from "@/components/TalkingCharacter";
 
 interface Props {
   overallProgress: number;
@@ -10,6 +10,8 @@ interface Props {
 }
 
 export default function DashboardHero({ overallProgress, totalPaid, totalOriginal, currency }: Props) {
+  const context = overallProgress >= 75 ? "celebration" : overallProgress >= 25 ? "progress" : "journey";
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -19,13 +21,16 @@ export default function DashboardHero({ overallProgress, totalPaid, totalOrigina
     >
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <img
-            src={characters.moneyTree.src}
-            alt={characters.moneyTree.alt}
-            width={64}
-            height={64}
-            className="w-16 h-16 object-contain hidden sm:block"
-          />
+          <div className="hidden sm:block">
+            <TalkingCharacter
+              character="moneyTree"
+              context={context}
+              animation="float"
+              size="md"
+              showBubble={true}
+              bubblePosition="top"
+            />
+          </div>
           <div>
             <p className="text-primary-foreground/70 text-sm font-medium">Overall Progress</p>
             <p className="text-4xl font-heading font-extrabold mt-1">{overallProgress}% Paid Off</p>

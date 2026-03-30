@@ -1,7 +1,6 @@
 import { useEffect, useRef, useMemo } from "react";
 import { Plus, DollarSign } from "lucide-react";
-import { characters } from "@/lib/characters";
-const theClimberSrc = characters.theClimber.src;
+import TalkingCharacter from "@/components/TalkingCharacter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
@@ -138,12 +137,13 @@ export default function Dashboard() {
           {!isLoading && !hasDebts ? (
             <Card>
               <CardContent className="p-10 text-center space-y-4">
-                <img
-                  src={theClimberSrc}
-                  alt="The Climber - start your journey"
-                  width={96}
-                  height={96}
-                  className="w-24 h-24 object-contain mx-auto"
+                <TalkingCharacter
+                  character="theClimber"
+                  context="empty"
+                  animation="bounce"
+                  size="lg"
+                  bubblePosition="top"
+                  className="mx-auto"
                 />
                 <div>
                   <h2 className="font-heading text-xl font-bold">Start Your Debt-Free Journey</h2>

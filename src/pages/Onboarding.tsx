@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Sparkles, ArrowRight, Check, Heart, UserCheck, Zap, CreditCard, DollarSign, BarChart3, Trophy, PartyPopper } from "lucide-react";
 import CurrencySelector from "@/components/CurrencySelector";
-import { characters } from "@/lib/characters";
+import TalkingCharacter from "@/components/TalkingCharacter";
 import { useUpdateProfile } from "@/hooks/useProfile";
 import { useAddDebt } from "@/hooks/useDebts";
 import { useAuth } from "@/contexts/AuthContext";
@@ -165,12 +165,14 @@ export default function Onboarding() {
               <Card>
                 <CardContent className="p-6 sm:p-8 space-y-6">
                   <div className="text-center">
-                    <img
-                      src={characters.theClimber.src}
-                      alt={characters.theClimber.alt}
-                      width={80}
-                      height={80}
-                      className="w-20 h-20 object-contain mx-auto mb-3"
+                    <TalkingCharacter
+                      character="theClimber"
+                      context="journey"
+                      animation="entrance"
+                      size="lg"
+                      showBubble={true}
+                      bubblePosition="top"
+                      className="mx-auto mb-3"
                     />
                     <h1 className="font-heading text-2xl font-bold">How MoneyTrek Works</h1>
                     <p className="text-muted-foreground text-sm mt-1">Five simple steps to financial freedom.</p>

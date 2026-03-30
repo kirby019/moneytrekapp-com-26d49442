@@ -2,7 +2,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import Confetti from "@/components/Confetti";
-import { characters } from "@/lib/characters";
+import TalkingCharacter from "@/components/TalkingCharacter";
+import type { CharacterKey } from "@/lib/characters";
+import type { MessageContext } from "@/components/TalkingCharacter";
 
 export type CelebrationLevel = "toast" | "milestone" | "major" | "ultimate";
 
@@ -15,6 +17,13 @@ interface CelebrationModalProps {
   level?: CelebrationLevel;
 }
 
+const levelConfig: Record<CelebrationLevel, { character: CharacterKey; context: MessageContext }> = {
+  toast: { character: "streakFlame", context: "celebration" },
+  milestone: { character: "theBuilder", context: "milestone" },
+  major: { character: "moneyTree", context: "celebration" },
+  ultimate: { character: "theClimber", context: "celebration" },
+};
+
 export default function CelebrationModal({
   open,
   onOpenChange,
@@ -24,6 +33,7 @@ export default function CelebrationModal({
   level = "milestone",
 }: CelebrationModalProps) {
   const confettiIntensity = level === "ultimate" ? "high" : level === "major" ? "medium" : "low";
+  const config = levelConfig[level];
 
   return (
     <>
@@ -39,12 +49,13 @@ export default function CelebrationModal({
                   transition={{ type: "spring", stiffness: 200, damping: 12 }}
                   className="mb-2 flex flex-col items-center gap-2"
                 >
-                  <img
-                    src={level === "ultimate" ? characters.moneyTree.src : characters.theBuilder.src}
-                    alt="Celebration character"
-                    width={80}
-                    height={80}
-                    className="w-20 h-20 object-contain"
+                  <TalkingCharacter
+                    character={config.character}
+                    context={config.context}
+                    animation="celebrate"
+                    size="lg"
+                    showBubble={true}
+                    bubblePosition="top"
                   />
                   <span className="text-4xl">{emoji}</span>
                 </motion.div>
