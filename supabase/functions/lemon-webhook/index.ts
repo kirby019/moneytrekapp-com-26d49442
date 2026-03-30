@@ -80,12 +80,21 @@ Deno.serve(async (req) => {
 
     switch (eventName) {
       case "subscription_created": {
-        // Deactivate existing trial/subscriptions
+        // Deactivate existing trial/subscriptions (only trials and old subs, not paid active ones)
         await supabase
           .from("subscriptions")
           .update({ status: "inactive" })
           .eq("user_id", userId)
-          .eq("status", "active");
+          .eq("status", "active")
+          .eq("is_trial", true);
+
+        // Also deactivate any other non-trial active subs to avoid duplicates
+        await supabase
+          .from("subscriptions")
+          .update({ status: "inactive" })
+          .eq("user_id", userId)
+          .eq("status", "active")
+          .neq("stripe_subscription_id", String(event.data?.id ?? ""));
 
         const { error } = await supabase
           .from("subscriptions")
