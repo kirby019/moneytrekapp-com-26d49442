@@ -43,7 +43,7 @@ export function useSubscription() {
     queryKey: ["subscription", user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("subscriptions")
+        .from("subscriptions_safe" as any)
         .select("*")
         .eq("user_id", user!.id)
         .eq("status", "active")
