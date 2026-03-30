@@ -154,13 +154,17 @@ export default function Landing() {
           {user ? (
             <>
               <Button size="sm" asChild><Link to="/dashboard">Dashboard</Link></Button>
+              <Button variant="ghost" size="sm" asChild><Link to="/demo"><Eye className="w-4 h-4 mr-1" /> Demo</Link></Button>
               <Button variant="ghost" size="sm" onClick={() => signOut()}>
                 <LogOut className="w-4 h-4 mr-1" /> Sign Out
               </Button>
             </>
           ) : (
             <>
-              <Button variant="ghost" size="sm" asChild><Link to="/login">Log in</Link></Button>
+              <Button variant="ghost" size="sm" asChild><Link to={"/login"}>Dashboard</Link></Button>
+              <Button variant="ghost" size="sm" asChild><Link to="/subscription">Pricing</Link></Button>
+              <Button variant="ghost" size="sm" asChild><Link to="/demo"><Eye className="w-4 h-4 mr-1" /> Demo</Link></Button>
+              <Button variant="ghost" size="sm" asChild><Link to="/login">Log In</Link></Button>
               <Button size="sm" asChild><Link to="/signup">Get Started</Link></Button>
             </>
           )}
