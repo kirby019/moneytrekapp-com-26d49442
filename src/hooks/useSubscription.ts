@@ -36,13 +36,29 @@ export const PRO_PRICING = {
   currency: "USD",
 } as const;
 
+type SubscriptionRow = {
+  id: string;
+  user_id: string;
+  plan: string | null;
+  status: string | null;
+  billing_cycle: string | null;
+  is_trial: boolean | null;
+  trial_ends_at: string | null;
+  is_founding_member: boolean | null;
+  start_date: string | null;
+  end_date: string | null;
+  current_period_end: string | null;
+  created_at: string | null;
+};
+
 export function useSubscription() {
   const { user } = useAuth();
 
   const { data: subscription, isLoading } = useQuery({
     queryKey: ["subscription", user?.id],
     queryFn: async () => {
-      const { data, error } = await (supabase
+      // First try to find an active subscription
+      const { data: activeSub, error: activeErr } = await (supabase
         .from("subscriptions_safe" as any)
         .select("*")
         .eq("user_id", user!.id)
@@ -50,21 +66,21 @@ export function useSubscription() {
         .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle() as any);
-      if (error) throw error;
-      return data as {
-        id: string;
-        user_id: string;
-        plan: string | null;
-        status: string | null;
-        billing_cycle: string | null;
-        is_trial: boolean | null;
-        trial_ends_at: string | null;
-        is_founding_member: boolean | null;
-        start_date: string | null;
-        end_date: string | null;
-        current_period_end: string | null;
-        created_at: string | null;
-      } | null;
+      if (activeErr) throw activeErr;
+      if (activeSub) return activeSub as SubscriptionRow;
+
+      // If no active sub, check for a valid trial that was incorrectly deactivated
+      const { data: trialSub, error: trialErr } = await (supabase
+        .from("subscriptions_safe" as any)
+        .select("*")
+        .eq("user_id", user!.id)
+        .eq("is_trial", true)
+        .gte("trial_ends_at", new Date().toISOString())
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle() as any);
+      if (trialErr) throw trialErr;
+      return (trialSub as SubscriptionRow) ?? null;
     },
     enabled: !!user,
   });
