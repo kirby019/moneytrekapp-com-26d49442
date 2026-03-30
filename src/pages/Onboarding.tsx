@@ -160,6 +160,39 @@ export default function Onboarding() {
 
         <AnimatePresence mode="wait">
           {step === 0 && (
+            <motion.div key="how-it-works" {...slideProps}>
+              <Card>
+                <CardContent className="p-6 sm:p-8 space-y-6">
+                  <div className="text-center">
+                    <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
+                      <Sparkles className="w-7 h-7 text-primary" />
+                    </div>
+                    <h1 className="font-heading text-2xl font-bold">How MoneyTrek Works</h1>
+                    <p className="text-muted-foreground text-sm mt-1">Five simple steps to financial freedom.</p>
+                  </div>
+                  <div className="space-y-2">
+                    {HOW_STEPS.map((s, i) => (
+                      <div key={s.title} className="flex items-center gap-3 p-2.5 rounded-lg border border-border">
+                        <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center flex-shrink-0">{i + 1}</span>
+                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <s.icon className="w-4 h-4 text-primary" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-sm">{s.title}</p>
+                          <p className="text-xs text-muted-foreground">{s.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <Button onClick={() => setStep(1)} className="w-full">
+                    Got It! Let's Go <ArrowRight className="ml-2 w-4 h-4" />
+                  </Button>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
+
+          {step === 1 && (
             <motion.div key="welcome" {...slideProps}>
               <Card>
                 <CardContent className="p-8 text-center space-y-6">
@@ -168,9 +201,9 @@ export default function Onboarding() {
                   </div>
                   <div>
                     <h1 className="font-heading text-2xl font-bold">Welcome to MoneyTrek! 🎉</h1>
-                    <p className="text-muted-foreground mt-2">Let's set up your debt-free journey in just a few steps.</p>
+                    <p className="text-muted-foreground mt-2">Let's set up your financial progress journey in just a few steps.</p>
                   </div>
-                  <Button onClick={() => setStep(1)} className="w-full">
+                  <Button onClick={() => setStep(2)} className="w-full">
                     Get Started <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </CardContent>
