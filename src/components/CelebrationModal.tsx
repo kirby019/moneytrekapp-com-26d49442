@@ -2,6 +2,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import Confetti from "@/components/Confetti";
+import { characters } from "@/lib/characters";
 
 export type CelebrationLevel = "toast" | "milestone" | "major" | "ultimate";
 
@@ -36,9 +37,16 @@ export default function CelebrationModal({
                   initial={{ scale: 0, rotate: -180 }}
                   animate={{ scale: 1, rotate: 0 }}
                   transition={{ type: "spring", stiffness: 200, damping: 12 }}
-                  className="text-6xl mb-2"
+                  className="mb-2 flex flex-col items-center gap-2"
                 >
-                  {emoji}
+                  <img
+                    src={level === "ultimate" ? characters.moneyTree.src : characters.theBuilder.src}
+                    alt="Celebration character"
+                    width={80}
+                    height={80}
+                    className="w-20 h-20 object-contain"
+                  />
+                  <span className="text-4xl">{emoji}</span>
                 </motion.div>
               )}
             </AnimatePresence>
