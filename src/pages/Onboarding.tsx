@@ -211,7 +211,7 @@ export default function Onboarding() {
             </motion.div>
           )}
 
-          {step === 1 && (
+          {step === 2 && (
             <motion.div key="reason" {...slideProps}>
               <Card>
                 <CardContent className="p-6 sm:p-8 space-y-6">
@@ -252,7 +252,7 @@ export default function Onboarding() {
                     )}
                   </div>
                   <Button
-                    onClick={() => setStep(2)}
+                    onClick={() => setStep(3)}
                     disabled={!reason || (reason === "custom" && !customReason)}
                     className="w-full"
                   >
@@ -263,7 +263,7 @@ export default function Onboarding() {
             </motion.div>
           )}
 
-          {step === 2 && (
+          {step === 3 && (
             <motion.div key="identity" {...slideProps}>
               <Card>
                 <CardContent className="p-6 sm:p-8 space-y-6">
@@ -286,7 +286,7 @@ export default function Onboarding() {
                       </button>
                     ))}
                   </div>
-                  <Button onClick={() => setStep(3)} disabled={!identity} className="w-full">
+                  <Button onClick={() => setStep(4)} disabled={!identity} className="w-full">
                     Continue <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </CardContent>
@@ -294,7 +294,7 @@ export default function Onboarding() {
             </motion.div>
           )}
 
-          {step === 3 && (
+          {step === 4 && (
             <motion.div key="journey-type" {...slideProps}>
               <Card>
                 <CardContent className="p-6 sm:p-8 space-y-6">
@@ -325,7 +325,7 @@ export default function Onboarding() {
                   <Button
                     onClick={async () => {
                       await saveUserData();
-                      setStep(4);
+                      setStep(5);
                     }}
                     disabled={!journeyType}
                     className="w-full"
@@ -337,7 +337,7 @@ export default function Onboarding() {
             </motion.div>
           )}
 
-          {step === 4 && (
+          {step === 5 && (
             <motion.div key="currency" {...slideProps}>
               <Card>
                 <CardContent className="p-6 sm:p-8 space-y-6">
