@@ -36,6 +36,21 @@ export const PRO_PRICING = {
   currency: "USD",
 } as const;
 
+type SubscriptionRow = {
+  id: string;
+  user_id: string;
+  plan: string | null;
+  status: string | null;
+  billing_cycle: string | null;
+  is_trial: boolean | null;
+  trial_ends_at: string | null;
+  is_founding_member: boolean | null;
+  start_date: string | null;
+  end_date: string | null;
+  current_period_end: string | null;
+  created_at: string | null;
+};
+
 export function useSubscription() {
   const { user } = useAuth();
 
