@@ -629,9 +629,9 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ==================== ROADMAP ==================== */}
+      {/* ==================== JOURNEY ==================== */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-20">
-        <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
+        <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-14">
           <span className="text-xs font-semibold text-accent uppercase tracking-wider">Your Journey</span>
           <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">The MoneyTrek Journey</h2>
           <p className="text-muted-foreground max-w-lg mx-auto text-sm">
@@ -639,13 +639,12 @@ export default function Landing() {
           </p>
         </motion.div>
 
-        {/* Timeline with characters */}
-        <div className="relative max-w-4xl mx-auto">
-          {/* Vertical line */}
-          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-border -translate-x-1/2" />
+        <div className="relative max-w-2xl mx-auto">
+          {/* Vertical path line */}
+          <div className="absolute left-6 sm:left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-accent via-primary to-muted" />
 
-          {/* Floating Streak Flame — motivational accent */}
-          <div className="hidden md:block absolute -right-4 top-1/2 -translate-y-1/2 z-10 opacity-70">
+          {/* Floating Streak Flame */}
+          <div className="hidden sm:block absolute -right-6 top-1/3 z-10 opacity-60">
             <TalkingCharacter
               character="streakFlame"
               context="streak"
@@ -655,117 +654,81 @@ export default function Landing() {
             />
           </div>
 
-          <div className="grid gap-10">
-            {roadmapStages.map((v, i) => {
-              const Icon = v.icon;
-              const statusColors = {
-                current: "bg-accent text-accent-foreground",
-                coming: "bg-primary text-primary-foreground",
-                future: "bg-muted text-muted-foreground",
-              };
-              const borderColors = {
-                current: "border-accent/40",
-                coming: "border-primary/30 border-dashed",
-                future: "border-border/60 border-dashed",
-              };
-
-              const characterMessages: Record<string, string> = {
-                moneyTree: "Your journey starts here!",
-                savingsPig: "Savings growing!",
-                theClimber: "Keep climbing!",
-                goalRocket: "Ready for launch!",
-                debtMonster: "Let's defeat debt!",
-                theBuilder: "You're building your future!",
-              };
-
-              const isLeft = i % 2 === 0;
-
+          <div className="space-y-12">
+            {journeySteps.map((step, i) => {
+              const Icon = step.icon;
               return (
                 <motion.div
-                  key={v.stage}
+                  key={step.title}
                   {...fadeUp}
-                  transition={{ delay: i * 0.12 }}
-                  className={`relative md:w-[calc(50%-1.5rem)] ${isLeft ? "md:mr-auto" : "md:ml-auto"}`}
+                  transition={{ delay: i * 0.15 }}
+                  className="relative pl-16 sm:pl-20"
                 >
-                  {/* Timeline dot */}
-                  <div className="hidden md:flex absolute top-6 w-4 h-4 rounded-full bg-card border-2 border-accent items-center justify-center"
-                    style={{ [isLeft ? "right" : "left"]: "-2.5rem" }}
-                  >
-                    <div className={`w-2 h-2 rounded-full ${v.status === "current" ? "bg-accent" : "bg-muted-foreground/40"}`} />
+                  {/* Path dot */}
+                  <div className="absolute left-4 sm:left-6 top-3 w-4 h-4 rounded-full bg-card border-2 border-accent flex items-center justify-center z-10">
+                    <div className="w-2 h-2 rounded-full bg-accent" />
                   </div>
 
-                  {/* Character placed on the opposite side of the card */}
-                  <div
-                    className={`hidden md:block absolute top-2 z-10 ${isLeft ? "-right-20" : "-left-20"}`}
-                    style={{ [isLeft ? "right" : "left"]: "-5.5rem" }}
-                  >
-                    <TalkingCharacter
-                      character={v.character}
-                      customMessage={characterMessages[v.character]}
-                      animation={v.status === "current" ? "bounce" : v.status === "coming" ? "wiggle" : "pulse"}
-                      size="sm"
-                      showBubble={true}
-                      bubblePosition={isLeft ? "right" : "right"}
-                      bubbleInterval={7000 + i * 1500}
-                    />
+                  {/* Step number circle */}
+                  <div className="absolute left-0 sm:left-1 top-0 w-3 h-3 flex items-center justify-center">
+                    <span className="text-[10px] font-bold text-muted-foreground">{i + 1}</span>
                   </div>
 
-                  {/* Secondary character (smaller, decorative) */}
-                  {v.secondaryCharacter && (
-                    <div
-                      className={`hidden lg:block absolute -bottom-3 z-10 ${isLeft ? "right-4" : "left-4"}`}
-                    >
-                      <TalkingCharacter
-                        character={v.secondaryCharacter}
-                        customMessage={characterMessages[v.secondaryCharacter]}
-                        animation="float"
-                        size="sm"
-                        showBubble={false}
-                        className="opacity-60"
-                      />
-                    </div>
-                  )}
-
-                  <Card className={`${borderColors[v.status]} overflow-hidden`}>
-                    <CardHeader className="pb-2">
-                      <div className="flex items-center justify-between gap-2 flex-wrap">
-                        <div className="flex items-center gap-2">
-                          <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${v.status === "current" ? "bg-accent/15" : "bg-muted"}`}>
-                            <Icon className={`w-4 h-4 ${v.status === "current" ? "text-accent" : "text-muted-foreground"}`} />
+                  {/* Content card */}
+                  <Card className="border-border/60 overflow-hidden hover:shadow-md transition-shadow">
+                    <CardContent className="p-5 sm:p-6">
+                      <div className="flex items-start gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+                              <Icon className="w-4 h-4 text-accent" />
+                            </div>
+                            <h3 className="font-heading font-bold text-base sm:text-lg">{step.title}</h3>
                           </div>
-                          <div>
-                            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{v.stage}</p>
-                            <CardTitle className="text-base">{v.title}</CardTitle>
-                          </div>
+                          <p className="text-sm text-muted-foreground leading-relaxed">{step.description}</p>
                         </div>
-                        <Badge className={`${statusColors[v.status]} text-[10px] px-2`}>{v.statusLabel}</Badge>
-                      </div>
-                      <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{v.description}</p>
-                    </CardHeader>
-                  </Card>
 
-                  {/* Mobile-only character */}
-                  <div className="flex md:hidden justify-center mt-3">
-                    <TalkingCharacter
-                      character={v.character}
-                      customMessage={characterMessages[v.character]}
-                      animation={v.status === "current" ? "bounce" : "pulse"}
-                      size="sm"
-                      showBubble={true}
-                      bubblePosition="top"
-                      bubbleInterval={7000 + i * 1500}
-                    />
-                  </div>
+                        {/* Character */}
+                        <div className="flex-shrink-0 flex flex-col items-center gap-2">
+                          <TalkingCharacter
+                            character={step.character}
+                            customMessage={step.characterMessage}
+                            animation={step.animation}
+                            size="md"
+                            showBubble={true}
+                            bubblePosition="top"
+                            bubbleInterval={7000 + i * 1500}
+                          />
+                          {step.secondaryCharacter && (
+                            <TalkingCharacter
+                              character={step.secondaryCharacter}
+                              customMessage={step.secondaryMessage}
+                              animation="float"
+                              size="sm"
+                              showBubble={false}
+                              className="opacity-70"
+                            />
+                          )}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </motion.div>
               );
             })}
           </div>
 
           {/* Journey summary */}
-          <motion.div {...fadeUp} transition={{ delay: 0.5 }} className="text-center mt-12">
-            <p className="text-sm text-muted-foreground font-medium">
-              Track → Save → Grow → Master
-            </p>
+          <motion.div {...fadeUp} transition={{ delay: 0.65 }} className="text-center mt-12">
+            <div className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground bg-muted/50 rounded-full px-5 py-2">
+              <span>Track</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+              <span>Save</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+              <span>Grow</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+              <span>Master</span>
+            </div>
           </motion.div>
         </div>
       </section>
