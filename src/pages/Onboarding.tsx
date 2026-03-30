@@ -354,7 +354,7 @@ export default function Onboarding() {
             </motion.div>
           )}
 
-          {step === 5 && (
+          {step === 6 && (
             <motion.div key="debt" {...slideProps}>
               <Card>
                 <CardContent className="p-6 sm:p-8 space-y-5">
@@ -393,7 +393,7 @@ export default function Onboarding() {
             </motion.div>
           )}
 
-          {step === 6 && (
+          {step === 7 && (
             <motion.div key="done" {...slideProps}>
               <Card>
                 <CardContent className="p-8 text-center space-y-6">
@@ -402,7 +402,7 @@ export default function Onboarding() {
                   </div>
                   <div>
                     <h2 className="font-heading text-2xl font-bold">You're All Set!</h2>
-                    <p className="text-muted-foreground mt-2">Your debt-free journey starts now.</p>
+                    <p className="text-muted-foreground mt-2">Your journey to financial freedom starts now.</p>
                   </div>
                   <Button onClick={() => navigate("/dashboard")} className="w-full">
                     Go to Dashboard <ArrowRight className="ml-2 w-4 h-4" />
