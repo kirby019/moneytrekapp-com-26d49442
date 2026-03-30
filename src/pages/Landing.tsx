@@ -581,10 +581,10 @@ export default function Landing() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-24 text-center relative z-10">
           <motion.div {...fadeUp} transition={{ duration: 0.6 }}>
             <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-extrabold text-primary-foreground mb-4">
-              Start Your 7-Day Free Pro Trial Today
+              Start Your Financial Freedom Journey Today
             </h2>
             <p className="text-primary-foreground/60 mb-3 max-w-md mx-auto text-sm sm:text-base">
-              Track your debt, monitor your progress, and build better financial habits with MoneyTrek. Small steps lead to big financial progress.
+              Track your debt, record payments, monitor your progress, and build better financial habits with MoneyTrek. Small steps lead to big financial freedom.
             </p>
             <p className="text-primary-foreground/40 mb-8 text-xs sm:text-sm">
               🏅 Sign up now to become a Founding Member and lock in $2.99/mo pricing for life.
@@ -615,7 +615,7 @@ export default function Landing() {
                 </div>
                 <span className="font-heading font-bold">MoneyTrek</span>
               </Link>
-              <p className="text-sm text-muted-foreground leading-relaxed">MoneyTrek is a financial progress tracker that helps you track debt, monitor progress, and build better financial habits on your journey to financial freedom.</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">MoneyTrek is a financial progress tracker that helps you track debt, record payments, monitor your progress, and build better financial habits on your journey to financial freedom.</p>
             </div>
             <div>
               <h4 className="font-heading font-semibold text-sm mb-3">Product</h4>
