@@ -40,18 +40,21 @@ function getQuoteIndex(): number {
 function MotivationCard() {
   const quote = useMemo(() => MOTIVATION_QUOTES[getQuoteIndex()], []);
   return (
-    <Card>
-      <CardContent className="p-6 flex items-start gap-4">
-        <TalkingCharacter
-          character="streakFlame"
-          context="weekly"
-          animation="wiggle"
-          size="md"
-          showBubble={false}
-        />
-        <div>
+    <Card className="overflow-visible">
+      <CardContent className="p-6 flex flex-col sm:flex-row items-start gap-4">
+        <div className="flex-1">
           <h2 className="font-heading font-semibold mb-2">Motivation</h2>
           <p className="text-muted-foreground text-sm italic">"{quote}"</p>
+        </div>
+        <div className="hidden sm:block shrink-0">
+          <TalkingCharacter
+            character="streakFlame"
+            context="weekly"
+            animation="wiggle"
+            size="lg"
+            showBubble={true}
+            bubblePosition="top"
+          />
         </div>
       </CardContent>
     </Card>

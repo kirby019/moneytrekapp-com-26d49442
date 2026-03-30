@@ -50,17 +50,8 @@ export default function AddDebt() {
 
   return (
     <AppLayout>
-      <div className="max-w-lg mx-auto">
-        <div className="flex items-center gap-3 mb-6">
-          <TalkingCharacter
-            character="debtMonster"
-            context="debt"
-            animation="wiggle"
-            size="md"
-            showBubble={false}
-          />
-          <h1 className="font-heading text-2xl font-bold">Add New Debt</h1>
-        </div>
+       <div className="max-w-lg mx-auto">
+        <h1 className="font-heading text-2xl font-bold mb-6">Add New Debt</h1>
         {!canAdd ? (
           <UpgradePrompt
             title="Debt Limit Reached"

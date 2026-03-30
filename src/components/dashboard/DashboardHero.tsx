@@ -16,7 +16,7 @@ export default function DashboardHero({ overallProgress, totalPaid, totalOrigina
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="p-6 rounded-2xl text-primary-foreground"
+      className="p-6 rounded-2xl text-primary-foreground overflow-visible"
       style={{ background: "var(--gradient-hero)" }}
     >
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
