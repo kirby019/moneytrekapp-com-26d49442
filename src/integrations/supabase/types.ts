@@ -479,7 +479,51 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      subscriptions_safe: {
+        Row: {
+          billing_cycle: string | null
+          created_at: string | null
+          current_period_end: string | null
+          end_date: string | null
+          id: string | null
+          is_founding_member: boolean | null
+          is_trial: boolean | null
+          plan: string | null
+          start_date: string | null
+          status: string | null
+          trial_ends_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          billing_cycle?: string | null
+          created_at?: string | null
+          current_period_end?: string | null
+          end_date?: string | null
+          id?: string | null
+          is_founding_member?: boolean | null
+          is_trial?: boolean | null
+          plan?: string | null
+          start_date?: string | null
+          status?: string | null
+          trial_ends_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          billing_cycle?: string | null
+          created_at?: string | null
+          current_period_end?: string | null
+          end_date?: string | null
+          id?: string | null
+          is_founding_member?: boolean | null
+          is_trial?: boolean | null
+          plan?: string | null
+          start_date?: string | null
+          status?: string | null
+          trial_ends_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never
