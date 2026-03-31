@@ -552,7 +552,7 @@ export default function Landing() {
       </section>
 
       {/* ==================== PRICING ==================== */}
-      <section className="bg-secondary/40 py-16 sm:py-20">
+      <section id="pricing" className="bg-secondary/40 py-16 sm:py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-12">
           <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
             <span className="text-xs font-semibold text-accent uppercase tracking-wider">Pricing</span>
