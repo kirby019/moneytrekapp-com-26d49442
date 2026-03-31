@@ -788,7 +788,7 @@ export default function Landing() {
                     <li><Link to="/login" className="hover:text-foreground transition-colors">Log In</Link></li>
                   </>
                 )}
-                <li><span className="cursor-default">Pricing</span></li>
+                <li><a href="#pricing" className="hover:text-foreground transition-colors">Pricing</a></li>
               </ul>
             </div>
             <div>
