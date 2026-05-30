@@ -28,18 +28,13 @@ jobs:
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
           VITE_SUPABASE_PROJECT_ID: ${{ secrets.VITE_SUPABASE_PROJECT_ID }}
 
-      - name: Install lftp
-        run: sudo apt-get install -y lftp
-
-      - name: Deploy via FTP
-        run: |
-          lftp -c "
-          set ftp:ssl-allow yes;
-          set ftp:ssl-force no;
-          set ftp:passive-mode yes;
-          set net:timeout 60;
-          set net:max-retries 3;
-          open ftp://${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}@153.92.10.88:21;
-          mirror -R --delete ./dist/ /public_html/;
-          bye
-          "
+      - name: Deploy via SSH
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          source: "./dist/*"
+          target: "/home/u386703577/domains/moneytrekapp.com/public_html"
+          strip_components: 1
