@@ -1,1 +1,0 @@
-ALTER TABLE public.debts ADD COLUMN IF NOT EXISTS debt_type text DEFAULT 'Credit Card';
