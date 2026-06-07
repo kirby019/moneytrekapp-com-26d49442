@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Sparkles } from "lucide-react";
+import { Sparkles, CheckCircle2, Shield, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -41,10 +41,23 @@ export default function Signup() {
   return (
     <div className="min-h-screen flex">
       <div className="hidden lg:flex flex-1 items-center justify-center" style={{ background: "var(--gradient-hero)" }}>
-        <div className="text-center text-primary-foreground p-12">
+        <div className="text-center text-primary-foreground p-12 max-w-sm">
           <Sparkles className="w-12 h-12 mx-auto mb-4 text-accent" />
           <h2 className="font-heading text-3xl font-bold mb-3">Start Your Journey</h2>
-          <p className="text-primary-foreground/70 max-w-sm">Take the first step toward becoming completely debt free.</p>
+          <p className="text-primary-foreground/70 mb-8">Take the first step toward financial freedom — track debt, savings, and your net worth all in one place.</p>
+          <div className="space-y-3 text-left">
+            {[
+              "7-day free Pro trial included",
+              "No credit card required",
+              "Secure & encrypted",
+              "Cancel anytime",
+            ].map(item => (
+              <div key={item} className="flex items-center gap-2.5 text-sm text-primary-foreground/80">
+                <CheckCircle2 className="w-4 h-4 text-accent flex-shrink-0" />
+                {item}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       <div className="flex-1 flex items-center justify-center p-8">
@@ -57,7 +70,7 @@ export default function Signup() {
               <span className="font-heading font-bold">MoneyTrek</span>
             </Link>
             <h1 className="font-heading text-2xl font-bold">Create account</h1>
-            <p className="text-sm text-muted-foreground mt-1">Start tracking your debts today</p>
+            <p className="text-sm text-muted-foreground mt-1">Track debt, savings &amp; net worth — free forever</p>
           </div>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
@@ -79,6 +92,20 @@ export default function Signup() {
           <p className="text-center text-sm text-muted-foreground">
             Already have an account? <Link to="/login" className="text-primary font-medium hover:underline">Log in</Link>
           </p>
+          <div className="border-t border-border pt-4 space-y-2">
+            <div className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
+              <Lock className="w-3 h-3" />
+              <span>Secured with encrypted authentication</span>
+            </div>
+            <div className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
+              <Shield className="w-3 h-3" />
+              <span>Your data is private and never shared</span>
+            </div>
+            <div className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
+              <CheckCircle2 className="w-3 h-3" />
+              <span>No credit card required · Cancel anytime</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
