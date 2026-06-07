@@ -85,6 +85,7 @@ const journeySteps = [
   },
 ];
 
+// Raw USD amounts for mockups
 const mockStatsRaw = [
   { label: "Total Debt", usd: 24500, change: "↓ 12%", icon: CreditCard },
   { label: "Total Savings", usd: 8400, change: "↑ 18%", icon: PiggyBank },
@@ -206,6 +207,7 @@ export default function Landing() {
       <section className="relative overflow-hidden" style={{ background: "var(--gradient-hero)" }}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-20 lg:py-28 relative z-10">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+            {/* Left - Copy */}
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-accent/20 text-accent mb-6">
                 <Zap className="w-3 h-3" /> 7-day free Pro trial — no credit card needed
@@ -245,6 +247,7 @@ export default function Landing() {
               </div>
             </motion.div>
 
+            {/* Right - Dashboard Mockup */}
             <motion.div
               initial={{ opacity: 0, y: 40, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -252,6 +255,7 @@ export default function Landing() {
               className="hidden lg:block"
             >
               <div className="bg-card/10 backdrop-blur-md rounded-2xl border border-primary-foreground/10 p-5 shadow-2xl">
+                {/* Mini stat cards */}
                 <div className="grid grid-cols-2 gap-3 mb-4">
                   {mockStats.map(s => (
                     <div key={s.label} className="bg-card/90 backdrop-blur rounded-xl p-3.5 border border-border/50">
@@ -264,6 +268,7 @@ export default function Landing() {
                     </div>
                   ))}
                 </div>
+                {/* Progress bar mockup */}
                 <div className="bg-card/90 backdrop-blur rounded-xl p-4 border border-border/50">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-xs font-semibold text-card-foreground">Financial Progress</span>
@@ -282,6 +287,7 @@ export default function Landing() {
                     <span>Savings: {fmt(8400)}</span>
                   </div>
                 </div>
+                {/* Mini dual chart mockup */}
                 <div className="grid grid-cols-2 gap-3 mt-3">
                   <div className="bg-card/90 backdrop-blur rounded-xl p-4 border border-border/50">
                     <span className="text-[10px] font-semibold text-card-foreground mb-2 block">Debt ↓</span>
@@ -316,6 +322,7 @@ export default function Landing() {
             </motion.div>
           </div>
         </div>
+        {/* Decorative */}
         <div className="absolute top-20 right-10 w-72 h-72 rounded-full bg-accent/10 blur-3xl" />
         <div className="absolute bottom-10 left-1/4 w-48 h-48 rounded-full bg-primary-foreground/5 blur-2xl" />
       </section>
@@ -329,6 +336,7 @@ export default function Landing() {
         </motion.div>
         <motion.div {...fadeUp} transition={{ duration: 0.6, delay: 0.15 }}>
           <div className="max-w-4xl mx-auto bg-card rounded-2xl border border-border shadow-xl overflow-hidden">
+            {/* Fake window bar */}
             <div className="flex items-center gap-2 px-4 py-3 bg-muted/50 border-b border-border">
               <div className="w-3 h-3 rounded-full bg-destructive/60" />
               <div className="w-3 h-3 rounded-full bg-warning/60" />
@@ -336,6 +344,7 @@ export default function Landing() {
               <span className="ml-3 text-xs text-muted-foreground">app.moneytrekapp.com/dashboard</span>
             </div>
             <div className="p-4 sm:p-6">
+              {/* Stats row */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
                 {mockStats.map(s => (
                   <div key={s.label} className="bg-secondary/50 rounded-xl p-3.5">
@@ -348,6 +357,7 @@ export default function Landing() {
                   </div>
                 ))}
               </div>
+              {/* Progress */}
               <div className="bg-secondary/50 rounded-xl p-4 mb-4">
                 <div className="flex justify-between mb-2">
                   <span className="text-sm font-semibold">Overall Financial Progress</span>
@@ -359,6 +369,7 @@ export default function Landing() {
                   <span>Goal: {fmt(0)} (debt free)</span>
                 </div>
               </div>
+              {/* Items list mockup — debts + savings */}
               <div className="space-y-2">
                 {mockItems.map(d => (
                   <div key={d.name} className="flex items-center gap-4 bg-secondary/30 rounded-lg p-3">
@@ -380,6 +391,7 @@ export default function Landing() {
                   </div>
                 ))}
               </div>
+              {/* Monthly summary row */}
               <div className="grid grid-cols-2 gap-3 mt-4">
                 <div className="bg-secondary/50 rounded-xl p-3.5 text-center">
                   <p className="text-[10px] text-muted-foreground mb-1">Paid This Month</p>
@@ -405,7 +417,12 @@ export default function Landing() {
           </motion.div>
           <div className="grid sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {steps.map((s, i) => (
-              <motion.div key={s.title} {...fadeUp} transition={{ delay: i * 0.15 }} className="relative text-center">
+              <motion.div
+                key={s.title}
+                {...fadeUp}
+                transition={{ delay: i * 0.15 }}
+                className="relative text-center"
+              >
                 <div className="w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center bg-primary text-primary-foreground shadow-lg shadow-primary/20">
                   <s.icon className="w-7 h-7" />
                 </div>
@@ -414,7 +431,9 @@ export default function Landing() {
                 </span>
                 <h3 className="font-heading font-semibold text-base mb-1.5">{s.title}</h3>
                 <p className="text-muted-foreground text-sm">{s.desc}</p>
-                {i < 2 && <ChevronRight className="hidden sm:block absolute top-8 -right-3 w-5 h-5 text-muted-foreground/30" />}
+                {i < 2 && (
+                  <ChevronRight className="hidden sm:block absolute top-8 -right-3 w-5 h-5 text-muted-foreground/30" />
+                )}
               </motion.div>
             ))}
           </div>
@@ -430,14 +449,20 @@ export default function Landing() {
         </motion.div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {features.map((f, i) => (
-            <motion.div key={f.title} {...fadeUp} transition={{ delay: i * 0.06 }}>
+            <motion.div
+              key={f.title}
+              {...fadeUp}
+              transition={{ delay: i * 0.06 }}
+            >
               <Card className="h-full hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 group">
                 <CardContent className="p-5">
                   <div className="flex items-center justify-between mb-4">
                     <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-primary/10 group-hover:bg-primary/20 transition-colors">
                       <f.icon className="w-5 h-5 text-primary" />
                     </div>
-                    {(f as any).pro && <Badge variant="secondary" className="text-[10px] px-1.5 py-0.5">Pro</Badge>}
+                    {(f as any).pro && (
+                      <Badge variant="secondary" className="text-[10px] px-1.5 py-0.5">Pro</Badge>
+                    )}
                   </div>
                   <h3 className="font-heading font-semibold text-sm mb-1.5">{f.title}</h3>
                   <p className="text-muted-foreground text-xs leading-relaxed">{f.desc}</p>
@@ -526,6 +551,65 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ==================== FAQ ==================== */}
+      <section className="bg-secondary/40 py-16 sm:py-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-12">
+          <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
+            <span className="text-xs font-semibold text-accent uppercase tracking-wider">FAQ</span>
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Frequently Asked Questions</h2>
+            <p className="text-muted-foreground max-w-md mx-auto text-sm">Everything you need to know before getting started.</p>
+          </motion.div>
+          <div className="max-w-2xl mx-auto space-y-4">
+            {[
+              {
+                q: "Do I need a credit card to sign up?",
+                a: "No. MoneyTrek is completely free to start. You only need a credit card if you choose to upgrade to Pro after your 7-day free trial.",
+              },
+              {
+                q: "What is Founding Member pricing?",
+                a: "Founding Members are early adopters who sign up while we're in early access. You lock in the $2.99/month rate for life — even when prices go up for new users.",
+              },
+              {
+                q: "Can I track savings goals, not just debts?",
+                a: "Yes! MoneyTrek tracks your full financial picture — debts, savings goals, and net worth. It's designed for anyone on a financial journey, not just people with debt.",
+              },
+              {
+                q: "How does the 7-day free Pro trial work?",
+                a: "When you sign up, you automatically get 7 days of full Pro access — no credit card needed. After 7 days, you stay on the free plan unless you choose to upgrade.",
+              },
+              {
+                q: "What currencies are supported?",
+                a: "Pro users can track finances in any currency with automatic exchange rate conversion. Free users track in a single currency.",
+              },
+              {
+                q: "Can I cancel anytime?",
+                a: "Yes. No contracts, no lock-in. Cancel your Pro subscription at any time from your account settings. You keep access until the end of your billing period.",
+              },
+              {
+                q: "Is my financial data secure?",
+                a: "Yes. All data is protected using row-level security — only you can see your data. We use encrypted authentication and never share your information with third parties.",
+              },
+              {
+                q: "I'm an OFW managing money across countries — can I use this?",
+                a: "Absolutely. MoneyTrek's multi-currency support (Pro) is built for people managing finances across different countries and currencies. Everything converts automatically.",
+              },
+            ].map((item, i) => (
+              <motion.div key={i} {...fadeUp} transition={{ delay: i * 0.05 }}>
+                <Card className="hover:shadow-md transition-shadow">
+                  <CardContent className="p-5">
+                    <h3 className="font-heading font-semibold text-sm mb-2 flex items-start gap-2">
+                      <span className="text-accent mt-0.5 flex-shrink-0">Q.</span>
+                      {item.q}
+                    </h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed pl-5">{item.a}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ==================== PRICING ==================== */}
       <section id="pricing" className="bg-secondary/40 py-16 sm:py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-12">
@@ -541,7 +625,9 @@ export default function Landing() {
             <span className="flex items-center gap-1.5"><Shield className="w-4 h-4 text-accent" /> Payments secured by Stripe</span>
             <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent" /> 30-day money-back guarantee</span>
           </div>
+
           <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+            {/* Free */}
             <motion.div {...fadeUp} transition={{ delay: 0.1 }}>
               <Card className="h-full border-2 border-primary/30 hover:shadow-lg transition-shadow">
                 <CardContent className="p-6">
@@ -564,6 +650,7 @@ export default function Landing() {
                 </CardContent>
               </Card>
             </motion.div>
+            {/* Pro */}
             <ProPricingCard />
           </div>
         </div>
@@ -578,7 +665,12 @@ export default function Landing() {
         </motion.div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-4 max-w-5xl mx-auto">
           {Object.entries(characters).map(([key, c], i) => (
-            <motion.div key={c.name} {...fadeUp} transition={{ delay: i * 0.08 }} className="text-center group">
+            <motion.div
+              key={c.name}
+              {...fadeUp}
+              transition={{ delay: i * 0.08 }}
+              className="text-center group"
+            >
               <Card className={`h-full hover:shadow-lg transition-all duration-300 ${c.comingSoon ? "opacity-60" : ""}`}>
                 <CardContent className="p-4">
                   <div className="mx-auto mb-3">
@@ -594,7 +686,9 @@ export default function Landing() {
                   </div>
                   <h3 className="font-heading font-semibold text-xs mb-0.5">{c.name}</h3>
                   <p className="text-muted-foreground text-[10px] leading-tight">{c.tagline}</p>
-                  {c.comingSoon && <Badge variant="secondary" className="mt-2 text-[9px] px-1.5 py-0">Coming Soon</Badge>}
+                  {c.comingSoon && (
+                    <Badge variant="secondary" className="mt-2 text-[9px] px-1.5 py-0">Coming Soon</Badge>
+                  )}
                 </CardContent>
               </Card>
             </motion.div>
@@ -611,22 +705,43 @@ export default function Landing() {
             From tracking your first payment to mastering your entire financial life — one step at a time.
           </p>
         </motion.div>
+
         <div className="relative max-w-2xl mx-auto">
+          {/* Vertical path line */}
           <div className="absolute left-6 sm:left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-accent via-primary to-muted" />
+
+          {/* Floating Streak Flame */}
           <div className="hidden sm:block absolute -right-6 top-1/3 z-10 opacity-60">
-            <TalkingCharacter character="streakFlame" context="streak" animation="float" size="sm" showBubble={false} />
+            <TalkingCharacter
+              character="streakFlame"
+              context="streak"
+              animation="float"
+              size="sm"
+              showBubble={false}
+            />
           </div>
+
           <div className="space-y-12">
             {journeySteps.map((step, i) => {
               const Icon = step.icon;
               return (
-                <motion.div key={step.title} {...fadeUp} transition={{ delay: i * 0.15 }} className="relative pl-16 sm:pl-20">
+                <motion.div
+                  key={step.title}
+                  {...fadeUp}
+                  transition={{ delay: i * 0.15 }}
+                  className="relative pl-16 sm:pl-20"
+                >
+                  {/* Path dot */}
                   <div className="absolute left-4 sm:left-6 top-3 w-4 h-4 rounded-full bg-card border-2 border-accent flex items-center justify-center z-10">
                     <div className="w-2 h-2 rounded-full bg-accent" />
                   </div>
+
+                  {/* Step number circle */}
                   <div className="absolute left-0 sm:left-1 top-0 w-3 h-3 flex items-center justify-center">
                     <span className="text-[10px] font-bold text-muted-foreground">{i + 1}</span>
                   </div>
+
+                  {/* Content card */}
                   <Card className="border-border/60 overflow-visible hover:shadow-md transition-shadow">
                     <CardContent className="p-5 sm:p-6">
                       <div className="flex items-start gap-4">
@@ -639,6 +754,8 @@ export default function Landing() {
                           </div>
                           <p className="text-sm text-muted-foreground leading-relaxed">{step.description}</p>
                         </div>
+
+                        {/* Character */}
                         <div className="flex-shrink-0 flex flex-col items-center gap-2 pt-6">
                           <TalkingCharacter
                             character={step.character}
@@ -667,6 +784,8 @@ export default function Landing() {
               );
             })}
           </div>
+
+          {/* Journey summary */}
           <motion.div {...fadeUp} transition={{ delay: 0.65 }} className="text-center mt-12">
             <div className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground bg-muted/50 rounded-full px-5 py-2">
               <span>Track</span>
@@ -720,7 +839,7 @@ export default function Landing() {
                 </div>
                 <span className="font-heading font-bold">MoneyTrek</span>
               </Link>
-              <p className="text-sm text-muted-foreground leading-relaxed">MoneyTrek is a debt-free journey tracker that helps you track every debt, record every payment, and build better financial habits on your journey to financial freedom.</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">MoneyTrek is a financial progress tracker that helps you track debt, record payments, monitor your progress, and build better financial habits on your journey to financial freedom.</p>
             </div>
             <div>
               <h4 className="font-heading font-semibold text-sm mb-3">Product</h4>
