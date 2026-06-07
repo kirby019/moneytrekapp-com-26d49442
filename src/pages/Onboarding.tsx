@@ -5,7 +5,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Sparkles, ArrowRight, Check, Heart, UserCheck, Zap, CreditCard, DollarSign, BarChart3, Trophy, PartyPopper } from "lucide-react";
+import {
+  Sparkles, ArrowRight, Check, Heart, Zap, CreditCard,
+  DollarSign, BarChart3, Trophy, PiggyBank, TrendingUp,
+} from "lucide-react";
 import CurrencySelector from "@/components/CurrencySelector";
 import TalkingCharacter from "@/components/TalkingCharacter";
 import { useUpdateProfile } from "@/hooks/useProfile";
@@ -16,34 +19,34 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
 
-const steps = ["How It Works", "Welcome", "Why", "Identity", "Journey", "Currency", "First Debt", "Done"];
+const steps = ["How It Works", "Welcome", "Goal", "Identity", "Journey", "Currency", "First Debt", "Done"];
 
 const HOW_STEPS = [
-  { icon: CreditCard, title: "Add Your Debts", desc: "Enter your debts with balances and interest rates." },
-  { icon: DollarSign, title: "Record Your Payments", desc: "Log payments and watch balances update automatically." },
-  { icon: BarChart3, title: "Track Your Progress", desc: "See charts, stats, and your overall financial progress." },
-  { icon: Trophy, title: "Reach Milestones", desc: "Earn badges at 10%, 25%, 50%, 75%, and 100%." },
-  { icon: PartyPopper, title: "Become Debt Free", desc: "Complete your journey to financial freedom!" },
+  { icon: CreditCard, title: "Track Your Debts", desc: "Add debts with balances and interest rates to see everything in one place." },
+  { icon: DollarSign, title: "Record Your Payments", desc: "Log payments and watch your balances update automatically." },
+  { icon: PiggyBank, title: "Build Your Savings", desc: "Set savings goals and track your progress toward financial security." },
+  { icon: BarChart3, title: "Monitor Your Progress", desc: "See charts, net worth stats, streaks, and your full financial picture." },
+  { icon: Trophy, title: "Reach Financial Freedom", desc: "Earn milestones, celebrate wins, and achieve your financial goals." },
 ];
 
-const REASONS = [
-  { id: "freedom", label: "Financial Freedom", desc: "I want to live without debt stress" },
-  { id: "stress", label: "Reduce Stress", desc: "Debt is causing me anxiety" },
-  { id: "goal", label: "Save for a Goal", desc: "I want to save for something important" },
-  { id: "example", label: "Set a Good Example", desc: "I want to model good financial habits" },
+const GOALS = [
+  { id: "pay-debt", label: "Pay Off Debt", desc: "I want to eliminate my debt and become debt-free" },
+  { id: "build-savings", label: "Build Savings", desc: "I want to grow my emergency fund and save for goals" },
+  { id: "grow-networth", label: "Grow Net Worth", desc: "I want to track my assets and build long-term wealth" },
+  { id: "reduce-stress", label: "Reduce Financial Stress", desc: "I want to feel in control and stop worrying about money" },
 ];
 
 const IDENTITIES = [
   { id: "debt-destroyer", label: "Debt Destroyer", desc: "I attack debt aggressively" },
-  { id: "freedom-fighter", label: "Freedom Fighter", desc: "I'm fighting for financial independence" },
-  { id: "money-master", label: "Money Master", desc: "I'm taking control of my finances" },
+  { id: "wealth-builder", label: "Wealth Builder", desc: "I'm building long-term financial freedom" },
+  { id: "smart-saver", label: "Smart Saver", desc: "I grow my savings strategically" },
   { id: "budget-boss", label: "Budget Boss", desc: "I manage every dollar with purpose" },
 ];
 
 const JOURNEY_TYPES = [
-  { id: "aggressive", label: "Aggressive", icon: Zap, desc: "Pay off debt as fast as possible" },
-  { id: "steady", label: "Steady", icon: ArrowRight, desc: "Balanced approach with consistent payments" },
-  { id: "gentle", label: "Gentle", icon: Heart, desc: "Minimum payments, slow and steady wins" },
+  { id: "aggressive", label: "Bold", icon: Zap, desc: "Move fast — pay off debt and save aggressively" },
+  { id: "steady", label: "Balanced", icon: ArrowRight, desc: "Steady, consistent progress toward my goals" },
+  { id: "gentle", label: "Gentle", icon: Heart, desc: "Slow and steady — build at my own pace" },
 ];
 
 export default function Onboarding() {
@@ -53,8 +56,8 @@ export default function Onboarding() {
   const updateProfile = useUpdateProfile();
   const addDebt = useAddDebt();
   const [step, setStep] = useState(0);
-  const [reason, setReason] = useState("");
-  const [customReason, setCustomReason] = useState("");
+  const [goal, setGoal] = useState("");
+  const [customGoal, setCustomGoal] = useState("");
   const [identity, setIdentity] = useState("");
   const [journeyType, setJourneyType] = useState("");
   const [currency, setCurrency] = useState("USD");
@@ -67,7 +70,7 @@ export default function Onboarding() {
       await updateProfile.mutateAsync({ default_currency: currency });
       setStep(6);
     } catch {
-      toast.error("Failed to save currency");
+      toast.error("Failed to save currency. Please try again.");
     } finally {
       setSaving(false);
     }
@@ -76,7 +79,7 @@ export default function Onboarding() {
   const saveUserData = async () => {
     await supabase.from("users").upsert({
       id: user!.id,
-      reason: reason === "custom" ? customReason : reason,
+      reason: goal === "custom" ? customGoal : goal,
       identity,
       journey_type: journeyType,
     }, { onConflict: "id" });
@@ -118,7 +121,7 @@ export default function Onboarding() {
       await saveJourneyBaseline();
       setStep(7);
     } catch {
-      toast.error("Failed to add debt");
+      toast.error("Failed to add debt. Please try again.");
     } finally {
       setSaving(false);
     }
@@ -130,7 +133,7 @@ export default function Onboarding() {
       await saveJourneyBaseline();
       setStep(7);
     } catch {
-      toast.error("Something went wrong");
+      toast.error("Something went wrong. Please try again.");
     } finally {
       setSaving(false);
     }
@@ -147,7 +150,7 @@ export default function Onboarding() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Progress */}
+        {/* Progress dots */}
         <div className="flex items-center justify-center gap-2 mb-8">
           {steps.map((_, i) => (
             <div
@@ -160,6 +163,8 @@ export default function Onboarding() {
         </div>
 
         <AnimatePresence mode="wait">
+
+          {/* Step 0 — How It Works */}
           {step === 0 && (
             <motion.div key="how-it-works" {...slideProps}>
               <Card>
@@ -175,12 +180,16 @@ export default function Onboarding() {
                       className="mx-auto mb-3"
                     />
                     <h1 className="font-heading text-2xl font-bold">How MoneyTrek Works</h1>
-                    <p className="text-muted-foreground text-sm mt-1">Five simple steps to financial freedom.</p>
+                    <p className="text-muted-foreground text-sm mt-1">
+                      Your complete financial progress tracker in 5 steps.
+                    </p>
                   </div>
                   <div className="space-y-2">
                     {HOW_STEPS.map((s, i) => (
                       <div key={s.title} className="flex items-center gap-3 p-2.5 rounded-lg border border-border">
-                        <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center flex-shrink-0">{i + 1}</span>
+                        <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center flex-shrink-0">
+                          {i + 1}
+                        </span>
                         <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
                           <s.icon className="w-4 h-4 text-primary" />
                         </div>
@@ -199,6 +208,7 @@ export default function Onboarding() {
             </motion.div>
           )}
 
+          {/* Step 1 — Welcome */}
           {step === 1 && (
             <motion.div key="welcome" {...slideProps}>
               <Card>
@@ -208,59 +218,68 @@ export default function Onboarding() {
                   </div>
                   <div>
                     <h1 className="font-heading text-2xl font-bold">Welcome to MoneyTrek! 🎉</h1>
-                    <p className="text-muted-foreground mt-2">Let's set up your financial progress journey in just a few steps.</p>
+                    <p className="text-muted-foreground mt-2">
+                      Let's set up your financial journey in just a few steps. This will only take 2 minutes.
+                    </p>
                   </div>
                   <Button onClick={() => setStep(2)} className="w-full">
-                    Get Started <ArrowRight className="ml-2 w-4 h-4" />
+                    Let's Go <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </CardContent>
               </Card>
             </motion.div>
           )}
 
+          {/* Step 2 — Financial Goal */}
           {step === 2 && (
-            <motion.div key="reason" {...slideProps}>
+            <motion.div key="goal" {...slideProps}>
               <Card>
                 <CardContent className="p-6 sm:p-8 space-y-6">
                   <div>
-                    <h2 className="font-heading text-xl font-bold">Why do you want to be debt free?</h2>
-                    <p className="text-muted-foreground text-sm mt-1">This helps us personalize your experience.</p>
+                    <h2 className="font-heading text-xl font-bold">What's your main financial goal?</h2>
+                    <p className="text-muted-foreground text-sm mt-1">
+                      This helps us personalize your experience.
+                    </p>
                   </div>
                   <div className="space-y-2">
-                    {REASONS.map(r => (
+                    {GOALS.map((g) => (
                       <button
-                        key={r.id}
-                        onClick={() => setReason(r.id)}
+                        key={g.id}
+                        onClick={() => setGoal(g.id)}
                         className={cn(
                           "w-full text-left p-3 rounded-lg border transition-all",
-                          reason === r.id ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-border hover:border-primary/50"
+                          goal === g.id
+                            ? "border-primary bg-primary/5 ring-1 ring-primary"
+                            : "border-border hover:border-primary/50"
                         )}
                       >
-                        <p className="font-medium text-sm">{r.label}</p>
-                        <p className="text-xs text-muted-foreground">{r.desc}</p>
+                        <p className="font-medium text-sm">{g.label}</p>
+                        <p className="text-xs text-muted-foreground">{g.desc}</p>
                       </button>
                     ))}
                     <button
-                      onClick={() => setReason("custom")}
+                      onClick={() => setGoal("custom")}
                       className={cn(
                         "w-full text-left p-3 rounded-lg border transition-all",
-                        reason === "custom" ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-border hover:border-primary/50"
+                        goal === "custom"
+                          ? "border-primary bg-primary/5 ring-1 ring-primary"
+                          : "border-border hover:border-primary/50"
                       )}
                     >
                       <p className="font-medium text-sm">Other</p>
                     </button>
-                    {reason === "custom" && (
+                    {goal === "custom" && (
                       <Input
-                        placeholder="Tell us your reason..."
-                        value={customReason}
-                        onChange={e => setCustomReason(e.target.value)}
+                        placeholder="Tell us your goal…"
+                        value={customGoal}
+                        onChange={(e) => setCustomGoal(e.target.value)}
                         className="mt-2"
                       />
                     )}
                   </div>
                   <Button
                     onClick={() => setStep(3)}
-                    disabled={!reason || (reason === "custom" && !customReason)}
+                    disabled={!goal || (goal === "custom" && !customGoal)}
                     className="w-full"
                   >
                     Continue <ArrowRight className="ml-2 w-4 h-4" />
@@ -270,6 +289,7 @@ export default function Onboarding() {
             </motion.div>
           )}
 
+          {/* Step 3 — Identity */}
           {step === 3 && (
             <motion.div key="identity" {...slideProps}>
               <Card>
@@ -279,13 +299,15 @@ export default function Onboarding() {
                     <p className="text-muted-foreground text-sm mt-1">Choose the identity that resonates with you.</p>
                   </div>
                   <div className="space-y-2">
-                    {IDENTITIES.map(id => (
+                    {IDENTITIES.map((id) => (
                       <button
                         key={id.id}
                         onClick={() => setIdentity(id.id)}
                         className={cn(
                           "w-full text-left p-3 rounded-lg border transition-all",
-                          identity === id.id ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-border hover:border-primary/50"
+                          identity === id.id
+                            ? "border-primary bg-primary/5 ring-1 ring-primary"
+                            : "border-border hover:border-primary/50"
                         )}
                       >
                         <p className="font-medium text-sm">{id.label}</p>
@@ -301,22 +323,25 @@ export default function Onboarding() {
             </motion.div>
           )}
 
+          {/* Step 4 — Journey Type */}
           {step === 4 && (
             <motion.div key="journey-type" {...slideProps}>
               <Card>
                 <CardContent className="p-6 sm:p-8 space-y-6">
                   <div>
                     <h2 className="font-heading text-xl font-bold">Choose your pace</h2>
-                    <p className="text-muted-foreground text-sm mt-1">How do you want to tackle your debt?</p>
+                    <p className="text-muted-foreground text-sm mt-1">How do you want to approach your financial goals?</p>
                   </div>
                   <div className="space-y-2">
-                    {JOURNEY_TYPES.map(jt => (
+                    {JOURNEY_TYPES.map((jt) => (
                       <button
                         key={jt.id}
                         onClick={() => setJourneyType(jt.id)}
                         className={cn(
                           "w-full text-left p-4 rounded-lg border transition-all flex items-center gap-3",
-                          journeyType === jt.id ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-border hover:border-primary/50"
+                          journeyType === jt.id
+                            ? "border-primary bg-primary/5 ring-1 ring-primary"
+                            : "border-border hover:border-primary/50"
                         )}
                       >
                         <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
@@ -344,13 +369,16 @@ export default function Onboarding() {
             </motion.div>
           )}
 
+          {/* Step 5 — Currency */}
           {step === 5 && (
             <motion.div key="currency" {...slideProps}>
               <Card>
                 <CardContent className="p-6 sm:p-8 space-y-6">
                   <div>
                     <h2 className="font-heading text-xl font-bold">Choose Your Currency</h2>
-                    <p className="text-muted-foreground text-sm mt-1">This will be your default currency for tracking debts.</p>
+                    <p className="text-muted-foreground text-sm mt-1">
+                      This will be your default currency for tracking debts and savings.
+                    </p>
                   </div>
                   <CurrencySelector value={currency} onValueChange={setCurrency} />
                   <Button onClick={handleCurrencySave} disabled={saving} className="w-full">
@@ -361,45 +389,76 @@ export default function Onboarding() {
             </motion.div>
           )}
 
+          {/* Step 6 — Add First Debt */}
           {step === 6 && (
             <motion.div key="debt" {...slideProps}>
               <Card>
                 <CardContent className="p-6 sm:p-8 space-y-5">
                   <div>
                     <h2 className="font-heading text-xl font-bold">Add Your First Debt</h2>
-                    <p className="text-muted-foreground text-sm mt-1">Start by adding one debt. You can add more later.</p>
+                    <p className="text-muted-foreground text-sm mt-1">
+                      Start with one debt — you can add more, plus savings goals, later.
+                    </p>
                   </div>
                   <div className="space-y-4">
                     <div className="space-y-2">
                       <Label>Debt Name</Label>
-                      <Input placeholder="e.g., Chase Visa" value={debt.name} onChange={e => setDebt({ ...debt, name: e.target.value })} />
+                      <Input
+                        placeholder="e.g., Credit Card, Car Loan"
+                        value={debt.name}
+                        onChange={(e) => setDebt({ ...debt, name: e.target.value })}
+                      />
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-2">
-                        <Label>Balance</Label>
-                        <Input type="number" step="0.01" placeholder="0.00" value={debt.balance} onChange={e => setDebt({ ...debt, balance: e.target.value })} />
+                        <Label>Balance ({currency})</Label>
+                        <Input
+                          type="number"
+                          step="0.01"
+                          placeholder="0.00"
+                          value={debt.balance}
+                          onChange={(e) => setDebt({ ...debt, balance: e.target.value })}
+                        />
                       </div>
                       <div className="space-y-2">
                         <Label>Interest Rate (%)</Label>
-                        <Input type="number" step="0.01" placeholder="0.00" value={debt.rate} onChange={e => setDebt({ ...debt, rate: e.target.value })} />
+                        <Input
+                          type="number"
+                          step="0.01"
+                          placeholder="0.00"
+                          value={debt.rate}
+                          onChange={(e) => setDebt({ ...debt, rate: e.target.value })}
+                        />
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label>Minimum Payment</Label>
-                      <Input type="number" step="0.01" placeholder="0.00" value={debt.minPayment} onChange={e => setDebt({ ...debt, minPayment: e.target.value })} />
+                      <Label>Minimum Monthly Payment ({currency})</Label>
+                      <Input
+                        type="number"
+                        step="0.01"
+                        placeholder="0.00"
+                        value={debt.minPayment}
+                        onChange={(e) => setDebt({ ...debt, minPayment: e.target.value })}
+                      />
                     </div>
                   </div>
                   <div className="flex gap-3">
                     <Button onClick={handleDebtSave} disabled={saving || !canAddDebt} className="flex-1">
                       {saving ? "Adding…" : "Add Debt"}
                     </Button>
-                    <Button variant="ghost" onClick={handleSkipDebt} disabled={saving}>Skip</Button>
+                    <Button variant="ghost" onClick={handleSkipDebt} disabled={saving}>
+                      Skip
+                    </Button>
                   </div>
+                  <p className="text-xs text-muted-foreground text-center">
+                    No debts? That's great! You can still use MoneyTrek to track savings and net worth.
+                  </p>
                 </CardContent>
               </Card>
             </motion.div>
           )}
 
+          {/* Step 7 — Done */}
           {step === 7 && (
             <motion.div key="done" {...slideProps}>
               <Card>
@@ -408,16 +467,19 @@ export default function Onboarding() {
                     <Check className="w-8 h-8 text-primary" />
                   </div>
                   <div>
-                    <h2 className="font-heading text-2xl font-bold">You're All Set!</h2>
-                    <p className="text-muted-foreground mt-2">Your journey to financial freedom starts now.</p>
+                    <h2 className="font-heading text-2xl font-bold">You're All Set! 🚀</h2>
+                    <p className="text-muted-foreground mt-2">
+                      Your financial journey starts now. Track your progress, build good habits, and celebrate every win.
+                    </p>
                   </div>
-                  <Button onClick={() => navigate("/dashboard")} className="w-full">
+                  <Button onClick={() => navigate("/dashboard")} className="w-full" size="lg">
                     Go to Dashboard <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </CardContent>
               </Card>
             </motion.div>
           )}
+
         </AnimatePresence>
       </div>
     </div>
