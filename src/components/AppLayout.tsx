@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, CreditCard, Plus, History, Target, Map, Trophy, CalendarCheck,
   Sparkles, User, Settings, Crown, LogOut, Menu, X, ChevronRight, BarChart3, Lock,
-  DollarSign, PiggyBank
+  DollarSign, PiggyBank, Landmark
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -18,6 +18,7 @@ const navItems = [
   { label: "Payment History", icon: History, path: "/payment-history", proOnly: false },
   { label: "Savings", icon: PiggyBank, path: "/savings", proOnly: false },
   { label: "Goals", icon: Target, path: "/goals", proOnly: false },
+  { label: "Net Worth", icon: Landmark, path: "/net-worth", proOnly: false },
   { label: "Analytics", icon: BarChart3, path: "/analytics", proOnly: true },
   { label: "Strategy", icon: Target, path: "/strategy", proOnly: false },
   { label: "Journey", icon: Map, path: "/journey", proOnly: false },
