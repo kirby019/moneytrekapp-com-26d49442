@@ -81,7 +81,7 @@ Deno.serve(async (req) => {
               },
             },
             product_options: {
-              redirect_url: `${req.headers.get("origin") || "https://moneytrekapp-com.lovable.app"}/subscription?success=true`,
+              redirect_url: `${req.headers.get("origin") || "https://moneytrekapp.com"}/subscription?success=true`,
             },
           },
           relationships: {
