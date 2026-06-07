@@ -28,6 +28,7 @@ import Subscription from "./pages/Subscription";
 import Onboarding from "./pages/Onboarding";
 import HowItWorks from "./pages/HowItWorks";
 import Analytics from "./pages/Analytics";
+import Savings from "./pages/Savings";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import RefundPolicy from "./pages/RefundPolicy";
@@ -69,6 +70,7 @@ const App = () => (
               <Route path="/settings" element={<ProtectedRoute><AppSettings /></ProtectedRoute>} />
               <Route path="/subscription" element={<ProtectedRoute><Subscription /></ProtectedRoute>} />
               <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+              <Route path="/savings" element={<ProtectedRoute><Savings /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </DemoProvider>
