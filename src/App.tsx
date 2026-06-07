@@ -28,11 +28,12 @@ import Subscription from "./pages/Subscription";
 import Onboarding from "./pages/Onboarding";
 import HowItWorks from "./pages/HowItWorks";
 import Analytics from "./pages/Analytics";
-import Savings from "./pages/Savings";
-import Goals from "./pages/Goals";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import RefundPolicy from "./pages/RefundPolicy";
+import Savings from "./pages/Savings";
+import Goals from "./pages/Goals";
+import NetWorth from "./pages/NetWorth";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -73,6 +74,7 @@ const App = () => (
               <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
               <Route path="/savings" element={<ProtectedRoute><Savings /></ProtectedRoute>} />
               <Route path="/goals" element={<ProtectedRoute><Goals /></ProtectedRoute>} />
+              <Route path="/net-worth" element={<ProtectedRoute><NetWorth /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </DemoProvider>
