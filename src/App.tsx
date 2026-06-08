@@ -34,6 +34,8 @@ import RefundPolicy from "./pages/RefundPolicy";
 import Savings from "./pages/Savings";
 import Goals from "./pages/Goals";
 import NetWorth from "./pages/NetWorth";
+import FAQ from "./pages/FAQ";
+import Features from "./pages/Features";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -47,16 +49,23 @@ const App = () => (
         <AuthProvider>
           <DemoProvider>
             <Routes>
+              {/* Public marketing pages */}
               <Route path="/" element={<Landing />} />
+              <Route path="/features" element={<Features />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/how-it-works" element={<HowItWorks />} />
+              <Route path="/demo" element={<DemoDashboard />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/refund-policy" element={<RefundPolicy />} />
+              <Route path="/terms" element={<Terms />} />
+
+              {/* Auth */}
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="/privacy" element={<Privacy />} />
-              <Route path="/refund-policy" element={<RefundPolicy />} />
-              <Route path="/terms" element={<Terms />} />
-              <Route path="/demo" element={<DemoDashboard />} />
-              <Route path="/how-it-works" element={<HowItWorks />} />
+
+              {/* Protected app routes */}
               <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="/debts" element={<ProtectedRoute><Debts /></ProtectedRoute>} />
