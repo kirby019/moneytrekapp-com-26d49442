@@ -11,43 +11,35 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm install
+      - run: npm install
 
-      - name: Build project
-        run: npm run build
+      - run: npm run build
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
           VITE_SUPABASE_PROJECT_ID: ${{ secrets.VITE_SUPABASE_PROJECT_ID }}
 
-      - name: Install lftp
-        run: sudo apt-get install -y lftp
+      - run: sudo apt-get install -y lftp
 
-      - name: Deploy to Hostinger via lftp
+      - name: Deploy to Hostinger via FTP
         timeout-minutes: 8
         run: |
           lftp -c "
             set net:timeout 30;
             set net:max-retries 3;
             set net:reconnect-interval-base 5;
-            set ftp:ssl-force true;
-            set ftp:ssl-protect-data true;
-            set ftps:initial-prot '';
-            set ssl:verify-certificate false;
+            set ftp:ssl-allow false;
             set ftp:use-mlsd false;
             set ftp:use-mdtm false;
             set ftp:use-size false;
-            open -u '${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }}' ftps://${{ secrets.FTP_SERVER }};
-            mirror --reverse --parallel=2 --verbose ./dist/ /public_html/;
+            open -u '${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }}' ftp://${{ secrets.FTP_SERVER }};
+            mirror --reverse --delete --parallel=2 --verbose ./dist/ /public_html/;
             quit
           "
