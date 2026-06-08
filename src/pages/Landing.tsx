@@ -118,7 +118,9 @@ function ProPricingCard() {
               or {yearlyPrice}/year (save 44%)
             </p>
             {showLocal && (
-              <p className="text-xs text-muted-foreground mt-0.5">≈ $2.99/mo or $19.99/yr USD</p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                approximately $2.99/mo or $19.99/yr USD
+              </p>
             )}
           </div>
           <div className="bg-accent/10 border border-accent/20 rounded-lg p-3 mb-4">
@@ -162,7 +164,7 @@ export default function Landing() {
 
   const mockStats = mockStatsRaw.map(s => ({
     ...s,
-    value: s.usd != null ? (s.usd < 0 ? `−${fmt(Math.abs(s.usd))}` : fmt(s.usd)) : s.value!,
+    value: s.usd != null ? (s.usd < 0 ? `-${fmt(Math.abs(s.usd))}` : fmt(s.usd)) : s.value!,
     change: s.change!,
   }));
 
@@ -174,7 +176,7 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-background">
 
-      {/* ==================== NAV ==================== */}
+      {/* NAV */}
       <nav className="flex items-center justify-between px-4 sm:px-6 lg:px-12 py-4 bg-card/80 backdrop-blur-sm border-b border-border sticky top-0 z-30">
         <Link to="/" className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "var(--gradient-primary)" }}>
@@ -186,7 +188,9 @@ export default function Landing() {
           {user ? (
             <>
               <Button size="sm" asChild><Link to="/dashboard">Dashboard</Link></Button>
-              <Button variant="ghost" size="sm" asChild><Link to="/demo"><Eye className="w-4 h-4 mr-1" /> Demo</Link></Button>
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/demo"><Eye className="w-4 h-4 mr-1" /> Demo</Link>
+              </Button>
               <Button variant="ghost" size="sm" onClick={() => signOut()}>
                 <LogOut className="w-4 h-4 mr-1" /> Sign Out
               </Button>
@@ -195,7 +199,9 @@ export default function Landing() {
             <>
               <Button variant="ghost" size="sm" asChild><Link to="/login">Dashboard</Link></Button>
               <Button variant="ghost" size="sm" asChild><a href="#pricing">Pricing</a></Button>
-              <Button variant="ghost" size="sm" asChild><Link to="/demo"><Eye className="w-4 h-4 mr-1" /> Demo</Link></Button>
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/demo"><Eye className="w-4 h-4 mr-1" /> Demo</Link>
+              </Button>
               <Button variant="ghost" size="sm" asChild><Link to="/login">Log In</Link></Button>
               <Button size="sm" asChild><Link to="/signup">Get Started</Link></Button>
             </>
@@ -203,7 +209,7 @@ export default function Landing() {
         </div>
       </nav>
 
-      {/* ==================== HERO ==================== */}
+      {/* HERO */}
       <section className="relative overflow-hidden" style={{ background: "var(--gradient-hero)" }}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-20 lg:py-28 relative z-10">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
@@ -212,7 +218,8 @@ export default function Landing() {
                 <Zap className="w-3 h-3" /> 7-day free Pro trial — no credit card needed
               </span>
               <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold leading-[1.1] mb-5 text-primary-foreground">
-                Debt. Savings. Net Worth. <span className="text-accent">Your Complete Financial Journey.</span>
+                Debt. Savings. Net Worth.{" "}
+                <span className="text-accent">Your Complete Financial Journey.</span>
               </h1>
               <p className="text-base sm:text-lg text-primary-foreground/70 mb-8 max-w-lg leading-relaxed">
                 MoneyTrek tracks your entire financial life — pay off debt, grow your savings, set goals, and watch your net worth climb. One beautiful app for every step of your money journey.
@@ -242,11 +249,10 @@ export default function Landing() {
               <div className="flex items-center gap-6 mt-8 text-primary-foreground/50 text-sm flex-wrap">
                 <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent" /> 7-day Pro trial included</span>
                 <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent" /> No credit card required</span>
-                <span className="flex items-center gap-1.5 hidden sm:flex"><CheckCircle2 className="w-4 h-4 text-accent" /> Lock in founding member pricing</span>
+                <span className="hidden sm:flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent" /> Lock in founding member pricing</span>
               </div>
             </motion.div>
 
-            {/* Right - Dashboard Mockup */}
             <motion.div
               initial={{ opacity: 0, y: 40, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -286,7 +292,7 @@ export default function Landing() {
                 </div>
                 <div className="grid grid-cols-2 gap-3 mt-3">
                   <div className="bg-card/90 backdrop-blur rounded-xl p-4 border border-border/50">
-                    <span className="text-[10px] font-semibold text-card-foreground mb-2 block">Debt ↓</span>
+                    <span className="text-[10px] font-semibold text-card-foreground mb-2 block">Debt down</span>
                     <div className="flex items-end gap-1 h-12">
                       {[95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 42].map((h, i) => (
                         <motion.div
@@ -300,7 +306,7 @@ export default function Landing() {
                     </div>
                   </div>
                   <div className="bg-card/90 backdrop-blur rounded-xl p-4 border border-border/50">
-                    <span className="text-[10px] font-semibold text-card-foreground mb-2 block">Savings ↑</span>
+                    <span className="text-[10px] font-semibold text-card-foreground mb-2 block">Savings up</span>
                     <div className="flex items-end gap-1 h-12">
                       {[8, 12, 18, 22, 28, 32, 38, 42, 48, 55, 62, 68].map((h, i) => (
                         <motion.div
@@ -322,7 +328,7 @@ export default function Landing() {
         <div className="absolute bottom-10 left-1/4 w-48 h-48 rounded-full bg-primary-foreground/5 blur-2xl" />
       </section>
 
-      {/* ==================== PILLARS STRIP ==================== */}
+      {/* PILLARS STRIP */}
       <section className="border-y border-border bg-secondary/30 py-5">
         <div className="container mx-auto px-4 sm:px-6 lg:px-12">
           <div className="flex flex-wrap justify-center gap-6 sm:gap-10 text-sm text-muted-foreground">
@@ -335,7 +341,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ==================== DASHBOARD PREVIEW ==================== */}
+      {/* DASHBOARD PREVIEW */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-20">
         <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
           <span className="text-xs font-semibold text-accent uppercase tracking-wider">Dashboard Preview</span>
@@ -346,7 +352,7 @@ export default function Landing() {
           <div className="max-w-4xl mx-auto bg-card rounded-2xl border border-border shadow-xl overflow-hidden">
             <div className="flex items-center gap-2 px-4 py-3 bg-muted/50 border-b border-border">
               <div className="w-3 h-3 rounded-full bg-destructive/60" />
-              <div className="w-3 h-3 rounded-full bg-warning/60" />
+              <div className="w-3 h-3 rounded-full bg-yellow-400/60" />
               <div className="w-3 h-3 rounded-full bg-accent/60" />
               <span className="ml-3 text-xs text-muted-foreground">app.moneytrekapp.com/dashboard</span>
             </div>
@@ -370,7 +376,7 @@ export default function Landing() {
                 </div>
                 <Progress value={41} className="h-3" />
                 <div className="flex justify-between mt-2 text-[10px] text-muted-foreground">
-                  <span>Net Worth: −{fmt(16100)}</span>
+                  <span>Net Worth: -{fmt(16100)}</span>
                   <span>Goal: {fmt(0)} (debt free)</span>
                 </div>
               </div>
@@ -384,7 +390,7 @@ export default function Landing() {
                       <div className="flex justify-between items-center mb-1">
                         <span className="text-sm font-medium truncate">{d.name}</span>
                         <div className="flex items-center gap-2">
-                          <Badge variant="secondary" className={`text-[9px] px-1.5 py-0 ${d.type === "Savings" ? "bg-accent/10 text-accent" : d.type === "Goal" ? "bg-warning/10 text-warning" : ""}`}>
+                          <Badge variant="secondary" className={`text-[9px] px-1.5 py-0 ${d.type === "Savings" ? "bg-accent/10 text-accent" : d.type === "Goal" ? "bg-yellow-100 text-yellow-700" : ""}`}>
                             {d.type}
                           </Badge>
                           <span className="text-xs text-muted-foreground">{d.bal}</span>
@@ -410,7 +416,7 @@ export default function Landing() {
         </motion.div>
       </section>
 
-      {/* ==================== HOW IT WORKS ==================== */}
+      {/* HOW IT WORKS */}
       <section className="bg-secondary/40 py-16 sm:py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-12">
           <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
@@ -438,7 +444,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ==================== FEATURES ==================== */}
+      {/* FEATURES */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-20">
         <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
           <span className="text-xs font-semibold text-accent uppercase tracking-wider">Features</span>
@@ -467,7 +473,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ==================== ANALYTICS PREVIEW ==================== */}
+      {/* ANALYTICS PREVIEW */}
       <section className="bg-secondary/40 py-16 sm:py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-12">
           <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
@@ -511,12 +517,12 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ==================== TESTIMONIALS ==================== */}
+      {/* TESTIMONIALS */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-20">
         <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
           <span className="text-xs font-semibold text-accent uppercase tracking-wider">Testimonials</span>
           <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Real People. Real Progress.</h2>
-          <p className="text-muted-foreground max-w-md mx-auto text-sm">From paying off debt to growing savings and tracking net worth — here's what users say about their MoneyTrek journey.</p>
+          <p className="text-muted-foreground max-w-md mx-auto text-sm">From paying off debt to growing savings and tracking net worth — here is what users say about their MoneyTrek journey.</p>
         </motion.div>
         <div className="grid sm:grid-cols-3 gap-5 max-w-4xl mx-auto">
           {testimonials.map((t, i) => (
@@ -525,7 +531,7 @@ export default function Landing() {
                 <CardContent className="p-5">
                   <div className="flex gap-0.5 mb-3">
                     {Array.from({ length: t.rating }).map((_, si) => (
-                      <Star key={si} className="w-4 h-4 fill-warning text-warning" />
+                      <Star key={si} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                     ))}
                   </div>
                   <p className="text-sm text-muted-foreground leading-relaxed mb-4 italic">"{t.quote}"</p>
@@ -545,7 +551,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ==================== FAQ ==================== */}
+      {/* FAQ */}
       <section className="bg-secondary/40 py-16 sm:py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-12">
           <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
@@ -557,23 +563,23 @@ export default function Landing() {
             {[
               {
                 q: "Is MoneyTrek just for debt tracking?",
-                a: "No — MoneyTrek is your complete personal finance tracker. You can track debts, savings accounts, financial goals, and your overall net worth. It's designed for anyone on a financial journey, whether you're paying off debt, building savings, or growing wealth.",
+                a: "No. MoneyTrek is your complete personal finance tracker. You can track debts, savings accounts, financial goals, and your overall net worth. It is designed for anyone on a financial journey, whether you are paying off debt, building savings, or growing wealth.",
               },
               {
                 q: "Do I need a credit card to sign up?",
                 a: "No. MoneyTrek is completely free to start. You only need a credit card if you choose to upgrade to Pro after your 7-day free trial.",
               },
               {
-                q: "What's the difference between Free and Pro?",
+                q: "What is the difference between Free and Pro?",
                 a: "Free users get core debt tracking (up to 3 debts), 2 savings accounts, and the dashboard. Pro unlocks unlimited debts and savings, financial goals, net worth tracking, advanced analytics, weekly reports, multi-currency support, and CSV data export.",
               },
               {
                 q: "What is Founding Member pricing?",
-                a: "Founding Members are early adopters who sign up while we're in early access. You lock in the $2.99/month rate for life — even when prices go up for new users.",
+                a: "Founding Members are early adopters who sign up while we are in early access. You lock in the $2.99/month rate for life, even when prices go up for new users.",
               },
               {
                 q: "How does the 7-day free Pro trial work?",
-                a: "When you sign up, you automatically get 7 days of full Pro access — no credit card needed. After 7 days, you stay on the free plan unless you choose to upgrade.",
+                a: "When you sign up, you automatically get 7 days of full Pro access with no credit card needed. After 7 days, you stay on the free plan unless you choose to upgrade.",
               },
               {
                 q: "What currencies are supported?",
@@ -585,11 +591,11 @@ export default function Landing() {
               },
               {
                 q: "Is my financial data secure?",
-                a: "Yes. All data is protected using row-level security — only you can see your data. We use encrypted authentication and never share your information with third parties.",
+                a: "Yes. All data is protected using row-level security so only you can see your data. We use encrypted authentication and never share your information with third parties.",
               },
               {
-                q: "I'm an OFW managing money across countries — can I use this?",
-                a: "Absolutely. MoneyTrek's multi-currency support (Pro) is built for people managing finances across different countries and currencies. Everything converts automatically.",
+                q: "I am an OFW managing money across countries. Can I use this?",
+                a: "Absolutely. MoneyTrek multi-currency support (Pro) is built for people managing finances across different countries and currencies. Everything converts automatically.",
               },
             ].map((item, i) => (
               <motion.div key={i} {...fadeUp} transition={{ delay: i * 0.05 }}>
@@ -608,7 +614,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ==================== PRICING ==================== */}
+      {/* PRICING */}
       <section id="pricing" className="bg-secondary/40 py-16 sm:py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-12">
           <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
@@ -632,7 +638,15 @@ export default function Landing() {
                   </div>
                   <p className="text-sm text-muted-foreground mb-4">Track debt, build savings, and start your financial journey with core free features.</p>
                   <ul className="space-y-2.5 mb-6">
-                    {["Up to 3 active debts", "Up to 2 savings accounts", "Record payments & deposits", "Basic dashboard & progress", "Milestones & badges", "What-If calculator", "Single currency"].map(f => (
+                    {[
+                      "Up to 3 active debts",
+                      "Up to 2 savings accounts",
+                      "Record payments and deposits",
+                      "Basic dashboard and progress",
+                      "Milestones and badges",
+                      "What-If calculator",
+                      "Single currency",
+                    ].map(f => (
                       <li key={f} className="flex items-center gap-2 text-sm">
                         <CheckCircle2 className="w-4 h-4 text-accent flex-shrink-0" />
                         {f}
@@ -650,12 +664,12 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ==================== CHARACTERS ==================== */}
+      {/* CHARACTERS */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-20">
         <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
           <span className="text-xs font-semibold text-accent uppercase tracking-wider">Meet Your Guides</span>
           <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Meet the MoneyTrek Characters</h2>
-          <p className="text-muted-foreground max-w-lg mx-auto text-sm">Every step of your financial journey has a companion. These characters guide, motivate, and celebrate with you — from slaying debt to building wealth.</p>
+          <p className="text-muted-foreground max-w-lg mx-auto text-sm">Every step of your financial journey has a companion. These characters guide, motivate, and celebrate with you from slaying debt to building wealth.</p>
         </motion.div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-4 max-w-5xl mx-auto">
           {Object.entries(characters).map(([key, c], i) => (
@@ -685,26 +699,19 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ==================== JOURNEY ==================== */}
+      {/* JOURNEY */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-20">
         <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-14">
           <span className="text-xs font-semibold text-accent uppercase tracking-wider">Your Journey</span>
           <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">The MoneyTrek Journey</h2>
           <p className="text-muted-foreground max-w-lg mx-auto text-sm">
-            From tracking your first payment to mastering your entire financial life — one step at a time.
+            From tracking your first payment to mastering your entire financial life, one step at a time.
           </p>
         </motion.div>
-
         <div className="relative max-w-2xl mx-auto">
           <div className="absolute left-6 sm:left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-accent via-primary to-muted" />
           <div className="hidden sm:block absolute -right-6 top-1/3 z-10 opacity-60">
-            <TalkingCharacter
-              character="streakFlame"
-              context="streak"
-              animation="float"
-              size="sm"
-              showBubble={false}
-            />
+            <TalkingCharacter character="streakFlame" context="streak" animation="float" size="sm" showBubble={false} />
           </div>
           <div className="space-y-12">
             {journeySteps.map((step, i) => {
@@ -771,7 +778,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ==================== FINAL CTA ==================== */}
+      {/* FINAL CTA */}
       <section className="relative overflow-hidden" style={{ background: "var(--gradient-hero)" }}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-24 text-center relative z-10">
           <motion.div {...fadeUp} transition={{ duration: 0.6 }}>
@@ -782,7 +789,7 @@ export default function Landing() {
               Track debt, grow savings, set goals, and monitor your net worth — all in one beautiful app. MoneyTrek makes your entire financial journey visible.
             </p>
             <p className="text-primary-foreground/40 mb-8 text-xs sm:text-sm">
-              🏅 Sign up now to become a Founding Member and lock in $2.99/mo pricing for life.
+              Sign up now to become a Founding Member and lock in $2.99/mo pricing for life.
             </p>
             {user ? (
               <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
@@ -799,7 +806,7 @@ export default function Landing() {
         <div className="absolute bottom-10 right-10 w-64 h-64 rounded-full bg-primary-foreground/5 blur-3xl" />
       </section>
 
-      {/* ==================== FOOTER ==================== */}
+      {/* FOOTER */}
       <footer className="border-t border-border bg-card">
         <div className="container mx-auto px-4 sm:px-6 lg:px-12 py-10">
           <div className="grid sm:grid-cols-3 gap-8">
@@ -846,6 +853,7 @@ export default function Landing() {
           </div>
         </div>
       </footer>
+
     </div>
   );
 }
