@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PiggyBank, Plus, Pencil, Trash2, ArrowDownCircle, ArrowUpCircle, TrendingUp } from "lucide-react";
+import { PiggyBank, Plus, Pencil, Trash2, ArrowDownCircle, ArrowUpCircle, TrendingUp, Crown } from "lucide-react";
 import AppLayout from "@/components/AppLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ import { formatCurrency } from "@/lib/currency";
 import CurrencySelector from "@/components/CurrencySelector";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import { useProfile } from "@/hooks/useProfile";
+import { useFeatureAccess } from "@/hooks/useSubscription";
 import {
   useSavingsAccounts,
   useAddSavingsAccount,
@@ -20,46 +21,52 @@ import {
 } from "@/hooks/useSavings";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { Link } from "react-router-dom";
 
 type TransactionType = "deposit" | "withdrawal";
+
+const FREE_SAVINGS_LIMIT = 2;
 
 export default function Savings() {
   const { data: accounts, isLoading } = useSavingsAccounts();
   const { data: profile } = useProfile();
   const defaultCurrency = (profile as any)?.default_currency ?? "USD";
+  const { hasAccess: hasUnlimitedSavings } = useFeatureAccess("unlimitedSavings");
 
   const addAccount = useAddSavingsAccount();
   const updateAccount = useUpdateSavingsAccount();
   const deleteAccount = useDeleteSavingsAccount();
   const addTransaction = useAddSavingsTransaction();
 
-  // Add account dialog state
   const [addOpen, setAddOpen] = useState(false);
   const [newName, setNewName] = useState("");
   const [newBalance, setNewBalance] = useState("");
   const [newCurrency, setNewCurrency] = useState(defaultCurrency);
   const [addingAccount, setAddingAccount] = useState(false);
 
-  // Edit account dialog state
   const [editAccount, setEditAccount] = useState<any>(null);
   const [editName, setEditName] = useState("");
   const [editingAccount, setEditingAccount] = useState(false);
 
-  // Transaction dialog state
   const [txAccount, setTxAccount] = useState<any>(null);
   const [txType, setTxType] = useState<TransactionType>("deposit");
   const [txAmount, setTxAmount] = useState("");
   const [txNotes, setTxNotes] = useState("");
   const [addingTx, setAddingTx] = useState(false);
 
-  // Delete dialog state
   const [deleteAcc, setDeleteAcc] = useState<any>(null);
   const [deleting, setDeleting] = useState(false);
 
   const totalSavings = accounts?.reduce((s, a) => s + (a.balance ?? 0), 0) ?? 0;
+  const accountCount = accounts?.length ?? 0;
+  const atFreeLimit = !hasUnlimitedSavings && accountCount >= FREE_SAVINGS_LIMIT;
 
   const handleAddAccount = async () => {
     if (!newName || !newBalance) return;
+    if (atFreeLimit) {
+      toast.error("Upgrade to Pro to add unlimited savings accounts.");
+      return;
+    }
     setAddingAccount(true);
     try {
       await addAccount.mutateAsync({
@@ -69,9 +76,7 @@ export default function Savings() {
       });
       toast.success(`${newName} added! 💰`);
       setAddOpen(false);
-      setNewName("");
-      setNewBalance("");
-      setNewCurrency(defaultCurrency);
+      setNewName(""); setNewBalance(""); setNewCurrency(defaultCurrency);
     } catch {
       toast.error("Failed to add account. Please try again.");
     } finally {
@@ -96,10 +101,7 @@ export default function Savings() {
   const handleAddTransaction = async () => {
     if (!txAccount || !txAmount) return;
     const amt = parseFloat(txAmount);
-    if (isNaN(amt) || amt <= 0) {
-      toast.error("Please enter a valid amount.");
-      return;
-    }
+    if (isNaN(amt) || amt <= 0) { toast.error("Please enter a valid amount."); return; }
     setAddingTx(true);
     try {
       await addTransaction.mutateAsync({
@@ -110,9 +112,7 @@ export default function Savings() {
         current_balance: txAccount.balance,
       });
       toast.success(txType === "deposit" ? "Deposit recorded! 💰" : "Withdrawal recorded");
-      setTxAccount(null);
-      setTxAmount("");
-      setTxNotes("");
+      setTxAccount(null); setTxAmount(""); setTxNotes("");
     } catch {
       toast.error("Failed to record transaction.");
     } finally {
@@ -143,21 +143,43 @@ export default function Savings() {
     <AppLayout>
       <div className="max-w-4xl mx-auto space-y-6">
 
-        {/* Page header */}
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div>
             <h1 className="font-heading text-2xl font-bold">Savings</h1>
             <p className="text-sm text-muted-foreground mt-1">
-              {accounts?.length ?? 0} {accounts?.length === 1 ? "account" : "accounts"}
+              {accountCount} {accountCount === 1 ? "account" : "accounts"}
               {accounts && accounts.length > 0 && ` · Total ${formatCurrency(totalSavings, defaultCurrency)}`}
+              {!hasUnlimitedSavings && ` · ${accountCount}/${FREE_SAVINGS_LIMIT} free`}
             </p>
           </div>
-          <Button onClick={() => setAddOpen(true)}>
-            <Plus className="w-4 h-4 mr-2" />Add Account
-          </Button>
+          {atFreeLimit ? (
+            <Button asChild>
+              <Link to="/subscription">
+                <Crown className="w-4 h-4 mr-2" />Upgrade for More
+              </Link>
+            </Button>
+          ) : (
+            <Button onClick={() => setAddOpen(true)}>
+              <Plus className="w-4 h-4 mr-2" />Add Account
+            </Button>
+          )}
         </div>
 
-        {/* Total savings summary */}
+        {/* Free limit banner */}
+        {atFreeLimit && (
+          <Card className="border-accent/30 bg-accent/5">
+            <CardContent className="p-4 flex items-center justify-between gap-3 flex-wrap">
+              <div className="flex items-center gap-2">
+                <Crown className="w-4 h-4 text-accent flex-shrink-0" />
+                <p className="text-sm font-medium">You've used your {FREE_SAVINGS_LIMIT} free savings accounts.</p>
+              </div>
+              <Button size="sm" asChild>
+                <Link to="/subscription">Upgrade to Pro for unlimited</Link>
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
         {accounts && accounts.length > 0 && (
           <Card className="border-primary/20 bg-primary/5">
             <CardContent className="p-5 flex items-center gap-4">
@@ -166,24 +188,17 @@ export default function Savings() {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Total Savings</p>
-                <p className="font-heading text-2xl font-bold text-primary">
-                  {formatCurrency(totalSavings, defaultCurrency)}
-                </p>
+                <p className="font-heading text-2xl font-bold text-primary">{formatCurrency(totalSavings, defaultCurrency)}</p>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Across {accounts.length} {accounts.length === 1 ? "account" : "accounts"}
+                  Across {accountCount} {accountCount === 1 ? "account" : "accounts"}
                 </p>
               </div>
             </CardContent>
           </Card>
         )}
 
-        {/* Accounts list */}
         {isLoading ? (
-          <div className="space-y-3">
-            {[1, 2, 3].map((i) => (
-              <Skeleton key={i} className="h-24 w-full rounded-xl" />
-            ))}
-          </div>
+          <div className="space-y-3">{[1,2,3].map(i => <Skeleton key={i} className="h-24 w-full rounded-xl" />)}</div>
         ) : accounts && accounts.length > 0 ? (
           <div className="space-y-3">
             {accounts.map((account) => (
@@ -196,53 +211,21 @@ export default function Savings() {
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold">{account.account_name}</p>
                       <p className="text-xs text-muted-foreground mt-0.5">{account.currency}</p>
-                      <p className="font-heading text-xl font-bold text-primary mt-1">
-                        {formatCurrency(account.balance, account.currency)}
-                      </p>
+                      <p className="font-heading text-xl font-bold text-primary mt-1">{formatCurrency(account.balance, account.currency)}</p>
                     </div>
                     <div className="flex gap-2 flex-shrink-0 flex-wrap">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="text-green-600 border-green-200 hover:bg-green-50 hover:text-green-700"
-                        onClick={() => {
-                          setTxAccount(account);
-                          setTxType("deposit");
-                          setTxAmount("");
-                          setTxNotes("");
-                        }}
-                      >
+                      <Button size="sm" variant="outline" className="text-green-600 border-green-200 hover:bg-green-50 hover:text-green-700"
+                        onClick={() => { setTxAccount(account); setTxType("deposit"); setTxAmount(""); setTxNotes(""); }}>
                         <ArrowDownCircle className="w-3.5 h-3.5 mr-1" />Deposit
                       </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="text-orange-600 border-orange-200 hover:bg-orange-50 hover:text-orange-700"
-                        onClick={() => {
-                          setTxAccount(account);
-                          setTxType("withdrawal");
-                          setTxAmount("");
-                          setTxNotes("");
-                        }}
-                      >
+                      <Button size="sm" variant="outline" className="text-orange-600 border-orange-200 hover:bg-orange-50 hover:text-orange-700"
+                        onClick={() => { setTxAccount(account); setTxType("withdrawal"); setTxAmount(""); setTxNotes(""); }}>
                         <ArrowUpCircle className="w-3.5 h-3.5 mr-1" />Withdraw
                       </Button>
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        onClick={() => {
-                          setEditAccount(account);
-                          setEditName(account.account_name);
-                        }}
-                      >
+                      <Button size="icon" variant="ghost" onClick={() => { setEditAccount(account); setEditName(account.account_name); }}>
                         <Pencil className="w-4 h-4" />
                       </Button>
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        className="text-destructive hover:text-destructive"
-                        onClick={() => setDeleteAcc(account)}
-                      >
+                      <Button size="icon" variant="ghost" className="text-destructive hover:text-destructive" onClick={() => setDeleteAcc(account)}>
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>
@@ -263,34 +246,23 @@ export default function Savings() {
                   Add your savings accounts — emergency fund, vacation fund, or any savings goal — and track your balance over time.
                 </p>
               </div>
-              <Button size="lg" onClick={() => setAddOpen(true)}>
-                <Plus className="w-4 h-4 mr-2" />Add Your First Account
-              </Button>
+              <Button size="lg" onClick={() => setAddOpen(true)}><Plus className="w-4 h-4 mr-2" />Add Your First Account</Button>
             </CardContent>
           </Card>
         )}
       </div>
 
-      {/* Add Account Dialog */}
       <Dialog open={addOpen} onOpenChange={setAddOpen}>
         <DialogContent>
           <DialogHeader><DialogTitle>Add Savings Account</DialogTitle></DialogHeader>
           <div className="space-y-4 pt-2">
             <div className="space-y-2">
               <Label>Account Name</Label>
-              <Input
-                placeholder="e.g., Emergency Fund, Vacation Fund"
-                value={newName}
-                onChange={(e) => setNewName(e.target.value)}
-              />
+              <Input placeholder="e.g., Emergency Fund, Vacation Fund" value={newName} onChange={e => setNewName(e.target.value)} />
             </div>
             <div className="space-y-2">
               <Label>Current Balance</Label>
-              <Input
-                type="number" step="0.01" min="0" placeholder="0.00"
-                value={newBalance}
-                onChange={(e) => setNewBalance(e.target.value)}
-              />
+              <Input type="number" step="0.01" min="0" placeholder="0.00" value={newBalance} onChange={e => setNewBalance(e.target.value)} />
             </div>
             <div className="space-y-2">
               <Label>Currency</Label>
@@ -306,14 +278,13 @@ export default function Savings() {
         </DialogContent>
       </Dialog>
 
-      {/* Edit Account Dialog */}
-      <Dialog open={!!editAccount} onOpenChange={(o) => !o && setEditAccount(null)}>
+      <Dialog open={!!editAccount} onOpenChange={o => !o && setEditAccount(null)}>
         <DialogContent>
           <DialogHeader><DialogTitle>Edit Account</DialogTitle></DialogHeader>
           <div className="space-y-4 pt-2">
             <div className="space-y-2">
               <Label>Account Name</Label>
-              <Input value={editName} onChange={(e) => setEditName(e.target.value)} />
+              <Input value={editName} onChange={e => setEditName(e.target.value)} />
             </div>
             <div className="flex gap-2 pt-2">
               <Button onClick={handleEditAccount} disabled={editingAccount || !editName} className="flex-1">
@@ -325,52 +296,21 @@ export default function Savings() {
         </DialogContent>
       </Dialog>
 
-      {/* Transaction Dialog */}
-      <Dialog open={!!txAccount} onOpenChange={(o) => !o && setTxAccount(null)}>
+      <Dialog open={!!txAccount} onOpenChange={o => !o && setTxAccount(null)}>
         <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{txType === "deposit" ? "Record Deposit" : "Record Withdrawal"}</DialogTitle>
-          </DialogHeader>
+          <DialogHeader><DialogTitle>{txType === "deposit" ? "Record Deposit" : "Record Withdrawal"}</DialogTitle></DialogHeader>
           <div className="space-y-4 pt-2">
             <div className="flex gap-2">
-              <button
-                onClick={() => setTxType("deposit")}
-                className={cn(
-                  "flex-1 py-2.5 rounded-lg text-sm font-medium border transition-all",
-                  txType === "deposit"
-                    ? "bg-green-50 border-green-300 text-green-700"
-                    : "border-border text-muted-foreground hover:border-primary/50"
-                )}
-              >
-                💰 Deposit
-              </button>
-              <button
-                onClick={() => setTxType("withdrawal")}
-                className={cn(
-                  "flex-1 py-2.5 rounded-lg text-sm font-medium border transition-all",
-                  txType === "withdrawal"
-                    ? "bg-orange-50 border-orange-300 text-orange-700"
-                    : "border-border text-muted-foreground hover:border-primary/50"
-                )}
-              >
-                💸 Withdrawal
-              </button>
+              <button onClick={() => setTxType("deposit")} className={cn("flex-1 py-2.5 rounded-lg text-sm font-medium border transition-all", txType === "deposit" ? "bg-green-50 border-green-300 text-green-700" : "border-border text-muted-foreground hover:border-primary/50")}>💰 Deposit</button>
+              <button onClick={() => setTxType("withdrawal")} className={cn("flex-1 py-2.5 rounded-lg text-sm font-medium border transition-all", txType === "withdrawal" ? "bg-orange-50 border-orange-300 text-orange-700" : "border-border text-muted-foreground hover:border-primary/50")}>💸 Withdrawal</button>
             </div>
             <div className="space-y-2">
               <Label>Amount ({txAccount?.currency})</Label>
-              <Input
-                type="number" step="0.01" min="0" placeholder="0.00"
-                value={txAmount}
-                onChange={(e) => setTxAmount(e.target.value)}
-              />
+              <Input type="number" step="0.01" min="0" placeholder="0.00" value={txAmount} onChange={e => setTxAmount(e.target.value)} />
             </div>
             <div className="space-y-2">
               <Label>Notes <span className="text-muted-foreground">(optional)</span></Label>
-              <Input
-                placeholder="e.g., Monthly savings transfer"
-                value={txNotes}
-                onChange={(e) => setTxNotes(e.target.value)}
-              />
+              <Input placeholder="e.g., Monthly savings transfer" value={txNotes} onChange={e => setTxNotes(e.target.value)} />
             </div>
             {txAccount && (
               <div className="rounded-lg bg-muted/50 p-3 text-sm space-y-1">
@@ -381,9 +321,7 @@ export default function Savings() {
                 {previewBalance !== null && (
                   <div className="flex justify-between font-medium">
                     <span>New balance</span>
-                    <span className={txType === "deposit" ? "text-green-600" : "text-orange-600"}>
-                      {formatCurrency(previewBalance, txAccount.currency)}
-                    </span>
+                    <span className={txType === "deposit" ? "text-green-600" : "text-orange-600"}>{formatCurrency(previewBalance, txAccount.currency)}</span>
                   </div>
                 )}
               </div>
@@ -398,12 +336,11 @@ export default function Savings() {
         </DialogContent>
       </Dialog>
 
-      {/* Delete Confirm */}
       <ConfirmDialog
         open={!!deleteAcc}
-        onOpenChange={(o) => !o && setDeleteAcc(null)}
+        onOpenChange={o => !o && setDeleteAcc(null)}
         title="Delete Account"
-        description={`Are you sure you want to delete "${deleteAcc?.account_name}"? All transactions for this account will be permanently deleted.`}
+        description={`Are you sure you want to delete "${deleteAcc?.account_name}"? All transactions will be permanently deleted.`}
         onConfirm={handleDelete}
         loading={deleting}
       />
