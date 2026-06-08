@@ -12,7 +12,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { formatCurrency } from "@/lib/currency";
 import CurrencySelector from "@/components/CurrencySelector";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import UpgradePrompt from "@/components/UpgradePrompt";
 import { useProfile } from "@/hooks/useProfile";
+import { useFeatureAccess } from "@/hooks/useSubscription";
 import {
   useFinancialGoals,
   useAddFinancialGoal,
@@ -28,6 +30,7 @@ function daysRemaining(targetDate: string | null): number | null {
 }
 
 export default function Goals() {
+  const { hasAccess } = useFeatureAccess("financialGoals");
   const { data: goals, isLoading } = useFinancialGoals();
   const { data: profile } = useProfile();
   const defaultCurrency = (profile as any)?.default_currency ?? "USD";
@@ -61,6 +64,19 @@ export default function Goals() {
   const totalTarget = goals?.reduce((s, g) => s + (g.target_amount ?? 0), 0) ?? 0;
   const totalSaved = goals?.reduce((s, g) => s + (g.current_amount ?? 0), 0) ?? 0;
   const completedCount = goals?.filter(g => (g.current_amount ?? 0) >= (g.target_amount ?? 0)).length ?? 0;
+
+  // Pro gate
+  if (!hasAccess) {
+    return (
+      <AppLayout>
+        <UpgradePrompt
+          fullPage
+          title="Financial Goals"
+          message="Set savings goals, track progress toward targets, and celebrate when you hit them. Upgrade to Pro — or start your free 7-day trial — to unlock Financial Goals."
+        />
+      </AppLayout>
+    );
+  }
 
   const handleAddGoal = async () => {
     if (!newName || !newTarget) return;
@@ -190,18 +206,13 @@ export default function Goals() {
         )}
 
         {isLoading ? (
-          <div className="space-y-3">
-            {[1, 2, 3].map((i) => <Skeleton key={i} className="h-32 w-full rounded-xl" />)}
-          </div>
+          <div className="space-y-3">{[1,2,3].map(i => <Skeleton key={i} className="h-32 w-full rounded-xl" />)}</div>
         ) : goals && goals.length > 0 ? (
           <div className="space-y-3">
             {goals.map((goal) => {
-              const progress = goal.target_amount > 0
-                ? Math.min(100, Math.round((goal.current_amount / goal.target_amount) * 100))
-                : 0;
+              const progress = goal.target_amount > 0 ? Math.min(100, Math.round((goal.current_amount / goal.target_amount) * 100)) : 0;
               const isComplete = goal.current_amount >= goal.target_amount;
               const days = daysRemaining(goal.target_date);
-
               return (
                 <Card key={goal.id} className={isComplete ? "border-green-200 bg-green-50/30" : ""}>
                   <CardContent className="p-4 sm:p-5 space-y-3">
@@ -222,21 +233,13 @@ export default function Goals() {
                       </div>
                       <div className="flex gap-2 flex-shrink-0">
                         {!isComplete && (
-                          <Button
-                            size="sm" variant="outline"
-                            className="text-primary border-primary/30 hover:bg-primary/5"
-                            onClick={() => { setAddMoneyGoal(goal); setAddAmount(""); }}
-                          >
+                          <Button size="sm" variant="outline" className="text-primary border-primary/30 hover:bg-primary/5"
+                            onClick={() => { setAddMoneyGoal(goal); setAddAmount(""); }}>
                             <PlusCircle className="w-3.5 h-3.5 mr-1" />Add Money
                           </Button>
                         )}
-                        <Button size="icon" variant="ghost" onClick={() => openEdit(goal)}>
-                          <Pencil className="w-4 h-4" />
-                        </Button>
-                        <Button size="icon" variant="ghost"
-                          className="text-destructive hover:text-destructive"
-                          onClick={() => setDeleteTarget(goal)}
-                        >
+                        <Button size="icon" variant="ghost" onClick={() => openEdit(goal)}><Pencil className="w-4 h-4" /></Button>
+                        <Button size="icon" variant="ghost" className="text-destructive hover:text-destructive" onClick={() => setDeleteTarget(goal)}>
                           <Trash2 className="w-4 h-4" />
                         </Button>
                       </div>
@@ -270,15 +273,12 @@ export default function Goals() {
                   Set a savings goal — a vacation, emergency fund, new phone, or anything you're working toward — and track your progress.
                 </p>
               </div>
-              <Button size="lg" onClick={() => setAddOpen(true)}>
-                <Plus className="w-4 h-4 mr-2" />Create Your First Goal
-              </Button>
+              <Button size="lg" onClick={() => setAddOpen(true)}><Plus className="w-4 h-4 mr-2" />Create Your First Goal</Button>
             </CardContent>
           </Card>
         )}
       </div>
 
-      {/* Add Goal Dialog */}
       <Dialog open={addOpen} onOpenChange={setAddOpen}>
         <DialogContent>
           <DialogHeader><DialogTitle>Create Financial Goal</DialogTitle></DialogHeader>
@@ -315,7 +315,6 @@ export default function Goals() {
         </DialogContent>
       </Dialog>
 
-      {/* Edit Goal Dialog */}
       <Dialog open={!!editGoal} onOpenChange={o => !o && setEditGoal(null)}>
         <DialogContent>
           <DialogHeader><DialogTitle>Edit Goal</DialogTitle></DialogHeader>
@@ -348,7 +347,6 @@ export default function Goals() {
         </DialogContent>
       </Dialog>
 
-      {/* Add Money Dialog */}
       <Dialog open={!!addMoneyGoal} onOpenChange={o => !o && setAddMoneyGoal(null)}>
         <DialogContent>
           <DialogHeader><DialogTitle>Add Money — {addMoneyGoal?.goal_name}</DialogTitle></DialogHeader>
@@ -385,7 +383,6 @@ export default function Goals() {
         </DialogContent>
       </Dialog>
 
-      {/* Delete Confirm */}
       <ConfirmDialog
         open={!!deleteTarget}
         onOpenChange={o => !o && setDeleteTarget(null)}
