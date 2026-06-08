@@ -29,23 +29,20 @@ jobs:
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
           VITE_SUPABASE_PROJECT_ID: ${{ secrets.VITE_SUPABASE_PROJECT_ID }}
 
-      - name: Install Playwright Chromium
-        run: npx playwright install chromium --with-deps
+      - name: Install lftp
+        run: sudo apt-get install -y lftp
 
-      - name: Prerender public pages
-        run: npm run prerender
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
-
-      - name: Deploy to Hostinger via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./dist/
-          server-dir: /public_html/
-          dangerous-clean-slate: false
-          protocol: ftps
-          timeout: 30000
+      - name: Deploy to Hostinger via lftp
+        run: |
+          lftp -c "
+            set net:timeout 30;
+            set net:max-retries 5;
+            set net:reconnect-interval-base 5;
+            set ftp:ssl-force true;
+            set ftp:ssl-protect-data true;
+            set ftps:initial-prot '';
+            set ssl:verify-certificate false;
+            open -u '${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }}' ftps://${{ secrets.FTP_SERVER }};
+            mirror --reverse --parallel=4 --verbose ./dist/ /public_html/;
+            quit
+          "
