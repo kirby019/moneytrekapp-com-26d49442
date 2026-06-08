@@ -223,4 +223,629 @@ export default function Landing() {
                     <Link to="/dashboard">
                       Go to Dashboard <ArrowRight className="ml-2 w-4 h-4" />
                     </Link>
-         
+                  </Button>
+                ) : (
+                  <>
+                    <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
+                      <Link to="/signup">
+                        Start Your Trek for Free <ArrowRight className="ml-2 w-4 h-4" />
+                      </Link>
+                    </Button>
+                    <Button size="lg" variant="outline" className="border-white/40 text-white bg-white/10 hover:bg-white/20 backdrop-blur-sm" asChild>
+                      <Link to="/demo">
+                        <Eye className="mr-2 w-4 h-4" /> View Demo
+                      </Link>
+                    </Button>
+                  </>
+                )}
+              </div>
+              <div className="flex items-center gap-6 mt-8 text-primary-foreground/50 text-sm flex-wrap">
+                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent" /> 7-day Pro trial included</span>
+                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent" /> No credit card required</span>
+                <span className="flex items-center gap-1.5 hidden sm:flex"><CheckCircle2 className="w-4 h-4 text-accent" /> Lock in founding member pricing</span>
+              </div>
+            </motion.div>
+
+            {/* Right - Dashboard Mockup */}
+            <motion.div
+              initial={{ opacity: 0, y: 40, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="hidden lg:block"
+            >
+              <div className="bg-card/10 backdrop-blur-md rounded-2xl border border-primary-foreground/10 p-5 shadow-2xl">
+                <div className="grid grid-cols-2 gap-3 mb-4">
+                  {mockStats.map(s => (
+                    <div key={s.label} className="bg-card/90 backdrop-blur rounded-xl p-3.5 border border-border/50">
+                      <div className="flex items-center justify-between mb-2">
+                        <s.icon className="w-4 h-4 text-muted-foreground" />
+                        <span className="text-[10px] font-medium text-accent">{s.change}</span>
+                      </div>
+                      <p className="font-heading text-lg font-bold text-card-foreground">{s.value}</p>
+                      <p className="text-[10px] text-muted-foreground">{s.label}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="bg-card/90 backdrop-blur rounded-xl p-4 border border-border/50">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-semibold text-card-foreground">Financial Progress</span>
+                    <span className="text-xs font-bold text-accent">41%</span>
+                  </div>
+                  <div className="h-2.5 rounded-full bg-muted overflow-hidden">
+                    <motion.div
+                      className="h-full rounded-full bg-accent"
+                      initial={{ width: 0 }}
+                      animate={{ width: "41%" }}
+                      transition={{ duration: 1.2, delay: 0.8 }}
+                    />
+                  </div>
+                  <div className="flex justify-between mt-2 text-[10px] text-muted-foreground">
+                    <span>Debt: {fmt(24500)}</span>
+                    <span>Savings: {fmt(8400)}</span>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-3 mt-3">
+                  <div className="bg-card/90 backdrop-blur rounded-xl p-4 border border-border/50">
+                    <span className="text-[10px] font-semibold text-card-foreground mb-2 block">Debt ↓</span>
+                    <div className="flex items-end gap-1 h-12">
+                      {[95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 42].map((h, i) => (
+                        <motion.div
+                          key={i}
+                          className="flex-1 rounded-t bg-destructive/50"
+                          initial={{ height: 0 }}
+                          animate={{ height: `${h}%` }}
+                          transition={{ duration: 0.5, delay: 0.8 + i * 0.04 }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <div className="bg-card/90 backdrop-blur rounded-xl p-4 border border-border/50">
+                    <span className="text-[10px] font-semibold text-card-foreground mb-2 block">Savings ↑</span>
+                    <div className="flex items-end gap-1 h-12">
+                      {[8, 12, 18, 22, 28, 32, 38, 42, 48, 55, 62, 68].map((h, i) => (
+                        <motion.div
+                          key={i}
+                          className="flex-1 rounded-t bg-accent/70"
+                          initial={{ height: 0 }}
+                          animate={{ height: `${h}%` }}
+                          transition={{ duration: 0.5, delay: 0.8 + i * 0.04 }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+        <div className="absolute top-20 right-10 w-72 h-72 rounded-full bg-accent/10 blur-3xl" />
+        <div className="absolute bottom-10 left-1/4 w-48 h-48 rounded-full bg-primary-foreground/5 blur-2xl" />
+      </section>
+
+      {/* ==================== PILLARS STRIP ==================== */}
+      <section className="border-y border-border bg-secondary/30 py-5">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-12">
+          <div className="flex flex-wrap justify-center gap-6 sm:gap-10 text-sm text-muted-foreground">
+            <span className="flex items-center gap-2"><CreditCard className="w-4 h-4 text-accent" /> Debt payoff tracking</span>
+            <span className="flex items-center gap-2"><PiggyBank className="w-4 h-4 text-accent" /> Savings growth</span>
+            <span className="flex items-center gap-2"><Target className="w-4 h-4 text-accent" /> Financial goals</span>
+            <span className="flex items-center gap-2"><Landmark className="w-4 h-4 text-accent" /> Net worth monitoring</span>
+            <span className="flex items-center gap-2"><TrendingUp className="w-4 h-4 text-accent" /> What-If calculators</span>
+          </div>
+        </div>
+      </section>
+
+      {/* ==================== DASHBOARD PREVIEW ==================== */}
+      <section className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-20">
+        <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
+          <span className="text-xs font-semibold text-accent uppercase tracking-wider">Dashboard Preview</span>
+          <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Your Complete Financial Command Center</h2>
+          <p className="text-muted-foreground max-w-md mx-auto text-sm">Debt, savings, net worth, and progress — all in one clean, beautiful dashboard.</p>
+        </motion.div>
+        <motion.div {...fadeUp} transition={{ duration: 0.6, delay: 0.15 }}>
+          <div className="max-w-4xl mx-auto bg-card rounded-2xl border border-border shadow-xl overflow-hidden">
+            <div className="flex items-center gap-2 px-4 py-3 bg-muted/50 border-b border-border">
+              <div className="w-3 h-3 rounded-full bg-destructive/60" />
+              <div className="w-3 h-3 rounded-full bg-warning/60" />
+              <div className="w-3 h-3 rounded-full bg-accent/60" />
+              <span className="ml-3 text-xs text-muted-foreground">app.moneytrekapp.com/dashboard</span>
+            </div>
+            <div className="p-4 sm:p-6">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+                {mockStats.map(s => (
+                  <div key={s.label} className="bg-secondary/50 rounded-xl p-3.5">
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <s.icon className="w-4 h-4 text-muted-foreground" />
+                      <span className="text-[10px] font-medium text-accent">{s.change}</span>
+                    </div>
+                    <p className="font-heading text-lg sm:text-xl font-bold">{s.value}</p>
+                    <p className="text-[10px] text-muted-foreground">{s.label}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="bg-secondary/50 rounded-xl p-4 mb-4">
+                <div className="flex justify-between mb-2">
+                  <span className="text-sm font-semibold">Overall Financial Progress</span>
+                  <span className="text-sm font-bold text-accent">41%</span>
+                </div>
+                <Progress value={41} className="h-3" />
+                <div className="flex justify-between mt-2 text-[10px] text-muted-foreground">
+                  <span>Net Worth: −{fmt(16100)}</span>
+                  <span>Goal: {fmt(0)} (debt free)</span>
+                </div>
+              </div>
+              <div className="space-y-2">
+                {mockItems.map(d => (
+                  <div key={d.name} className="flex items-center gap-4 bg-secondary/30 rounded-lg p-3">
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${d.type === "Savings" || d.type === "Goal" ? "bg-accent/10" : "bg-primary/10"}`}>
+                      <d.icon className={`w-4 h-4 ${d.type === "Savings" || d.type === "Goal" ? "text-accent" : "text-primary"}`} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-sm font-medium truncate">{d.name}</span>
+                        <div className="flex items-center gap-2">
+                          <Badge variant="secondary" className={`text-[9px] px-1.5 py-0 ${d.type === "Savings" ? "bg-accent/10 text-accent" : d.type === "Goal" ? "bg-warning/10 text-warning" : ""}`}>
+                            {d.type}
+                          </Badge>
+                          <span className="text-xs text-muted-foreground">{d.bal}</span>
+                        </div>
+                      </div>
+                      <Progress value={d.pct} className="h-1.5" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="grid grid-cols-2 gap-3 mt-4">
+                <div className="bg-secondary/50 rounded-xl p-3.5 text-center">
+                  <p className="text-[10px] text-muted-foreground mb-1">Paid This Month</p>
+                  <p className="font-heading text-lg font-bold text-primary">{fmt(1400)}</p>
+                </div>
+                <div className="bg-secondary/50 rounded-xl p-3.5 text-center">
+                  <p className="text-[10px] text-muted-foreground mb-1">Saved This Month</p>
+                  <p className="font-heading text-lg font-bold text-accent">{fmt(650)}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* ==================== HOW IT WORKS ==================== */}
+      <section className="bg-secondary/40 py-16 sm:py-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-12">
+          <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
+            <span className="text-xs font-semibold text-accent uppercase tracking-wider">How It Works</span>
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Three Simple Steps to Financial Clarity</h2>
+            <p className="text-muted-foreground max-w-md mx-auto text-sm">Getting started takes less than 2 minutes. Track everything — debt, savings, goals, and net worth — from one place.</p>
+          </motion.div>
+          <div className="grid sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            {steps.map((s, i) => (
+              <motion.div key={s.title} {...fadeUp} transition={{ delay: i * 0.15 }} className="relative text-center">
+                <div className="w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center bg-primary text-primary-foreground shadow-lg shadow-primary/20">
+                  <s.icon className="w-7 h-7" />
+                </div>
+                <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 w-6 h-6 rounded-full bg-accent text-accent-foreground text-xs font-bold flex items-center justify-center shadow-sm">
+                  {i + 1}
+                </span>
+                <h3 className="font-heading font-semibold text-base mb-1.5">{s.title}</h3>
+                <p className="text-muted-foreground text-sm">{s.desc}</p>
+                {i < 2 && (
+                  <ChevronRight className="hidden sm:block absolute top-8 -right-3 w-5 h-5 text-muted-foreground/30" />
+                )}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ==================== FEATURES ==================== */}
+      <section className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-20">
+        <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
+          <span className="text-xs font-semibold text-accent uppercase tracking-wider">Features</span>
+          <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Everything You Need for Your Financial Journey</h2>
+          <p className="text-muted-foreground max-w-lg mx-auto text-sm">From debt payoff to savings growth to net worth tracking — MoneyTrek gives you the tools to see, understand, and improve your entire financial picture.</p>
+        </motion.div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          {features.map((f, i) => (
+            <motion.div key={f.title} {...fadeUp} transition={{ delay: i * 0.06 }}>
+              <Card className="h-full hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 group">
+                <CardContent className="p-5">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                      <f.icon className="w-5 h-5 text-primary" />
+                    </div>
+                    {(f as any).pro && (
+                      <Badge variant="secondary" className="text-[10px] px-1.5 py-0.5">Pro</Badge>
+                    )}
+                  </div>
+                  <h3 className="font-heading font-semibold text-sm mb-1.5">{f.title}</h3>
+                  <p className="text-muted-foreground text-xs leading-relaxed">{f.desc}</p>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* ==================== ANALYTICS PREVIEW ==================== */}
+      <section className="bg-secondary/40 py-16 sm:py-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-12">
+          <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
+            <span className="text-xs font-semibold text-accent uppercase tracking-wider">Analytics</span>
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Visualize Your Complete Financial Picture</h2>
+            <p className="text-muted-foreground max-w-md mx-auto text-sm">Beautiful charts showing debt reduction, savings growth, net worth trends, and your overall financial progress.</p>
+          </motion.div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
+            {[
+              { title: "Debt Over Time", bars: [95, 90, 85, 80, 78, 75, 72, 70, 67, 65, 62, 58], color: "bg-destructive/50" },
+              { title: "Savings Over Time", bars: [5, 10, 15, 22, 28, 35, 40, 48, 55, 60, 65, 72], color: "bg-accent/60" },
+              { title: "Net Worth Over Time", bars: [10, 14, 18, 22, 26, 30, 35, 40, 45, 50, 55, 60], color: "bg-primary/60" },
+              { title: "Payments Per Month", bars: [30, 55, 40, 70, 50, 80, 65, 90, 75, 85, 60, 95], color: "bg-primary/50" },
+              { title: "Savings Per Month", bars: [20, 35, 45, 30, 55, 40, 60, 50, 70, 55, 75, 65], color: "bg-accent/50" },
+              { title: "Progress Over Time", bars: [5, 10, 15, 20, 25, 28, 32, 35, 38, 40, 41, 41], color: "bg-accent/60" },
+            ].map((chart, ci) => (
+              <motion.div key={chart.title} {...fadeUp} transition={{ delay: ci * 0.08 }}>
+                <Card className="overflow-hidden">
+                  <CardContent className="p-5">
+                    <h4 className="text-xs font-semibold mb-4">{chart.title}</h4>
+                    <div className="flex items-end gap-1 h-20">
+                      {chart.bars.map((h, i) => (
+                        <motion.div
+                          key={i}
+                          className={`flex-1 rounded-t ${chart.color}`}
+                          initial={{ height: 0 }}
+                          whileInView={{ height: `${h}%` }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.4, delay: i * 0.04 }}
+                        />
+                      ))}
+                    </div>
+                    <div className="flex justify-between mt-2 text-[8px] text-muted-foreground">
+                      <span>Jan</span><span>Jun</span><span>Dec</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ==================== TESTIMONIALS ==================== */}
+      <section className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-20">
+        <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
+          <span className="text-xs font-semibold text-accent uppercase tracking-wider">Testimonials</span>
+          <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Real People. Real Progress.</h2>
+          <p className="text-muted-foreground max-w-md mx-auto text-sm">From paying off debt to growing savings and tracking net worth — here's what users say about their MoneyTrek journey.</p>
+        </motion.div>
+        <div className="grid sm:grid-cols-3 gap-5 max-w-4xl mx-auto">
+          {testimonials.map((t, i) => (
+            <motion.div key={t.name} {...fadeUp} transition={{ delay: i * 0.12 }}>
+              <Card className="h-full hover:shadow-lg transition-shadow">
+                <CardContent className="p-5">
+                  <div className="flex gap-0.5 mb-3">
+                    {Array.from({ length: t.rating }).map((_, si) => (
+                      <Star key={si} className="w-4 h-4 fill-warning text-warning" />
+                    ))}
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4 italic">"{t.quote}"</p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <span className="text-xs font-bold text-primary">{t.name[0]}</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold">{t.name}</p>
+                      <p className="text-xs text-muted-foreground">{t.country}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* ==================== FAQ ==================== */}
+      <section className="bg-secondary/40 py-16 sm:py-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-12">
+          <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
+            <span className="text-xs font-semibold text-accent uppercase tracking-wider">FAQ</span>
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Frequently Asked Questions</h2>
+            <p className="text-muted-foreground max-w-md mx-auto text-sm">Everything you need to know before getting started.</p>
+          </motion.div>
+          <div className="max-w-2xl mx-auto space-y-4">
+            {[
+              {
+                q: "Is MoneyTrek just for debt tracking?",
+                a: "No — MoneyTrek is your complete personal finance tracker. You can track debts, savings accounts, financial goals, and your overall net worth. It's designed for anyone on a financial journey, whether you're paying off debt, building savings, or growing wealth.",
+              },
+              {
+                q: "Do I need a credit card to sign up?",
+                a: "No. MoneyTrek is completely free to start. You only need a credit card if you choose to upgrade to Pro after your 7-day free trial.",
+              },
+              {
+                q: "What's the difference between Free and Pro?",
+                a: "Free users get core debt tracking (up to 3 debts), 2 savings accounts, and the dashboard. Pro unlocks unlimited debts and savings, financial goals, net worth tracking, advanced analytics, weekly reports, multi-currency support, and CSV data export.",
+              },
+              {
+                q: "What is Founding Member pricing?",
+                a: "Founding Members are early adopters who sign up while we're in early access. You lock in the $2.99/month rate for life — even when prices go up for new users.",
+              },
+              {
+                q: "How does the 7-day free Pro trial work?",
+                a: "When you sign up, you automatically get 7 days of full Pro access — no credit card needed. After 7 days, you stay on the free plan unless you choose to upgrade.",
+              },
+              {
+                q: "What currencies are supported?",
+                a: "Pro users can track finances in any currency with automatic exchange rate conversion. Free users track in a single currency.",
+              },
+              {
+                q: "Can I cancel anytime?",
+                a: "Yes. No contracts, no lock-in. Cancel your Pro subscription at any time from your account settings. You keep access until the end of your billing period.",
+              },
+              {
+                q: "Is my financial data secure?",
+                a: "Yes. All data is protected using row-level security — only you can see your data. We use encrypted authentication and never share your information with third parties.",
+              },
+              {
+                q: "I'm an OFW managing money across countries — can I use this?",
+                a: "Absolutely. MoneyTrek's multi-currency support (Pro) is built for people managing finances across different countries and currencies. Everything converts automatically.",
+              },
+            ].map((item, i) => (
+              <motion.div key={i} {...fadeUp} transition={{ delay: i * 0.05 }}>
+                <Card className="hover:shadow-md transition-shadow">
+                  <CardContent className="p-5">
+                    <h3 className="font-heading font-semibold text-sm mb-2 flex items-start gap-2">
+                      <span className="text-accent mt-0.5 flex-shrink-0">Q.</span>
+                      {item.q}
+                    </h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed pl-5">{item.a}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ==================== PRICING ==================== */}
+      <section id="pricing" className="bg-secondary/40 py-16 sm:py-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-12">
+          <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
+            <span className="text-xs font-semibold text-accent uppercase tracking-wider">Pricing</span>
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Simple, Transparent Pricing</h2>
+            <p className="text-muted-foreground max-w-md mx-auto text-sm">Every new account gets a <strong>7-day free Pro trial</strong>. No credit card required. Sign up today to lock in founding member pricing for life.</p>
+          </motion.div>
+          <div className="flex flex-wrap justify-center gap-4 mb-8 text-xs text-muted-foreground">
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent" /> No credit card required</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent" /> Cancel anytime</span>
+            <span className="flex items-center gap-1.5"><Shield className="w-4 h-4 text-accent" /> Payments secured by Stripe</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent" /> 30-day money-back guarantee</span>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+            <motion.div {...fadeUp} transition={{ delay: 0.1 }}>
+              <Card className="h-full border-2 border-primary/30 hover:shadow-lg transition-shadow">
+                <CardContent className="p-6">
+                  <div className="mb-4">
+                    <span className="text-xs font-semibold text-accent uppercase">Free</span>
+                    <p className="font-heading text-3xl font-extrabold mt-1">$0<span className="text-sm font-normal text-muted-foreground">/forever</span></p>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-4">Track debt, build savings, and start your financial journey with core free features.</p>
+                  <ul className="space-y-2.5 mb-6">
+                    {["Up to 3 active debts", "Up to 2 savings accounts", "Record payments & deposits", "Basic dashboard & progress", "Milestones & badges", "What-If calculator", "Single currency"].map(f => (
+                      <li key={f} className="flex items-center gap-2 text-sm">
+                        <CheckCircle2 className="w-4 h-4 text-accent flex-shrink-0" />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                  <Button className="w-full" asChild>
+                    <Link to="/signup">Get Started Free</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            </motion.div>
+            <ProPricingCard />
+          </div>
+        </div>
+      </section>
+
+      {/* ==================== CHARACTERS ==================== */}
+      <section className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-20">
+        <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-12">
+          <span className="text-xs font-semibold text-accent uppercase tracking-wider">Meet Your Guides</span>
+          <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">Meet the MoneyTrek Characters</h2>
+          <p className="text-muted-foreground max-w-lg mx-auto text-sm">Every step of your financial journey has a companion. These characters guide, motivate, and celebrate with you — from slaying debt to building wealth.</p>
+        </motion.div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-4 max-w-5xl mx-auto">
+          {Object.entries(characters).map(([key, c], i) => (
+            <motion.div key={c.name} {...fadeUp} transition={{ delay: i * 0.08 }} className="text-center group">
+              <Card className={`h-full hover:shadow-lg transition-all duration-300 ${c.comingSoon ? "opacity-60" : ""}`}>
+                <CardContent className="p-4">
+                  <div className="mx-auto mb-3">
+                    <TalkingCharacter
+                      character={key as any}
+                      context={c.comingSoon ? "empty" : "progress"}
+                      animation={c.comingSoon ? "pulse" : "float"}
+                      size="md"
+                      showBubble={!c.comingSoon}
+                      bubblePosition="top"
+                      bubbleInterval={8000 + i * 1000}
+                    />
+                  </div>
+                  <h3 className="font-heading font-semibold text-xs mb-0.5">{c.name}</h3>
+                  <p className="text-muted-foreground text-[10px] leading-tight">{c.tagline}</p>
+                  {c.comingSoon && (
+                    <Badge variant="secondary" className="mt-2 text-[9px] px-1.5 py-0">Coming Soon</Badge>
+                  )}
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* ==================== JOURNEY ==================== */}
+      <section className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-20">
+        <motion.div {...fadeUp} transition={{ duration: 0.6 }} className="text-center mb-14">
+          <span className="text-xs font-semibold text-accent uppercase tracking-wider">Your Journey</span>
+          <h2 className="font-heading text-2xl sm:text-3xl font-bold mt-2 mb-3">The MoneyTrek Journey</h2>
+          <p className="text-muted-foreground max-w-lg mx-auto text-sm">
+            From tracking your first payment to mastering your entire financial life — one step at a time.
+          </p>
+        </motion.div>
+
+        <div className="relative max-w-2xl mx-auto">
+          <div className="absolute left-6 sm:left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-accent via-primary to-muted" />
+          <div className="hidden sm:block absolute -right-6 top-1/3 z-10 opacity-60">
+            <TalkingCharacter
+              character="streakFlame"
+              context="streak"
+              animation="float"
+              size="sm"
+              showBubble={false}
+            />
+          </div>
+          <div className="space-y-12">
+            {journeySteps.map((step, i) => {
+              const Icon = step.icon;
+              return (
+                <motion.div key={step.title} {...fadeUp} transition={{ delay: i * 0.15 }} className="relative pl-16 sm:pl-20">
+                  <div className="absolute left-4 sm:left-6 top-3 w-4 h-4 rounded-full bg-card border-2 border-accent flex items-center justify-center z-10">
+                    <div className="w-2 h-2 rounded-full bg-accent" />
+                  </div>
+                  <div className="absolute left-0 sm:left-1 top-0 w-3 h-3 flex items-center justify-center">
+                    <span className="text-[10px] font-bold text-muted-foreground">{i + 1}</span>
+                  </div>
+                  <Card className="border-border/60 overflow-visible hover:shadow-md transition-shadow">
+                    <CardContent className="p-5 sm:p-6">
+                      <div className="flex items-start gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
+                              <Icon className="w-4 h-4 text-accent" />
+                            </div>
+                            <h3 className="font-heading font-bold text-base sm:text-lg">{step.title}</h3>
+                          </div>
+                          <p className="text-sm text-muted-foreground leading-relaxed">{step.description}</p>
+                        </div>
+                        <div className="flex-shrink-0 flex flex-col items-center gap-2 pt-6">
+                          <TalkingCharacter
+                            character={step.character}
+                            customMessage={step.characterMessage}
+                            animation={step.animation}
+                            size="md"
+                            showBubble={true}
+                            bubblePosition="top"
+                            bubbleInterval={7000 + i * 1500}
+                          />
+                          {step.secondaryCharacter && (
+                            <TalkingCharacter
+                              character={step.secondaryCharacter}
+                              customMessage={step.secondaryMessage}
+                              animation="float"
+                              size="sm"
+                              showBubble={false}
+                              className="opacity-70"
+                            />
+                          )}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
+          </div>
+          <motion.div {...fadeUp} transition={{ delay: 0.65 }} className="text-center mt-12">
+            <div className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground bg-muted/50 rounded-full px-5 py-2">
+              <span>Track</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+              <span>Save</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+              <span>Grow</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+              <span>Master</span>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ==================== FINAL CTA ==================== */}
+      <section className="relative overflow-hidden" style={{ background: "var(--gradient-hero)" }}>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-24 text-center relative z-10">
+          <motion.div {...fadeUp} transition={{ duration: 0.6 }}>
+            <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-extrabold text-primary-foreground mb-4">
+              Take Control of Your Entire Financial Journey
+            </h2>
+            <p className="text-primary-foreground/60 mb-3 max-w-md mx-auto text-sm sm:text-base">
+              Track debt, grow savings, set goals, and monitor your net worth — all in one beautiful app. MoneyTrek makes your entire financial journey visible.
+            </p>
+            <p className="text-primary-foreground/40 mb-8 text-xs sm:text-sm">
+              🏅 Sign up now to become a Founding Member and lock in $2.99/mo pricing for life.
+            </p>
+            {user ? (
+              <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
+                <Link to="/dashboard">Go to Dashboard <ArrowRight className="ml-2 w-4 h-4" /></Link>
+              </Button>
+            ) : (
+              <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20" asChild>
+                <Link to="/signup">Start Free Trial <ArrowRight className="ml-2 w-4 h-4" /></Link>
+              </Button>
+            )}
+          </motion.div>
+        </div>
+        <div className="absolute top-10 left-10 w-48 h-48 rounded-full bg-accent/10 blur-3xl" />
+        <div className="absolute bottom-10 right-10 w-64 h-64 rounded-full bg-primary-foreground/5 blur-3xl" />
+      </section>
+
+      {/* ==================== FOOTER ==================== */}
+      <footer className="border-t border-border bg-card">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-12 py-10">
+          <div className="grid sm:grid-cols-3 gap-8">
+            <div>
+              <Link to="/" className="flex items-center gap-2 mb-3">
+                <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "var(--gradient-primary)" }}>
+                  <Sparkles className="w-3.5 h-3.5 text-primary-foreground" />
+                </div>
+                <span className="font-heading font-bold">MoneyTrek</span>
+              </Link>
+              <p className="text-sm text-muted-foreground leading-relaxed">MoneyTrek is your complete personal finance app — track debt, grow savings, set financial goals, and monitor your net worth. One beautiful app for your entire money journey.</p>
+            </div>
+            <div>
+              <h4 className="font-heading font-semibold text-sm mb-3">Product</h4>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                {user ? (
+                  <>
+                    <li><Link to="/dashboard" className="hover:text-foreground transition-colors">Dashboard</Link></li>
+                    <li><button onClick={() => signOut()} className="hover:text-foreground transition-colors">Sign Out</button></li>
+                  </>
+                ) : (
+                  <>
+                    <li><Link to="/signup" className="hover:text-foreground transition-colors">Get Started</Link></li>
+                    <li><Link to="/login" className="hover:text-foreground transition-colors">Log In</Link></li>
+                  </>
+                )}
+                <li><a href="#pricing" className="hover:text-foreground transition-colors">Pricing</a></li>
+                <li><Link to="/features" className="hover:text-foreground transition-colors">Features</Link></li>
+                <li><Link to="/faq" className="hover:text-foreground transition-colors">FAQ</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-heading font-semibold text-sm mb-3">Legal</h4>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li><Link to="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link></li>
+                <li><Link to="/terms" className="hover:text-foreground transition-colors">Terms of Service</Link></li>
+                <li><Link to="/refund-policy" className="hover:text-foreground transition-colors">Refund Policy</Link></li>
+                <li><a href="mailto:hello@moneytrekapp.com" className="hover:text-foreground transition-colors">Contact</a></li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-border mt-8 pt-6 text-center text-xs text-muted-foreground">
+            © {new Date().getFullYear()} MoneyTrek. All rights reserved.
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
