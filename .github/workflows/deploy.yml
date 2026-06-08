@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout code
@@ -33,23 +34,20 @@ jobs:
         run: sudo apt-get install -y lftp
 
       - name: Deploy to Hostinger via lftp
+        timeout-minutes: 8
         run: |
-          for attempt in 1 2 3; do
-            echo "Deploy attempt $attempt of 3..."
-            lftp -c "
-              set net:timeout 30;
-              set net:max-retries 5;
-              set net:reconnect-interval-base 5;
-              set ftp:ssl-force true;
-              set ftp:ssl-protect-data true;
-              set ftps:initial-prot '';
-              set ssl:verify-certificate false;
-              open -u '${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }}' ftps://${{ secrets.FTP_SERVER }};
-              mirror --reverse --parallel=4 --verbose ./dist/ /public_html/;
-              quit
-            " && echo "Deploy succeeded on attempt $attempt!" && exit 0
-            echo "Attempt $attempt failed. Waiting 30 seconds before retry..."
-            sleep 30
-          done
-          echo "All 3 deploy attempts failed."
-          exit 1
+          lftp -c "
+            set net:timeout 30;
+            set net:max-retries 3;
+            set net:reconnect-interval-base 5;
+            set ftp:ssl-force true;
+            set ftp:ssl-protect-data true;
+            set ftps:initial-prot '';
+            set ssl:verify-certificate false;
+            set ftp:use-mlsd false;
+            set ftp:use-mdtm false;
+            set ftp:use-size false;
+            open -u '${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }}' ftps://${{ secrets.FTP_SERVER }};
+            mirror --reverse --parallel=2 --verbose ./dist/ /public_html/;
+            quit
+          "
