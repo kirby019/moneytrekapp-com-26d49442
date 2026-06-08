@@ -17,13 +17,13 @@ const navItems = [
   { label: "Record Payment", icon: DollarSign, path: "/record-payment", proOnly: false },
   { label: "Payment History", icon: History, path: "/payment-history", proOnly: false },
   { label: "Savings", icon: PiggyBank, path: "/savings", proOnly: false },
-  { label: "Goals", icon: Target, path: "/goals", proOnly: false },
-  { label: "Net Worth", icon: Landmark, path: "/net-worth", proOnly: false },
+  { label: "Goals", icon: Target, path: "/goals", proOnly: true },
+  { label: "Net Worth", icon: Landmark, path: "/net-worth", proOnly: true },
   { label: "Analytics", icon: BarChart3, path: "/analytics", proOnly: true },
   { label: "Strategy", icon: Target, path: "/strategy", proOnly: false },
   { label: "Journey", icon: Map, path: "/journey", proOnly: false },
   { label: "Milestones", icon: Trophy, path: "/milestones", proOnly: false },
-  { label: "Weekly Review", icon: CalendarCheck, path: "/weekly-review", proOnly: false },
+  { label: "Weekly Review", icon: CalendarCheck, path: "/weekly-review", proOnly: true },
   { label: "Future Screen", icon: Sparkles, path: "/future", proOnly: false },
 ];
 
