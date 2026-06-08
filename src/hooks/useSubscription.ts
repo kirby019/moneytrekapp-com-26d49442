@@ -92,9 +92,9 @@ export function useSubscription() {
   const isTrialExpired = isTrial && trialEndsAt ? trialEndsAt < new Date() : false;
   const isFoundingMember = !!subscription?.is_founding_member;
 
-  // If trial is expired and it's still a trial (not converted), treat as free
+  // Grant pro if: plan is "pro" OR if user has an active (non-expired) trial
   const plan: PlanType =
-    subscription?.plan === "pro" && !isTrialExpired ? "pro" : "free";
+    (subscription?.plan === "pro" || (isTrial && !isTrialExpired)) ? "pro" : "free";
   const limits = PLAN_LIMITS[plan];
 
   const trialDaysRemaining = trialEndsAt
