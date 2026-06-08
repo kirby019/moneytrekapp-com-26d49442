@@ -31,15 +31,18 @@ jobs:
       - name: Deploy to Hostinger via FTP
         timeout-minutes: 8
         run: |
-          lftp -c "
-            set net:timeout 30;
-            set net:max-retries 3;
-            set net:reconnect-interval-base 5;
-            set ftp:ssl-allow false;
-            set ftp:use-mlsd false;
-            set ftp:use-mdtm false;
-            set ftp:use-size false;
-            open -u '${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }}' ftp://${{ secrets.FTP_SERVER }};
-            mirror --reverse --delete --parallel=2 --verbose ./dist/ /public_html/;
-            quit
-          "
+          for attempt in 1 2 3; do
+            echo "Deploy attempt $attempt of 3..."
+            lftp -c "
+              set net:timeout 30;
+              set net:max-retries 3;
+              set net:reconnect-interval-base 5;
+              set ftp:ssl-allow false;
+              set ftp:use-mlsd false;
+              set ftp:use-mdtm false;
+              set ftp:use-size false;
+              open -u '${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }}' ftp://${{ secrets.FTP_SERVER }};
+              mirror --reverse --delete --parallel=2 --verbose ./dist/ /public_html/;
+              quit
+            " && break || { echo "Attempt $attempt failed. Retrying in 15s..."; sleep 15; }
+          done
