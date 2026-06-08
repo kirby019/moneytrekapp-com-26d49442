@@ -1,0 +1,48 @@
+# MoneyTrek
+
+> MoneyTrek is a personal finance web app that helps people track debt, savings, net worth, and financial goals on their journey to financial freedom. It is free to use with an optional Pro upgrade. No credit card is needed to sign up — users get a 7-day free Pro trial automatically.
+
+## What MoneyTrek Does
+
+MoneyTrek combines debt tracking, savings monitoring, net worth snapshots, and financial goal setting in one place. It uses gamification (streaks, milestone badges, character guides) to keep users motivated. The app supports multiple currencies with automatic exchange rate conversion.
+
+## Core Features
+
+- [Debt Tracking](https://moneytrekapp.com/features): Add debts with balances, interest rates, types, and due dates. Record payments and watch balances update automatically.
+- [Payoff Strategies](https://moneytrekapp.com/features): Choose between the debt snowball method (smallest balance first) or debt avalanche method (highest interest first) to pay off debt faster.
+- [Savings Tracking](https://moneytrekapp.com/features): Track savings accounts, log deposits and withdrawals, and watch balances grow over time.
+- [Financial Goals](https://moneytrekapp.com/features): Set specific savings or financial goals with target amounts and dates. Track progress with visual progress bars.
+- [Net Worth Snapshots](https://moneytrekapp.com/features): Calculate and save your net worth (total assets minus total liabilities) over time to track wealth-building progress.
+- [What-If Calculator](https://moneytrekapp.com/features): Model scenarios such as "what if I paid an extra $200/month?" to see how many months faster you'd be debt-free and how much interest you'd save.
+- [Investment Projector](https://moneytrekapp.com/features): Project how much a monthly investment could grow at a chosen annual return rate over 5, 10, 20, or 30 years.
+- [Payment Analytics](https://moneytrekapp.com/features): View charts showing debt reduction over time, payment frequency, and total interest paid.
+- [Streaks & Milestones](https://moneytrekapp.com/features): Earn milestone badges and maintain payment streaks to stay motivated.
+- [Weekly Reports](https://moneytrekapp.com/features): Receive automated weekly summaries of payments and progress (Pro feature).
+- [Multi-Currency](https://moneytrekapp.com/features): Track finances in any currency with live exchange rate conversion (Pro feature).
+- [Data Export](https://moneytrekapp.com/features): Export debt and payment data as CSV files (Pro feature).
+
+## Pricing
+
+- Free plan: Debt tracking, savings, goals, net worth, streaks, milestones — forever free
+- Pro plan: Adds analytics, multi-currency, weekly reports, data export, and more
+- 7-day free Pro trial automatically on signup — no credit card needed
+- Founding Member pricing available for early adopters (locked in for life)
+
+## Key Pages
+
+- [Home](https://moneytrekapp.com/): Main landing page with overview and signup
+- [Features](https://moneytrekapp.com/features): Full list of features with descriptions
+- [FAQ](https://moneytrekapp.com/faq): Common questions about MoneyTrek
+- [How It Works](https://moneytrekapp.com/how-it-works): Step-by-step guide to getting started
+- [Demo](https://moneytrekapp.com/demo): Try MoneyTrek without creating an account
+- [Privacy Policy](https://moneytrekapp.com/privacy): How user data is handled
+- [Terms of Service](https://moneytrekapp.com/terms): Terms for using MoneyTrek
+- [Refund Policy](https://moneytrekapp.com/refund-policy): MoneyTrek's refund terms
+
+## Target Users
+
+MoneyTrek is designed for individuals who want to pay off debt, build savings, and grow their net worth — especially people juggling multiple debts (credit cards, student loans, personal loans, car loans) who need a structured way to track and eliminate them. It is popular with users in the Philippines, Southeast Asia, and Australia who manage finances in multiple currencies.
+
+## Technical Notes
+
+MoneyTrek is a web application accessible at moneytrekapp.com. It works in any modern browser. User data is stored securely using Supabase with row-level security. Payments are processed by LemonSqueezy.
