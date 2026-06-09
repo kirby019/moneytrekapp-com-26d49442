@@ -1,14 +1,16 @@
-name: Build & Deploy to Hostinger
+name: Build Check
 
 on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
 
     steps:
       - uses: actions/checkout@v4
@@ -25,18 +27,3 @@ jobs:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
           VITE_SUPABASE_PROJECT_ID: ${{ secrets.VITE_SUPABASE_PROJECT_ID }}
-
-      - run: sudo apt-get install -y lftp
-
-      - name: Deploy to Hostinger via SFTP
-        timeout-minutes: 10
-        run: |
-          lftp -c "
-            set sftp:auto-confirm yes;
-            set net:timeout 60;
-            set net:max-retries 3;
-            set net:reconnect-interval-base 5;
-            open sftp://${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}@${{ secrets.FTP_SERVER }}:65002;
-            mirror --reverse --delete --parallel=2 --verbose ./dist/ /public_html/;
-            quit
-          "
